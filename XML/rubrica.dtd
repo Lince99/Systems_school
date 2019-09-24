@@ -1,0 +1,15 @@
+<!DOCTYPE rubrica
+[
+<!ELEMENT rubrica (elemento,nome,cognome,numero,datanascita)>
+<!ATTLIST rubrica version CDATA #REQUIRED>
+<!ELEMENT elemento (#PCDATA)>
+<!ELEMENT nome (#PCDATA)>
+<!ELEMENT cognome (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ELEMENT numero (#PCDATA)>
+<!ELEMENT nickname (#PCDATA)>
+<!ELEMENT datanascita (day, month, year)>
+	<!ELEMENT day (#PCDATA)>
+	<!ELEMENT month (#PCDATA)>
+	<!ELEMENT year (#PCDATA)>
+]>

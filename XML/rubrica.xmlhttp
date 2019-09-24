@@ -1,0 +1,70 @@
+POST /rubrica.xmlhttp HTTP/1.1
+Host: localhost:7070
+Content-Type: application/xml; charset=utf-8
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: it-IT,it;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE rubrica SYSTEM "rubrica.dtd">-->
+<?xml-stylesheet type="text/xsl" href="rubrica.xsl"?>
+
+<!DOCTYPE rubrica
+[
+<!ELEMENT rubrica (elemento)>
+	<!ATTLIST rubrica version CDATA #REQUIRED>
+	<!ELEMENT elemento (nome,cognome,numero,(email|nickname|datanascita))>
+		<!ELEMENT nome (#PCDATA)>
+		<!ELEMENT cognome (#PCDATA)>
+		<!ELEMENT email (#PCDATA)>
+		<!ELEMENT numero (#PCDATA)>
+		<!ELEMENT nickname (#PCDATA)>
+		<!ELEMENT datanascita EMPTY>
+			<!ATTLIST datanascita d CDATA #REQUIRED>
+			<!ATTLIST datanascita m CDATA #REQUIRED>
+			<!ATTLIST datanascita y CDATA #REQUIRED>
+]>
+
+
+<rubrica version="1.0">
+	
+	<elemento>
+		<nome>Pippo</nome>
+		<cognome>Baudo</cognome>
+		<numero>1234567890</numero>
+		
+	</elemento>
+	
+	<elemento>
+		<nome>Mario</nome>
+		<cognome>Rossi</cognome>
+		<numero>1234567890</numero>
+		<datanascita d="11" m="11" y="1111"/>
+		<email>mariorossi11@email.com</email>
+	</elemento>
+	
+	<elemento>
+		<nome>Mariuccio</nome>
+		<cognome>Rossucci</cognome>
+		<numero>0987654321</numero>
+		<datanascita d="12" m="12" y="1222"/>
+		<email>mariorossucci11@email.com</email>
+	</elemento>
+	
+	<elemento>
+		<nome>Jeffrey</nome>
+		<cognome>Fan</cognome>
+		<numero>9443783438</numero>
+		<datanascita d="25" m="05" y="1980"/>
+		<email>ma.name.jeff@notmail.com</email>
+	</elemento>
+	
+	<elemento>
+		<nome>Dante</nome>
+		<cognome>Dutch</cognome>
+		<numero>9443783438</numero>
+		<datanascita d="25" m="05" y="1080"/>
+		<nickname>D</nickname>
+	</elemento>
+	
+</rubrica>
