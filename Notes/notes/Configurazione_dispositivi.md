@@ -1,6 +1,6 @@
 ---
 tags: [Networking]
-title: Configurazione Dispositivi
+title: Configurazione_dispositivi
 created: '2019-09-24T10:11:06.431Z'
 modified: '2019-09-24T10:26:38.838Z'
 ---
