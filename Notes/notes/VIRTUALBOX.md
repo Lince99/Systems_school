@@ -1,7 +1,7 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-09-26T10:37:47.498Z'
+modified: '2019-09-30T17:44:25.944Z'
 ---
 
 # VIRTUALBOX
@@ -9,16 +9,25 @@ modified: '2019-09-26T10:37:47.498Z'
 ## CLIENT
 
 ### Configurazione:
-clientbasso
+clientcognome lasolita
 Debian (64bit)
 1024MB
 4 GB
+NAT
+https://www.debian.org/distrib/netinst
 
 **Screenshot: CTRL DX + E**
 
 1. Creazione macchina virtuale
 
+1. DHCP
+  1. yes
+  1. 3
+  1. hostname = cognome.intra
 1. Scelta distribuzione
+  1. http
+  1. Italy
+  1. ftp.it.debian.org
   1. Archivio Debian: buster - stable
     (testing, unstable, experimental sono le rolling release)
 1. Scaricare componenti del programma installazione
