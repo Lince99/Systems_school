@@ -1,7 +1,7 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-09-30T20:13:42.433Z'
+modified: '2019-09-30T20:37:51.226Z'
 ---
 
 # VIRTUALBOX
@@ -9,6 +9,7 @@ modified: '2019-09-30T20:13:42.433Z'
 ## CLIENT
 
 ### Configurazione:
+
 clientcognome lasolita
 Debian (64bit)
 RAM 1MB
@@ -18,7 +19,7 @@ https://www.debian.org/distrib/netinst
 
 **Screenshot: CTRL DX + E**
 
-**Screenshot: CTRL DX + T**
+**Clonazione: CTRL DX + T**
 
 1. Creazione macchina virtuale
 1. abilitare Network con NAT
@@ -139,7 +140,18 @@ https://www.debian.org/distrib/netinst
   1. UTENTE ROOT
     1. apt update
     1. apt upgrade
-    1. apt install less joe tcpdump mtr-tiny cowsay
+    1. (in caso di problemi: nano /etc/apt/sources.list)
+```
+deb http://deb.debian.org/debian buster main
+deb-src http://deb.debian.org/debian buster main
+
+deb http://deb.debian.org/debian-security/ buster/updates main
+deb-src http://deb.debian.org/debian-security/ buster/updates main
+
+deb http://deb.debian.org/debian buster-updates main
+deb-src http://deb.debian.org/debian buster-updates main
+```
+  1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)
       - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
       - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
       1. S
@@ -160,6 +172,16 @@ https://www.debian.org/distrib/netinst
         1. password
       1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove
       1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
+      1. echo $TERM : stampa il nome del terminale
+      1. CTRL+D : uscire dall'utente
+      1. nano .bashrc:
+```
+case "$TERM" in
+  xterm-color|linux|...
+
+alias shutdown=/sbin/shutdown
+```
+
   1. LIBRERIE
     - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
     - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
