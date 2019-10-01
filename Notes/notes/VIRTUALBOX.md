@@ -196,6 +196,11 @@ alias shutdown=/sbin/shutdown
       - deborphan: cerca le librerie orfane, non necessarie a nessun software
       deb auto... : rimuove le librerie inutilizzate in automatico
 
+## Robe utili:
+
+```
+cat /etc/shadow
+```
 
 #### TODO:
 - clonare client, configurare clone e rinominarlo SERVER
