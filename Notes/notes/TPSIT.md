@@ -2,7 +2,7 @@
 tags: [Networking, Routing]
 title: TPSIT
 created: '2019-09-24T08:59:47.457Z'
-modified: '2019-09-24T10:22:24.885Z'
+modified: '2019-10-01T10:13:39.811Z'
 ---
 
 # TPSIT
@@ -53,6 +53,7 @@ Router:
 
 ### Tabella di NAT
 
+```
 |---------------------------------|
 | IP esterno | Porta | IP interno |
 | IP1        | 7000  |         .7 | <-- richiesta
@@ -61,6 +62,7 @@ Router:
 | IP1        | 7000  |         .7 | <-- risposta
 | IP5        | 2000  |         .3 | <-- port forwarding
 |---------------------------------|
+```
 
 Client --> Router --> WAN --> Server
       IP Dynamic Port     IP Port
