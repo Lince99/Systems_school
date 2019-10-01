@@ -57,8 +57,9 @@ https://www.debian.org/distrib/netinst
     1. Utente Di Servizio
     1. uds
     1. lasolita
-1. Configurare orologio (RTC = real time clock a batteria, GPS via satellite manda l'ora e localizzazione, Orologio telecontrollato di Francoforte)
-  1. NTP 
+1. Configurare orologio 
+    (RTC = real time clock a batteria, GPS via satellite manda l'ora e localizzazione, Orologio telecontrollato di Francoforte)
+  1. NTP = Si
     1. Consigliato (italiano)
     1. Europe/Rome (UTC Greenwich +1 inverno, +2 estate, CEST (central europe standard time))
 1. Rilevare dischi (auto)
@@ -94,6 +95,7 @@ https://www.debian.org/distrib/netinst
             1. Impostazione della partizione completata
         1. SPAZIO LIBERO
           1. Primaria
+          1. Fine
           1. Area di swap: (memoria virtuale in winzoz), se la RAM è occupata va ad utilizzare il disco nella partizione dedicata
         1. Terminare le modifiche
           1. Yep
@@ -201,6 +203,12 @@ alias shutdown=/sbin/shutdown
 ```
 cat /etc/shadow
 ```
+
+```
+sudo nano /etc/profile
+# aggiungere :/usr/sbin dopo PATH
+```
+
 
 #### TODO:
 - clonare client, configurare clone e rinominarlo SERVER
