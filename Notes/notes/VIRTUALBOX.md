@@ -1,7 +1,7 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-09-30T20:37:51.226Z'
+modified: '2019-10-02T09:43:30.341Z'
 ---
 
 # VIRTUALBOX
@@ -172,11 +172,66 @@ deb-src http://deb.debian.org/debian buster-updates main
       1. id : ora uds è sudo
       1. sudo -s
         1. password
-      1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove
+      1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
       1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
-      1. echo $TERM : stampa il nome del terminale
-      1. CTRL+D : uscire dall'utente
-      1. nano .bashrc:
+    1. CREARE IL SERVER
+      1. spegnere la macchina da amministratore
+        1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
+        1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
+      1. clonare la macchina virtuale
+        1. CTRL + O o Pecora Dolly nel menu a tendina
+        1. servercognome
+        1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
+        1. Scegliere "Clone completo", copia tutti i file come disco separato.
+        1. nome sbagliato: modificare /etc/hostname: (i processi prendono l'hostname all'avvio, quindi lo mantengono durante l'esecuzione anche se nel durante viene modificato)
+          1. login uds
+          1. joe /etc/hostname
+          1. mettere servercognome invece di clientcognome
+          1. CTRL+K e poi X
+          1. modificare file /etc/hosts
+          1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
+          1. ping 127.0.x.x
+          1. shutdown -h now
+
+1. Creare nuova macchina per monowall
+  1. routercognome
+  1. BSD
+  1. FreeBSD (32-bit)
+  1. RAM = 128 MB
+  1. HDD = 64 MB
+  1. Seleziona disco di avvio:
+    1. /home/itis/InternetFiles/m0n0wall-generic-pc-1.8.1.iso
+    1. avvia e poi subito F12
+  1. Menu di monowall (può funzionare solo con floppy (config ) e CD (OS))
+    1. 7 - Install on HDD
+    1. ad0
+    1. y
+    1. al riavvio spegnere subito
+    1. togliere CD da virtualbox
+
+
+## Robe utili:
+
+1. FHS
+  1. https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+  1. dove sono i file nel filesystem linux
+  1. sotto /etc/apt/sources.list o cartella sources.list.d/...
+    1. in Debian si trovano delle configurazioni modulari = installare un software ha eseguibili, configurazioni e .deb per la configurazione iniziale
+    1. aggiunge alla configurazione precedente
+    1. ESEMPIO: scaricare Firefox, plugin installabili in maniera centralizzata, passando la configurazione nella sottocartella del file di configurazione di Firefox.
+    1. FILE SOURCES.LIST contiene le configurazioni di dove trovare gli aggiornamenti Debian
+    1. Commentare riga contenente gli aggiornamenti via CD
+    1. apt update: scarica l'elenco del software per il controllo delle versioni
+    1. apt upgrade: scarica il software aggiornato, momento delicato poichè deve seguire una scaletta di dipendenze
+    1. aggiornamento della versione di Debian: tutte le dipendenze rischiano di rompere l'upgrade (dependency hell)
+      1. dist-upgrade: esegue l'upgrade senza dare peso alle dipendenze, però portando ad interruzioni di servizio
+
+1. Usando il CD a casa richiede se si vuole scaricare dal CD o dalla rete, per rendere indipendente la macchina dall'uso del CD:
+  1. source
+
+1. echo $TERM : stampa il nome del terminale
+1. CTRL+D : uscire dall'utente
+1. nano .bashrc:
 ```
 case "$TERM" in
   xterm-color|linux|...
@@ -197,8 +252,6 @@ alias shutdown=/sbin/shutdown
       - deb: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
       - deborphan: cerca le librerie orfane, non necessarie a nessun software
       deb auto... : rimuove le librerie inutilizzate in automatico
-
-## Robe utili:
 
 ```
 cat /etc/shadow
