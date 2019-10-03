@@ -1,10 +1,16 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-02T09:43:30.341Z'
+modified: '2019-10-03T10:36:49.343Z'
 ---
 
 # VIRTUALBOX
+
+## INTRODUZIONE
+
+- Descrizione VirtualBox
+- Introduzione specifica per ogni paragrafo
+- 
 
 ## CLIENT
 
@@ -174,24 +180,29 @@ deb-src http://deb.debian.org/debian buster-updates main
         1. password
       1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
       1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
-    1. CREARE IL SERVER
-      1. spegnere la macchina da amministratore
-        1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
-        1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
-      1. clonare la macchina virtuale
-        1. CTRL + O o Pecora Dolly nel menu a tendina
-        1. servercognome
-        1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
-        1. Scegliere "Clone completo", copia tutti i file come disco separato.
-        1. nome sbagliato: modificare /etc/hostname: (i processi prendono l'hostname all'avvio, quindi lo mantengono durante l'esecuzione anche se nel durante viene modificato)
-          1. login uds
-          1. joe /etc/hostname
-          1. mettere servercognome invece di clientcognome
-          1. CTRL+K e poi X
-          1. modificare file /etc/hosts
-          1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
-          1. ping 127.0.x.x
-          1. shutdown -h now
+
+## SERVER
+
+1. CREARE IL SERVER
+  1. spegnere la macchina da amministratore
+    1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
+    1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
+  1. clonare la macchina virtuale
+    1. CTRL + O o Pecora Dolly nel menu a tendina
+    1. servercognome
+    1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
+    1. Scegliere "Clone completo", copia tutti i file come disco separato.
+    1. nome sbagliato: modificare /etc/hostname: (i processi prendono l'hostname all'avvio, quindi lo mantengono durante l'esecuzione anche se nel durante viene modificato)
+      1. login uds
+      1. joe /etc/hostname
+      1. mettere servercognome invece di clientcognome
+      1. CTRL+K e poi X
+      1. modificare file /etc/hosts
+      1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
+      1. ping 127.0.x.x
+      1. shutdown -h now
+
+## ROUTER
 
 1. Creare nuova macchina per monowall
   1. routercognome
@@ -206,9 +217,130 @@ deb-src http://deb.debian.org/debian buster-updates main
     1. 7 - Install on HDD
     1. ad0
     1. y
-    1. al riavvio spegnere subito
-    1. togliere CD da virtualbox
+  1. al riavvio spegnere subito
+  1. togliere CD da virtualbox
+    1. Archiviazione
+      1. CD: rimuovi disco dal lettore
+  1. Scheda di rete 1
+    1. Scheda con Bridge
+      1. br0 (a scuola)
+  1. Scheda di rete 2
+    1. Rete interna
+      1. LAN
+  1. Scheda di rete 3
+    1. Rete interna
+      1. DMZ
+  1. riconosce che esiste un HDD non visualizzando la voce 7 dal menu
+  1. Non sono etichettate le porte LAN, WAN e DMZ
+    1. 1 (Interfaces: assign network ports) (ci devono essere 3 interfacce: em0 em1 em2)
+    1. osservare i MAC address nelle impostazioni di rete di VirtualBox se sono in ordine come su monowall
+    1. richiesta di abilitare VLAN? n (è possibile avere monowall con 1 sola interfaccia e con VLAN attive per avere più reti)
+    1. LAN interface: em1
+    1. WAN interface: em0 (monowall si accontenta di 2 interfacce, ma useremo anche la DMZ)
+    1. opzionali: em2
+    1. ENTER
+    1. confermare? y (punto delicato: a casa usa DHCP, in laboratorio viene aggiunto un server DHCP in più, creando caos nello stesso dominio di broadcast. Peroò due server DHCP possono distribuire una porzione di indirizzi)
+    1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
+    1. Ora bisogna configurare gli host
+  1. Avviare il clientcognome
+    1. entrare con uds
+    1. sudo bash
+    1. serve gestore login grafico o desktop manager (mdm = mint desktop manager, lightdm = light desktop manager, kdm = kde desktop manager, nodm = avvia in automatico la sessione)
+    1. serve un desktop enviroment (mate, lxqt, kde)
+    1. serve il browser (firefox-esr è il nome del pacchetto creato per un litigio tra Mozilla e Debian per il logo (panda rosso), ora include patch sia da )
+      1. apt install lightdm mate firefox-esr
+      1. S
+      1. apt install firefox-esr-l10n-it (lingua italiana)
+    1. ora i pacchetti non servono più
+      1. apt clean
+    1. Linux quando parte c'è il kernel che passa il comando ad un gestore di sistema (init) che lancia una serie di script, ora esiste systemd, basato su un eseguibile parallelo
+    1. E' possibile manovrare i singoli servizi da amministratori con:
+      1. in /etc/init.d/... ci sono vari file eseguibili con configuratori (console-setup) e anche processi grafici
+        1. /etc/init.d/lightdm status (gestito da systemd)
+        1. /etc/init.d/lightdm restart (avvia l'interfaccia grafica)
+          1. accedere come uds
+          1. avviare firefox
+          1. andare sulle impostazioni di rete del client di Virtualbox
+            1. Collegare Rete interna e mettere LAN
+          1. aprire terminale MATE
+            1. ip addr
+            1. sudo bash
+            1. /etc/init.d/networking stop
+            1. (PLEASE WAIT UNTIL OUR PROF RESOLVE THE PROBLEM...)
+            1. lanciare a mano la richiesta DHCP
+              1. dhclient enp0s3
+              1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
+    1. tornare su Firefox
+      1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
+        1. admin
+        1. mono
+        1. possibilità di configurazione del router via web attraverso il client o i computer presenti in LAN
+        1. per questione di sicurezza è possibile modificare le impostazioni del router tramite una regola di controllo da parte del PC ospitante
+          1. Firewall -> rules -> (e)
+            1. disabilitare spunta Block.. (infondo)
+          1. Firewall -> rules -> +
+            1. Single host or alias
+            1. Destination: WAN address
+            1. inserire proprio IP
+            1. porte from: 80 to: 80
+            1. Description: Allow: ....
+          1. Apply changes
+        1. Andare sul browser dell'host e scrivere l'indirizzo della WAN da Status -> Interfaces
+          1. Impostare proxy su auto su firefox
+          1. accedere con admin mono
+          1. System -> general setup
+            1. hostaname: routercognome
+            1. domain: cognome.intra
+            1. lasciare spunta Allow DNS...
+            1. user: admin
+            1. password: lasolita
+            1. time zone: Europe/Rome
+            1. Save
+            1. loggare con admin lasolita
+          1. firmware: possiblità di aggiornare monowall via web
+          1. System -> Advanced
+            1. possibilità di attivare la modalità access point
+          1. System -> User manager
+            1. permette di creare un gruppo di utenti con delle regole di accesso, per creare voucher e altro
+          1. Interfaces (assign)
+            1. permette di ricalibrare le interfacce di rete, VLAN e WLAN
+          1. Interfaces -> LAN
+            1. permette di modificare il range di indirizzi
+          1. Interfaces -> WAN
+            1. DHCP -> hostname: routercognome
+            1. Save
+          1. Interfaces -> OPT1
+            1. Enable
+            1. DMZ (è possibile mettere in bridge monowall, ma DMZ deve essere indipendente dalla LAN)
+            1. IP address: 192.168.101.1 / 24
+            1. Save
+            1. "Note: be sure to add firewall rules to permit traffic through the interface." (da configurare il firewall)
+          1. Firewall -> Rules -> LAN
+            1. (valido solo per BSD e non per iptables) Le regole sono valutate in ordine discendente (da sopra a sotto)
+            1. Default: permette tutto
+          1. Firewall -> Rules -> DMZ -> +
+            1. Action: block
+            1. protocol: any
+            1. Source: DMZ subnet
+            1. Destination: LAN subnet
+            1. Description: Block: DMZ to LAN
+            1. Save
+          1. + sotto la (e)
+            1. Pass
+            1. Destination: any
+            1. Description: Allow: DMZ to any
+          1. Apply changes
 
+          - I computer DMZ possono andare su tutta internet? NO: se il DMZ viene "conquistato" bisogna bloccare le connessioni con un firewall che non cercano direttamente un proxy specificato o un DNS personale.
+
+        1. Status -> traffic graph
+        1. Diagnostics -> Logs
+        1. Diagnostics -> DHCP leases ()
+        1. Diagnostics -> ARP table (MAC registrati)
+        1. Diagnostics -> Backup/Restore (XML)
+          1. Download configuration
+        1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
+---
 
 ## Robe utili:
 
@@ -253,16 +385,21 @@ alias shutdown=/sbin/shutdown
       - deborphan: cerca le librerie orfane, non necessarie a nessun software
       deb auto... : rimuove le librerie inutilizzate in automatico
 
+file password:
 ```
 cat /etc/shadow
 ```
 
+file con la configurazione del profilo utente
 ```
 sudo nano /etc/profile
 # aggiungere :/usr/sbin dopo PATH
 ```
 
+1. In caso di problemi con monowall, basta riavviarlo
+1. Le macchine virtuali possono modificare le schede di rete anche durante le esecuzione delle stesse
 
 #### TODO:
-- clonare client, configurare clone e rinominarlo SERVER
-- cron e anacron
+- [x] clonare client, configurare clone e rinominarlo SERVER
+- [ ] cron e anacron
+- [ ] come viene gestito DHCP in LAN e cosa fare la DMZ
