@@ -5,9 +5,9 @@ CC=gcc #g++
 RM=rm -f
 
 # name of the source (include folders if the source isn't in the current dir)
-SRC=readvbx.c
+SRC=checker.c
 # name of the executable
-EXC=readvbx
+EXC=checker
 # params used in the program
 PARAMS=
 # compile params like optimization or other platform targeting
@@ -15,9 +15,8 @@ C_PAR=-Os -Wall -fdiagnostics-color=auto
 # - - - warnings - - -
 #-Wextra -Wall
 
-# - - - general info - - -
 C_INFO=
-
+# - - - infoes - - -
 #-ftime-report
 #-fopt-info
 #-fdump-statistics -fstack-usage ( -fstats for C++)
@@ -25,35 +24,38 @@ C_INFO=
 #-fdiagnostics-color=auto
 #-fdiagnostics-parseable-fixits -fdiagnostics-generate-patch
 
-# - - - optimizations - - -
 C_OPT=-faggressive-loop-optimizations -fcombine-stack-adjustments
 C_OPT+= -fexpensive-optimizations -falign-functions -falign-jumps
 C_OPT+= -falign-labels -falign-loops -floop-nest-optimize
 C_OPT+= -foptimize-strlen -ftree-loop-optimize
+# - - - optimizations - - -
+#-Os
+#-fpredictive-commoning
+#-faggressive-loop-optimizations -fcombine-stack-adjustments -fexpensive-optimizations
+#-falign-functions -falign-jumps -falign-labels -falign-loops
+#-fconserve-stack
+#-floop-nest-optimize -foptimize-strlen -ftree-loop-optimize
 
-
-# - - - folding optimizations - - -
 C_FOLD_OPT=-fipa-icf -fipa-icf-functions -fipa-icf-variables -fipa-reference
 C_FOLD_OPT+= -fipa-pta -foptimize-sibling-calls -freorder-blocks
 C_FOLD_OPT+= -freorder-functions
+# - - - folding optimizations - - -
+#-fipa-icf -fipa-icf-functions -fipa-icf-variables -fipa-reference -fipa-pta
+#-foptimize-sibling-calls -freorder-blocks -freorder-functions
 
 
 
-#all: clean_reset compile run
-all: clean compile 
+all: clean_reset compile run
 
 all_opt: clean_reset compile_optimize run_less
 
 help:
-	@echo "Use make [option]:"
-	@echo "help: show this help"
-	@echo "compile: compile from the source and strip it"
-	@echo "compile_info: compile and show compilation/linking stuffs"
-	@echo "compile_optimize: compile and try to use built-in optimizers"
-	@echo "cron_time: cronometrate compilation time and execution time"
-	@echo "debug: enter debug mode"
-	@echo "clean: remove executable"
-	@echo "clean_reset: remove executable and reset terminal"
+	@echo "\nUse make [option]:\n"
+	@echo "help \n\tshow this help"
+	@echo "compile \n\tcompile from the source and strip it"
+	@echo "compile_info \n\tcompile and show compilation/linking stuffs"
+	@echo "compile_optimize \n\tcompile and try to use built-in optimizers"
+	@echo "compile_optimize \n\tcompile and try to use built-in optimizers"
 
 compile:
 	@$(CC) -o $(EXC) $(SRC)
