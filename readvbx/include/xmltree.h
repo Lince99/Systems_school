@@ -34,34 +34,25 @@ struct STACK {
     stack* next;
 };
 
-//TODO
+/*
+ * initialize xml document structure to NULL
+ */
 xml_tree* init_xml_tree(char* content) {
     xml_tree* xmldoc = NULL;
+
+    xmldoc = (xml_tree*) malloc(sizeof(xml_tree));
+    if(xmldoc == NULL) {
+        fprintf(stderr,"Error on alloc xml document tree!\n");
+        return NULL;
+    }
+    xmldoc->name = NULL;
+    xmldoc->content = NULL;
+    xmldoc->root = NULL;
+
     return xmldoc;
 }
 
-int xml_to_html(xml_tree* doc, char* filename) {
-    return 0;
-}
+//TODO
 
-int xml_to_xml(xml_tree* doc, char* filename) {
-    return 0;
-}
-
-int xml_to_rtf(xml_tree* doc, char* filename) {
-    return 0;
-}
-
-int xml_to_txt(xml_tree* doc, char* filename) {
-    return 0;
-}
-
-int xml_to_stdout(xml_tree* doc) {
-    return 0;
-}
-
-int xml_to_user(xml_tree* doc, char* filename) {
-    return 0;
-}
 
 #endif
