@@ -10,63 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "include/xmltree.h"
-
-/*
- * read from stdin
- */
-char* read_stdin() {
-    char* str = NULL;
-    int pos = 0;
-    char c = 0;
-    
-    fprintf(stdout, "Waiting for stdin...\n"); //TODO: REMOVE ON RELEASE
-    while((c=fgetc(stdin)) != EOF) {
-        if(str == NULL)
-            str = (char*) malloc(sizeof(c));
-        else
-            str = (char*) realloc(str, ++pos);
-        str[pos] = c;
-    }
-    //add string terminator
-    str = (char*) realloc(str, ++pos);
-    str[pos] = '\0';
-    
-    return str;
-}
-
-char* read_file(char* filename) {
-    char* str = NULL;
-    int pos = 0;
-    char c = 0;
-    FILE* fp = NULL;
-    
-    //open file
-    fp = fopen(filename, "r");
-    if(fp == NULL) {
-        fprintf(stderr, "Error on opening %s file!", filename);
-        return NULL;
-    }
-    //read file content
-    while((c=fgetc(fp)) != EOF) {
-        if(str == NULL)
-            str = (char*) malloc(sizeof(c));
-        else {
-            pos++;
-            str = (char*) realloc(str, pos);
-        }
-        str[pos] = c;
-    }
-    //add string terminator
-    str = (char*) realloc(str, ++pos);
-    str[pos] = '\0';
-    
-    return str;
-}
-
-//TODO
-xml_tree* modify_data_level(xml_tree* doc, int level) {
-    return doc;
-}
+#include "include/getarg.h"
+#include "include/printout.h"
 
 //where magic happens
 int main(int argc, char** argv) {
@@ -161,8 +106,9 @@ int main(int argc, char** argv) {
     if(file_content == NULL || !strlen(file_content)) {
         fprintf(stderr, "No content inside %s file!\n", filename_in);
         return 3;
-    }    
-    xmldoc = init_xml_tree(file_content);
+    }
+    xmldoc = xml_to_tree(file_content, filename_in);
+    print_xml_tree(xmldoc); //TODO: REMOVE ON RELEASE
     
     //choose level of data updating xml_tree
     if(quantity_mode == -1)
