@@ -6,8 +6,17 @@
 #include <string.h>
 #include "getarg.h"
 #include "printout.h"
+#include "xmlstruct.h"
+#include "xmlstack.h"
 
-
+xml_tree* xml_to_tree(char* content, char* fname);
+xml_node* extract_root(char* data);
+char* extract_tag_val(char* text, int dim);
+xml_node_attr** extract_attributes(char* text, int dim, int* n_attr);
+xml_node* save_tag(char* data, int data_len, int* pos);
+xml_node* add_child(xml_node* root, xml_node* node);
+xml_node* get_child(xml_node* root, int pos);
+xml_tree* modify_data_level(xml_tree* doc, int level);
 
 static int SAVE_COMMENTS = 0;
 
@@ -89,6 +98,7 @@ xml_node* extract_root(char* data) {
     //toglie la radice principale
     root_stack = pop(root_stack);
     //se ci sono ancora tag aperti c'e' un errore e cancella la struttura
+    //BRUTAL TIME
     if(count_stack(root_stack) > 0) {
         free_node(root);
         return NULL;
@@ -119,6 +129,8 @@ char* extract_tag_val(char* text, int dim) {
     for(; i < out_dim; ++i)
         out[i] = text[i];
     out[i] = '\0';
+    
+    printf("\textract tag val: %s\n\n", out);
 
     return out;
 }
@@ -268,6 +280,11 @@ xml_node* get_child(xml_node* root, int pos) {
     node = root->childs[pos];
 
     return node;
+}
+
+//TODO
+xml_tree* modify_data_level(xml_tree* doc, int level) {
+    return doc;
 }
 
 #endif

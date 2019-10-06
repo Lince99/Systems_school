@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "include/xmltree.h"
+#include "include/xmloperations.h"
 #include "include/getarg.h"
 #include "include/printout.h"
 
@@ -37,58 +37,18 @@ int main(int argc, char** argv) {
     }
     //search for command line arguments' content
     else {
-        argc++; //ignore command name
-        for(; i < argc; i++) {
-            if(quantity_mode == -1) {
-                if(strcmp(argv[i], "-0"))
-                    quantity_mode = 0;
-                else if(strcmp(argv[i], "-1"))
-                    quantity_mode = 1;
-                else if(strcmp(argv[i], "-2"))
-                    quantity_mode = 2;
-            }
-            else {
-                fprintf(stderr, "Too many data quantity mode arguments!\n");
-                return 1;
-            }
-            if(output_mode == -1) {
-                if(strcmp(argv[i], "-html"))
-                    output_mode = 0;
-                else if(strcmp(argv[i], "-xml"))
-                    output_mode = 1;
-                else if(strcmp(argv[i], "-rtf"))
-                    output_mode = 2;
-                else if(strcmp(argv[i], "-txt"))
-                    output_mode = 3;
-            }
-            else {
-                fprintf(stderr, "Too many output format arguments!\n");
-                return 1;
-            }
+        printf("args:\n");
+        for(i = 1; i < argc; i++) {
+            printf("%d : %s\n", i, argv[i]);
             //user-selected filename to read
             if(in_check == 0) {
                 if(strcmp(argv[i], "-i")) {
                     in_check = 1;
-                    if(i < argc-1)
-                        strcpy(filename_in, argv[i+1]);
+                    filename_in = argv[i];
                 }
             }
             else {
                 fprintf(stderr, "Too many input arguments!\n");
-                return 1;
-            }
-            //user-selected output
-            if(out_check == 0) {
-                if(strcmp(argv[i], "-o")) {
-                    out_check = 1;
-                    if(i < argc-1) {
-                        strcpy(filename_out, argv[i+1]);
-                        output_mode = 5;
-                    }
-                }
-            }
-            else {
-                fprintf(stderr, "Too many output arguments!\n");
                 return 1;
             }
         }
@@ -108,46 +68,14 @@ int main(int argc, char** argv) {
         return 3;
     }
     xmldoc = xml_to_tree(file_content, filename_in);
+    printf("after extract\n");
     print_xml_tree(xmldoc); //TODO: REMOVE ON RELEASE
     
-    //choose level of data updating xml_tree
-    if(quantity_mode == -1)
-        quantity_mode = 0; //default value
-    xmldoc = modify_data_level(xmldoc, quantity_mode);
     
     //if no output file name is specified, copy the input file name
-    if(filename_out == NULL)
+    if(filename_out == NULL) {
+        filename_out = (char*) malloc(sizeof(char)*strlen(filename_in));
         strcpy(filename_out, filename_in);
-    if(output_mode == -1)
-        output_mode = 4; //default value
-    //produce output
-    switch(output_mode) {
-        //html
-        case 0:
-            xml_to_html(xmldoc, filename_out);
-            break;
-        //xml (.out_xml)
-        case 1:
-            xml_to_xml(xmldoc, filename_out);
-            break;
-        //rtf
-        case 2:
-            xml_to_rtf(xmldoc, filename_out);
-            break;
-        //txt
-        case 3:
-            xml_to_txt(xmldoc, filename_out);
-            break;
-        //no file output, only terminal
-        case 4:
-            xml_to_stdout(xmldoc);
-            break;
-        //user defined output
-        case 5:
-            xml_to_user(xmldoc, filename_out);
-        default:
-            fprintf(stderr, "Error on selecting output format!\n");
-            return 3;
     }
 
     return 0;
