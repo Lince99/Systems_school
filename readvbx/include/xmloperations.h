@@ -59,7 +59,7 @@ xml_node* extract_root(char* data) {
     while(i < data_len-1) {
 
         //se e' un commento allora diventera' suo figlio
-        if(data[i+1] == '!')
+        if(data[i+1] == '!' || data[i+1] == '?')
             whats_next = 0;
         //se node sara' chiuso allora torna al padre precedente
         else if(data[i+1] == '/')
@@ -129,7 +129,7 @@ char* extract_tag_val(char* text, int dim) {
     for(; i < out_dim; ++i)
         out[i] = text[i];
     out[i] = '\0';
-    
+
     printf("\textract tag val: %s\n\n", out);
 
     return out;
@@ -203,7 +203,8 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
     node = init_xml_node();
 
     //porta il contatore di caratteri a '>' per estrarre il tag da < a >
-    for(; data[i] != '>' && i < data_len; i++);
+    for(; data[i] != '>' || (data[i] != '/' && data[i+1] != '>')
+          && i < data_len; i++);
     text = substring(data, start, i+1);
     text = trim_string(text);
 
