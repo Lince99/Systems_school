@@ -10,16 +10,15 @@ modified: '2019-10-03T10:36:49.343Z'
 
 - Descrizione VirtualBox
 - Introduzione specifica per ogni paragrafo
-- 
 
 ## CLIENT
 
 ### Configurazione:
 
-clientcognome lasolita
+- clientcognome lasolita
 Debian (64bit)
 RAM 1MB
-HDD 4 GB
+HDD 4 GB (4.0 GB root, 368 MB swap)
 NAT
 https://www.debian.org/distrib/netinst
 
@@ -31,264 +30,265 @@ https://www.debian.org/distrib/netinst
 1. abilitare Network con NAT
 1. expert install
 1. Choose language
-  1. Italiano
-  1. Italia - it_IT.UTF-8
-  1. it_IT e it_IT@euro
-  1. UTF8
+    1. Italiano
+    1. Italia - it_IT.UTF-8
+    1. it_IT e it_IT@euro
+    1. UTF8
 1. Configurazione tastiera
-  1. Italiana
+    1. Italiana
 1. Caricare i componenti del programma
-  1. nessun software
+    1. nessun software
 1. Rilevare l'hardware di rete
 1. Configurare la rete
-  1. DHCP
-    1. Si
-    1. 3
-    1. hostname = cognome.intra
+    1. DHCP
+        1. Si
+        1. 3
+        1. hostname = cognome.intra
 1. Scelta distribuzione
-  1. http
-  1. Italy
-  1. ftp.it.debian.org
-  1. Archivio Debian: buster - stable
-    (testing, unstable, experimental sono le rolling release)
+    1. http
+    1. Italy
+    1. ftp.it.debian.org
+    1. Archivio Debian: buster - stable (testing, unstable, experimental sono le rolling release)
 1. Scaricare componenti del programma installazione
-  1. Modalità esperta permette di installare i programmi dall'immagine ISO
+    1. Modalità esperta permette di installare i programmi dall'immagine ISO
 1. Password e utenti
-  1. nomi e password erano nello stesso file, ora sono separati
-  1. "shadow passowrd" abilitato (Sì)
-  1. accesso a root abilitato (Sì)
+    1. nomi e password erano nello stesso file, ora sono separati
+    1. "shadow passowrd" abilitato (Sì)
+    1. accesso a root abilitato (Sì)
     utente root deve essere in possesso di una sola persona (GDPR)
-  1. password: lasolita
-  1. Creazione utente normale:
-    1. Utente Di Servizio
-    1. uds
-    1. lasolita
-1. Configurare orologio 
-    (RTC = real time clock a batteria, GPS via satellite manda l'ora e localizzazione, Orologio telecontrollato di Francoforte)
-  1. NTP = Si
-    1. Consigliato (italiano)
-    1. Europe/Rome (UTC Greenwich +1 inverno, +2 estate, CEST (central europe standard time))
-1. Rilevare dischi (auto)
-1. Partizionamento dei dischi
-  - permette di usare il terminale grazie al multiplexing - 6 terminali + altre grafiche (CTRL+ALT+F1 F2 F3... F9(su pc lab))
-  - ALT+F1 su VM
-  1. Manuale
-    1. HDD nuovo da partizionare
-      - gpt e mbr
-      1. Partizioni primarie
-        1. esteso
-          1. partizioni logiche
-      - 2TB e avvio OS EFI con partizionamento gpt (senza limiti sul partizionamento)
-      - tabella del partizionamento presente all'inizio del disco (gpt copiata anche a senso inverso alla fine del disco)
-      1. SCSI (0,0,0) (sda) - 10,7 GB
-        1. msdos
-          1. SPAZIO LIBERO
-          1. Creare nuova paritzione
+    1. password: lasolita
+    1. Creazione utente normale:
+        1. Utente Di Servizio
+        1. uds
+        1. lasolita
+    1. Configurare orologio (RTC = real time clock a batteria, GPS via satellite manda l'ora e localizzazione, Orologio telecontrollato di Francoforte)
+    1. NTP = Si
+        1. Consigliato (italiano)
+        1. Europe/Rome (UTC Greenwich +1 inverno, +2 estate, CEST (central europe standard time))
+    1. Rilevare dischi (auto)
+    1. Partizionamento dei dischi
+        - permette di usare il terminale grazie al multiplexing - 6 terminali + altre grafiche (CTRL+ALT+F1 F2 F3... F9(su pc lab))
+        - ALT+F1 su VM
+    1. Manuale
+        1. HDD nuovo da partizionare
+            - gpt e mbr
+        1. Partizioni primarie
+            1. esteso
+            1. partizioni logiche
+                - 2TB e avvio OS EFI con partizionamento gpt (senza limiti sul partizionamento)
+                - tabella del partizionamento presente all'inizio del disco (gpt copiata anche a senso inverso alla fine del disco)
+            1. SCSI (0,0,0) (sda) - 10,7 GB
+            1. msdos
+        1. SPAZIO LIBERO
+            1. Creare nuova paritzione
             1. 4.0 GB
             1. Primaria (mbr)
             1. Inizio
                 - btrfs per i dischi flash per sistemi ibridi, FAT va a leggere i dati nella prima parte chiavetta usurandola
             1. Usare come ext4 (estesa con journaling)
             1. Punti di mount: / (cartella di root)
-              - mount: attacca il disco nel tree delle directory
-              - root, home, swap
+                - mount: attacca il disco nel tree delle directory
+                - root, home, swap
             1. attivare nelle opzioni di mount:
             1. discard: rimuovere un file: dereferenziazione per poi essere sovrascritto da altri file, informa il disco della cancellazione, durante i periodi di inattività cancella i settori marchiati "discard"
-              - dispositivi flash: scrivere e riscrivere: cancellazione costa risorse su zone già scritte
+                - dispositivi flash: scrivere e riscrivere: cancellazione costa risorse su zone già scritte
             1. noatime: lettura dei file: scrive le date (accesso, creazione, modifica, ...) sul file letto, quindi scrive e rallenta = alcuni servizi necessitano la gestione di atime (orario di accesso).
             1. etichetta: linuxroot
             1. Flag avviabile: utilizzato da DOS
             1. Impostazione della partizione completata
         1. SPAZIO LIBERO
-          1. Primaria
-          1. Fine
-          1. Area di swap: (memoria virtuale in winzoz), se la RAM è occupata va ad utilizzare il disco nella partizione dedicata
+            1. Primaria
+            1. Fine
+            1. Area di swap: (memoria virtuale in winzoz), se la RAM è occupata va ad utilizzare il disco nella partizione dedicata
         1. Terminare le modifiche
-          1. Yep
-      1. Sistema di base
+            1. Yep
+    1. Sistema di base
         1. scelta del kernel: linux-image-amd64 (ultimo kernel stabile)
         1. generico (mappatura del disco all'avvio, driver autoconfigurati)
-      1. Gestore dei pacchetti
+    1. Gestore dei pacchetti
         1. No (solo software libero)
         1. Si Software contrib (software libero con parti non libere) (installazione di Adobe Flash Player (libreria), (Font proprietari Microsoft)
         1. No repository sorgenti APT
         1. Continua
-      1. Selezione installazione software:
+    1. Selezione installazione software:
         1. Deselezionare tutto
         1. Abilitare pacchetti VirtualBox
         1. Nessun auto update
         1. No partecipare alle statistiche
         1. Deseleziona tutto
-      1. Installare Boot loader GRUB (GRUB è un OS per avviare gli altri OS)
+    1. Installare Boot loader GRUB (GRUB è un OS per avviare gli altri OS)
         1. Installare boot loader GRUB nel master boot record (prima parte del disco che serve ad avviare l'OS)
-          - BIOS legacy: letto primo settore del disco e viene mandato in esecuzione
-          - BIOS EFI: legge il disco per trovare partizioni EFI, carica un file EFI in memoria
-      1. Si
-      1. /dev/sda
-      1. Forzare l'installazione di GRUB su dispositivo rimovibile EFI? No
-        - EFI: partizionamento da 100 MB nella prima parte del disco formattato in gpt
-  1. Terminare l'installazione
-    1. Orologio di sistema da impostare su UTC? Si
-      - Winzoz: locale
-      - Linux: UTC
-      1. Continua
-  - (RIMUOVERE IL CD DAL LETTORE VIRTUALE SE USATA UNA ISO)
+            - BIOS legacy: letto primo settore del disco e viene mandato in esecuzione
+            - BIOS EFI: legge il disco per trovare partizioni EFI, carica un file EFI in memoria
+        1. Si
+        1. /dev/sda
+        1. Forzare l'installazione di GRUB su dispositivo rimovibile EFI? No
+            - EFI: partizionamento da 100 MB nella prima parte del disco formattato in gpt
+    1. Terminare l'installazione
+        1. Orologio di sistema da impostare su UTC? Si
+            - Winzoz: locale
+            - Linux: UTC
+        1. Continua
+            - (RIMUOVERE IL CD DAL LETTORE VIRTUALE SE USATA UNA ISO)
 
 1. Debian GNU/Linux
-  1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
-  1. Segnalazione dell'integrazione del puntatore del mouse
-  1. clientcognome login: uds
-  1. password: lasolita
-  1. UTENTE NORMALE
-    1. pwd : print working directory
-    1. df -h : visualizza lo stato dell'hard disk
-    1. sudo : super user do often
-    1. su - : super user
-    1. password di root: lasolita
-  1. UTENTE ROOT
-    1. apt update
-    1. apt upgrade
-    1. (in caso di problemi: nano /etc/apt/sources.list)
-```
-deb http://deb.debian.org/debian buster main
-deb-src http://deb.debian.org/debian buster main
+    1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
+    1. Segnalazione dell'integrazione del puntatore del mouse
+    1. clientcognome login: uds
+    1. password: lasolita
+    1. UTENTE NORMALE
+        1. pwd : print working directory
+        1. df -h : visualizza lo stato dell'hard disk
+        1. sudo : super user do often
+        1. su - : super user
+        1. password di root: lasolita
+    1. UTENTE ROOT
+        1. apt update
+        1. apt upgrade
+        1. (in caso di problemi: nano /etc/apt/sources.list)
+        ```
+        deb http://deb.debian.org/debian buster main
+        deb-src http://deb.debian.org/debian buster main
 
-deb http://deb.debian.org/debian-security/ buster/updates main
-deb-src http://deb.debian.org/debian-security/ buster/updates main
+        deb http://deb.debian.org/debian-security/ buster/updates main
+        deb-src http://deb.debian.org/debian-security/ buster/updates main
 
-deb http://deb.debian.org/debian buster-updates main
-deb-src http://deb.debian.org/debian buster-updates main
-```
-  1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)
-      - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
-      - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
-      1. S
-      1. cowsay : non funziona perchè i giochi non esistono per root 
-      1. apt install sudo
-      - SUDO permette di usufruire di azioni da amministratore da parte dell'utente normale senza sapere la password di root ma usando la propria (Wireshark richiede accesso hardware alla scheda di rete)
-      - crea gruppo sudo
-      1. id : mostra i gruppi a cui appartiene l'utente corrent
-      1. id uds : mostra i gruppi a cui appartiene all'utente
-      1. adduser uds sudo : iscrive un utente al gruppo
-      1. id uds : ricontrollo se è su sudo 
-      1. exit
-      1. id
-      1. exit
-      1. relogin con uds lasolita
-      1. id : ora uds è sudo
-      1. sudo -s
-        1. password
-      1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
-      1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
+        deb http://deb.debian.org/debian buster-updates main
+        deb-src http://deb.debian.org/debian buster-updates main
+        ```
+    1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)
+        - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
+        - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
+        1. S
+        1. cowsay : non funziona perchè i giochi non esistono per root
+        1. apt install sudo
+        - SUDO permette di usufruire di azioni da amministratore da parte dell'utente normale senza sapere la password di root ma usando la propria (Wireshark richiede accesso hardware alla scheda di rete)
+        - crea gruppo sudo
+        1. id : mostra i gruppi a cui appartiene l'utente corrent
+        1. id uds : mostra i gruppi a cui appartiene all'utente
+        1. adduser uds sudo : iscrive un utente al gruppo
+        1. id uds : ricontrollo se è su sudo
+        1. exit
+        1. id
+        1. exit
+        1. relogin con uds lasolita
+        1. id : ora uds è sudo
+        1. sudo -s
+            1. password
+        1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
+        1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
 
 ## SERVER
 
 1. CREARE IL SERVER
-  1. spegnere la macchina da amministratore
-    1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
-    1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
-  1. clonare la macchina virtuale
-    1. CTRL + O o Pecora Dolly nel menu a tendina
-    1. servercognome
-    1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
-    1. Scegliere "Clone completo", copia tutti i file come disco separato.
+    1. spegnere la macchina da amministratore
+        1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
+        1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
+    1. clonare la macchina virtuale
+        1. CTRL + O o Pecora Dolly nel menu a tendina
+        1. servercognome
+        1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
+        1. Scegliere "Clone completo", copia tutti i file come disco separato.
     1. nome sbagliato: modificare /etc/hostname: (i processi prendono l'hostname all'avvio, quindi lo mantengono durante l'esecuzione anche se nel durante viene modificato)
-      1. login uds
-      1. joe /etc/hostname
-      1. mettere servercognome invece di clientcognome
-      1. CTRL+K e poi X
-      1. modificare file /etc/hosts
-      1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
-      1. ping 127.0.x.x
-      1. shutdown -h now
+    1. login uds
+    1. joe /etc/hostname
+    1. mettere servercognome invece di clientcognome
+        1. CTRL+K e poi X
+    1. modificare file /etc/hosts
+        1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
+    1. ping 127.0.x.x
+    1. shutdown -h now
 
 ## ROUTER
 
 1. Creare nuova macchina per monowall
-  1. routercognome
-  1. BSD
-  1. FreeBSD (32-bit)
-  1. RAM = 128 MB
-  1. HDD = 64 MB
-  1. Seleziona disco di avvio:
-    1. /home/itis/InternetFiles/m0n0wall-generic-pc-1.8.1.iso
+    1. configurazione macchina virtuale:
+        1. routercognome
+        1. BSD
+        1. FreeBSD (32-bit)
+        1. RAM = 128 MB
+        1. HDD = 64 MB
+    1. Seleziona disco di avvio:
+        1. /home/itis/InternetFiles/m0n0wall-generic-pc-1.8.1.iso
     1. avvia e poi subito F12
-  1. Menu di monowall (può funzionare solo con floppy (config ) e CD (OS))
-    1. 7 - Install on HDD
-    1. ad0
-    1. y
-  1. al riavvio spegnere subito
-  1. togliere CD da virtualbox
-    1. Archiviazione
-      1. CD: rimuovi disco dal lettore
-  1. Scheda di rete 1
-    1. Scheda con Bridge
-      1. br0 (a scuola)
-  1. Scheda di rete 2
-    1. Rete interna
-      1. LAN
-  1. Scheda di rete 3
-    1. Rete interna
-      1. DMZ
-  1. riconosce che esiste un HDD non visualizzando la voce 7 dal menu
-  1. Non sono etichettate le porte LAN, WAN e DMZ
-    1. 1 (Interfaces: assign network ports) (ci devono essere 3 interfacce: em0 em1 em2)
-    1. osservare i MAC address nelle impostazioni di rete di VirtualBox se sono in ordine come su monowall
-    1. richiesta di abilitare VLAN? n (è possibile avere monowall con 1 sola interfaccia e con VLAN attive per avere più reti)
-    1. LAN interface: em1
-    1. WAN interface: em0 (monowall si accontenta di 2 interfacce, ma useremo anche la DMZ)
-    1. opzionali: em2
-    1. ENTER
-    1. confermare? y (punto delicato: a casa usa DHCP, in laboratorio viene aggiunto un server DHCP in più, creando caos nello stesso dominio di broadcast. Peroò due server DHCP possono distribuire una porzione di indirizzi)
-    1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
-    1. Ora bisogna configurare gli host
-  1. Avviare il clientcognome
+    1. Menu di monowall (può funzionare solo con floppy (config ) e CD (OS))
+        1. 7 - Install on HDD
+        1. ad0
+        1. y
+        1. al riavvio spegnere subito
+    1. togliere CD da virtualbox
+        1. Archiviazione
+            1. CD: rimuovi disco dal lettore
+    1. Scheda di rete 1
+        1. Scheda con Bridge
+            1. br0 (a scuola)
+    1. Scheda di rete 2
+        1. Rete interna
+            1. LAN
+    1. Scheda di rete 3
+        1. Rete interna
+            1. DMZ
+    1. riconosce che esiste un HDD non visualizzando la voce 7 dal menu
+    1. Non sono etichettate le porte LAN, WAN e DMZ
+        1. 1 (Interfaces: assign network ports) (ci devono essere 3 interfacce: em0 em1 em2)
+        1. osservare i MAC address nelle impostazioni di rete di VirtualBox se sono in ordine come su monowall
+        1. richiesta di abilitare VLAN? n (è possibile avere monowall con 1 sola interfaccia e con VLAN attive per avere più reti)
+        1. LAN interface: em1
+        1. WAN interface: em0 (monowall si accontenta di 2 interfacce, ma useremo anche la DMZ)
+        1. opzionali: em2
+        1. ENTER
+        1. confermare? y (punto delicato: a casa usa DHCP, in laboratorio viene aggiunto un server DHCP in più, creando caos nello stesso dominio di broadcast. Peroò due server DHCP possono distribuire una porzione di indirizzi)
+        1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
+        1. Ora bisogna configurare gli host
+
+
+1. Avviare il clientcognome
     1. entrare con uds
     1. sudo bash
     1. serve gestore login grafico o desktop manager (mdm = mint desktop manager, lightdm = light desktop manager, kdm = kde desktop manager, nodm = avvia in automatico la sessione)
     1. serve un desktop enviroment (mate, lxqt, kde)
     1. serve il browser (firefox-esr è il nome del pacchetto creato per un litigio tra Mozilla e Debian per il logo (panda rosso), ora include patch sia da )
-      1. apt install lightdm mate firefox-esr
-      1. S
-      1. apt install firefox-esr-l10n-it (lingua italiana)
+        1. apt install lightdm mate firefox-esr
+        1. S
+        1. apt install firefox-esr-l10n-it (lingua italiana)
     1. ora i pacchetti non servono più
-      1. apt clean
+        1. apt clean
     1. Linux quando parte c'è il kernel che passa il comando ad un gestore di sistema (init) che lancia una serie di script, ora esiste systemd, basato su un eseguibile parallelo
     1. E' possibile manovrare i singoli servizi da amministratori con:
-      1. in /etc/init.d/... ci sono vari file eseguibili con configuratori (console-setup) e anche processi grafici
+        1. in /etc/init.d/... ci sono vari file eseguibili con configuratori (console-setup) e anche processi grafici
         1. /etc/init.d/lightdm status (gestito da systemd)
-        1. /etc/init.d/lightdm restart (avvia l'interfaccia grafica)
-          1. accedere come uds
-          1. avviare firefox
-          1. andare sulle impostazioni di rete del client di Virtualbox
+    1. /etc/init.d/lightdm restart (avvia l'interfaccia grafica)
+        1. accedere come uds
+        1. avviare firefox
+        1. andare sulle impostazioni di rete del client di Virtualbox
             1. Collegare Rete interna e mettere LAN
-          1. aprire terminale MATE
+        1. aprire terminale MATE
             1. ip addr
             1. sudo bash
             1. /etc/init.d/networking stop
             1. (PLEASE WAIT UNTIL OUR PROF RESOLVE THE PROBLEM...)
             1. lanciare a mano la richiesta DHCP
-              1. dhclient enp0s3
-              1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
-    1. tornare su Firefox
-      1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
+                1. dhclient enp0s3
+                1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
+1. tornare su Firefox
+    1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
         1. admin
-        1. mono
-        1. possibilità di configurazione del router via web attraverso il client o i computer presenti in LAN
-        1. per questione di sicurezza è possibile modificare le impostazioni del router tramite una regola di controllo da parte del PC ospitante
-          1. Firewall -> rules -> (e)
+    1. mono
+    1. possibilità di configurazione del router via web attraverso il client o i computer presenti in LAN
+    1. per questione di sicurezza è possibile modificare le impostazioni del router tramite una regola di controllo da parte del PC ospitante
+        1. Firewall -> rules -> (e)
             1. disabilitare spunta Block.. (infondo)
-          1. Firewall -> rules -> +
+        1. Firewall -> rules -> +
             1. Single host or alias
             1. Destination: WAN address
             1. inserire proprio IP
             1. porte from: 80 to: 80
             1. Description: Allow: ....
-          1. Apply changes
-        1. Andare sul browser dell'host e scrivere l'indirizzo della WAN da Status -> Interfaces
-          1. Impostare proxy su auto su firefox
-          1. accedere con admin mono
-          1. System -> general setup
+        1. Apply changes
+    1. Andare sul browser dell'host e scrivere l'indirizzo della WAN da Status -> Interfaces
+        1. Impostare proxy su auto su firefox
+        1. accedere con admin mono
+        1. System -> general setup
             1. hostaname: routercognome
             1. domain: cognome.intra
             1. lasciare spunta Allow DNS...
@@ -297,42 +297,40 @@ deb-src http://deb.debian.org/debian buster-updates main
             1. time zone: Europe/Rome
             1. Save
             1. loggare con admin lasolita
-          1. firmware: possiblità di aggiornare monowall via web
-          1. System -> Advanced
+        1. firmware: possiblità di aggiornare monowall via web
+        1. System -> Advanced
             1. possibilità di attivare la modalità access point
-          1. System -> User manager
+        1. System -> User manager
             1. permette di creare un gruppo di utenti con delle regole di accesso, per creare voucher e altro
-          1. Interfaces (assign)
+        1. Interfaces (assign)
             1. permette di ricalibrare le interfacce di rete, VLAN e WLAN
-          1. Interfaces -> LAN
+        1. Interfaces -> LAN
             1. permette di modificare il range di indirizzi
-          1. Interfaces -> WAN
+        1. Interfaces -> WAN
             1. DHCP -> hostname: routercognome
             1. Save
-          1. Interfaces -> OPT1
+        1. Interfaces -> OPT1
             1. Enable
             1. DMZ (è possibile mettere in bridge monowall, ma DMZ deve essere indipendente dalla LAN)
             1. IP address: 192.168.101.1 / 24
             1. Save
             1. "Note: be sure to add firewall rules to permit traffic through the interface." (da configurare il firewall)
-          1. Firewall -> Rules -> LAN
+        1. Firewall -> Rules -> LAN
             1. (valido solo per BSD e non per iptables) Le regole sono valutate in ordine discendente (da sopra a sotto)
             1. Default: permette tutto
-          1. Firewall -> Rules -> DMZ -> +
+        1. Firewall -> Rules -> DMZ -> +
             1. Action: block
             1. protocol: any
             1. Source: DMZ subnet
             1. Destination: LAN subnet
             1. Description: Block: DMZ to LAN
             1. Save
-          1. + sotto la (e)
+        1. + sotto la (e)
             1. Pass
             1. Destination: any
             1. Description: Allow: DMZ to any
-          1. Apply changes
-
-          - I computer DMZ possono andare su tutta internet? NO: se il DMZ viene "conquistato" bisogna bloccare le connessioni con un firewall che non cercano direttamente un proxy specificato o un DNS personale.
-
+        1. Apply changes
+            - I computer DMZ possono andare su tutta internet? NO: se il DMZ viene "conquistato" bisogna bloccare le connessioni con un firewall che non cercano direttamente un proxy specificato o un DNS personale.
         1. Status -> traffic graph
         1. Diagnostics -> Logs
         1. Diagnostics -> DHCP leases ()
