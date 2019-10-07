@@ -8,6 +8,7 @@
 #include "printout.h"
 #include "xmlstruct.h"
 #include "xmlstack.h"
+#include "colors.h"
 
 xml_tree* xml_to_tree(char* content, char* fname);
 xml_node* extract_root(char* data);
@@ -62,7 +63,8 @@ xml_node* extract_root(char* data) {
         if(data[i+1] == '!' || data[i+1] == '?')
             whats_next = 0;
         //se node sara' chiuso allora torna al padre precedente
-        else if(data[i+1] == '/')
+        //else if(data[i+1] == '/')
+        else if(data[i] == '<' && data[i+1] == '/' || (data[i] == '/' && data[i+1] == '>'))
             whats_next = 1;
         //se il prossimo e' un nuovo tag allora node diventa padre
         else
@@ -71,6 +73,7 @@ xml_node* extract_root(char* data) {
         //salva il tag corrente se e' un tag aperto o commento
         if(whats_next != 1)
             node = save_tag(data, data_len, &i);
+        printf(ANSI_BOLD "I'm here!" ANSI_RESET "\n");
         //se e' un tag aperto lo aggiunge alla coda in attesa di una chiusura
         if(whats_next == 2) {
             if(!node->is_comment)
@@ -84,7 +87,7 @@ xml_node* extract_root(char* data) {
                 for(i = i+1; data[i] != '<' && i < data_len-1; i++);
                 //torna al precedente padre
                 root_stack = pop(root_stack);
-            }while(data[i] == '<' && data[i+1] == '/');
+            }while(data[i] == '<' && data[i+1] == '/' || (data[i] == '/' && data[i+1] == '>'));
         }
 
         //e la rende figlia della radice attuale (inizia con "null")
@@ -151,11 +154,19 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
             //ottiene la lunghezza dell'attributo
             while(i+j < dim && text[i+j] != '=')
                 j++;
-            if(n_at == 0)
+            for(int x=0; x < n_at; x++)
+                printf("\t\t%d: %s\n", x, out[x]->attr);
+            printf("\tNot broke %d\n", n_at);
+            //TODO: FIX HERE
+            if(n_at == 0) {
+                printf("\t\t\tMALLOC\n");
                 out = (xml_node_attr**) malloc(sizeof(xml_node_attr*));
-            else
-                out = (xml_node_attr**) realloc(out,
-                                              sizeof(xml_node_attr*)*n_at);
+            }
+            else {
+                printf("\t\t\tREALLOC BROKE %d\n", n_at);
+                out = (xml_node_attr**) realloc(out, sizeof(xml_node_attr*)*n_at);
+            }
+            printf("\tBroke %d\n", n_at);
             //salva l'attributo
             out[n_at] = init_xml_node_attr();
             if(out == NULL)
@@ -177,6 +188,8 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
         }
     }
 
+
+    printf("\t--- OUT OF EXTR ATTR\n");
     *n_attr = n_at;
     return out;
 }
@@ -193,6 +206,8 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
     char* tmp = NULL;
     const char* start_cmt = "<!--";
     const char* end_cmt = "-->";
+    const char* start_def = "<?";
+    const char* end_def = "?>";
     int start = *pos;
     int i = start;
 
@@ -203,8 +218,7 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
     node = init_xml_node();
 
     //porta il contatore di caratteri a '>' per estrarre il tag da < a >
-    for(; data[i] != '>' || (data[i] != '/' && data[i+1] != '>')
-          && i < data_len; i++);
+    for(; data[i] != '>' && i < data_len; i++);
     text = substring(data, start, i+1);
     text = trim_string(text);
 
@@ -212,6 +226,14 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
     if(strncmp(text, start_cmt, strlen(start_cmt)) == 0) {
         tmp = substring(text, strlen(start_cmt),
                          strlen(text)-strlen(end_cmt));
+        tmp = trim_string(tmp);
+        node->tag = tmp;
+        node->is_comment = 1;
+    }
+    //se il tag corrente e' una dichiarazione allora lo estrae come commento
+    else if(strncmp(text, start_def, strlen(start_def)) == 0) {
+        tmp = substring(text, strlen(start_def),
+                         strlen(text)-strlen(end_def));
         tmp = trim_string(tmp);
         node->tag = tmp;
         node->is_comment = 1;

@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     int in_check = 0;
     int out_check = 0;
     xml_tree* xmldoc = NULL;
-    
+
     //check for arg contents
     if(argc < 1) {
         fprintf(stderr, "Error on argc parsing! argc < 1!\n");
@@ -53,7 +53,8 @@ int main(int argc, char** argv) {
             }
         }
     }
-    
+
+    printf("Ready to read file content:\n");
     //Read data from input
     if(in_check && filename_in != NULL)
         file_content = read_file(filename_in);
@@ -61,17 +62,19 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Error on reading file content!\n");
         return 2;
     }
-    
+
+
     //translate string to xml_tree
     if(file_content == NULL || !strlen(file_content)) {
         fprintf(stderr, "No content inside %s file!\n", filename_in);
         return 3;
     }
+    printf("File letto:\n");
     xmldoc = xml_to_tree(file_content, filename_in);
     printf("after extract\n");
     print_xml_tree(xmldoc); //TODO: REMOVE ON RELEASE
-    
-    
+
+
     //if no output file name is specified, copy the input file name
     if(filename_out == NULL) {
         filename_out = (char*) malloc(sizeof(char)*strlen(filename_in));

@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+Host: localhost:2080
+Content-Type: text/html; charset=UTF-8
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: it-IT,it;q=0.8,en-US;q=0.5,en;q=0.3
+Accept-Encoding: gzip, deflate
+
+<html>
+<head>
+    <title>BBMMCC</title>
+</head>
+<body>
+
+Bau bau, miao miao, cip cip.
+
+</body>
+
+</html>

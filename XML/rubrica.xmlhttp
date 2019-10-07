@@ -67,4 +67,12 @@ Accept-Encoding: gzip, deflate
 		<nickname>D</nickname>
 	</elemento>
 	
+	<elemento>
+		<nome>Pier Giorgio</nome>
+		<cognome>Fusk</cognome>
+		<numero>3728372273</numero>
+		<datanascita d="23" m="06" y="2010"/>
+		<email>mariorossucci11@email.com</email>
+	</elemento>
+	
 </rubrica>

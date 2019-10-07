@@ -15,7 +15,36 @@ void print_tree(xml_node* root, int level);
 
 
 
-int xml_to_html(xml_tree* doc, char* filename) {
+int xml_to_html(xml_tree* root, char* filename) {
+    FILE* fp = NULL;
+
+    //open file
+    fp = fopen(filename, "w+");
+    if(fp == NULL) {
+        fprintf(stderr, "Error on opening %s file!", filename);
+        return -1;
+    }
+    fprintf(fp,
+"<!DOCTYPE html>\
+<html lang=\"it\" dir=\"ltr\">\
+    <head>\
+        <meta charset=\"utf-8\">\
+        <meta name = \"viewport\" content = \"width=device-width, initial-scale=1.0\">\
+        <meta name = \"keywords\" content = \"xml, htmloutput, parsing\"/>\
+        <meta name = \"description\" content = \"%s\"/>\
+        <title>%s</title>\
+    </head>\
+    <body>");
+
+    //TODO print LIST of nodes
+
+    fprintf(fp, "\
+        <div>\
+            <a href=\"#\"> RETURN TOP </a>\
+            <p><span> (C) Copyright 2019</span><br><br></p>\
+        </div>\
+    </body>\
+</html>");
     return 0;
 }
 
@@ -32,6 +61,11 @@ int xml_to_txt(xml_tree* doc, char* filename) {
 }
 
 int xml_to_stdout(xml_tree* doc) {
+
+    if(doc == NULL)
+        return -1;
+    print_xml_tree(doc);
+
     return 0;
 }
 
