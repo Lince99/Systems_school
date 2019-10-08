@@ -2,7 +2,7 @@
 tags: [Networking, Routing]
 title: TPSIT
 created: '2019-09-24T08:59:47.457Z'
-modified: '2019-10-01T10:13:39.811Z'
+modified: '2019-10-08T10:32:01.277Z'
 ---
 
 # TPSIT
@@ -75,3 +75,4 @@ Porta generata dai client in locale per fare la richiesta verso l'esterno per ac
 ### Port forwarding
 
 Modifica la tabella NAT del router
+

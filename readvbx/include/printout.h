@@ -34,7 +34,7 @@ int xml_to_html(xml_tree* root, char* filename) {
         <meta name = \"description\" content = \"%s\"/>\
         <title>%s</title>\
     </head>\
-    <body>");
+    <body>", filename, filename);
 
     //TODO print LIST of nodes
 
