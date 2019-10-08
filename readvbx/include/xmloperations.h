@@ -46,6 +46,7 @@ xml_node* extract_root(char* data) {
     int i = 0;
     int data_len = 0;
     int whats_next = 0;
+    //int autoclose = 0;
 
     if(data == NULL)
         return NULL;
@@ -58,24 +59,25 @@ xml_node* extract_root(char* data) {
     data_len = strlen(data);
 
     while(i < data_len-1) {
-
         //se e' un commento allora diventera' suo figlio
         if(data[i+1] == '!' || data[i+1] == '?')
             whats_next = 0;
         //se node sara' chiuso allora torna al padre precedente
         //else if(data[i+1] == '/')
-        else if(data[i] == '<' && data[i+1] == '/' || (data[i] == '/' && data[i+1] == '>'))
+        else if(data[i] == '<' && data[i+1] == '/')
             whats_next = 1;
         //se il prossimo e' un nuovo tag allora node diventa padre
         else
             whats_next = 2;
-
         //salva il tag corrente se e' un tag aperto o commento
-        if(whats_next != 1)
+        if(whats_next != 1) {
             node = save_tag(data, data_len, &i);
-        printf(ANSI_BOLD "I'm here!" ANSI_RESET "\n");
+            if(data[i-2] == '/' && data[i-1] == '>')
+                whats_next = 3;
+        }
         //se e' un tag aperto lo aggiunge alla coda in attesa di una chiusura
         if(whats_next == 2) {
+            //if(!node->is_comment && !autoclose)
             if(!node->is_comment)
                 root_stack = push(root_stack, node);
         }
@@ -87,12 +89,12 @@ xml_node* extract_root(char* data) {
                 for(i = i+1; data[i] != '<' && i < data_len-1; i++);
                 //torna al precedente padre
                 root_stack = pop(root_stack);
-            }while(data[i] == '<' && data[i+1] == '/' || (data[i] == '/' && data[i+1] == '>'));
+            }while(data[i] == '<' && data[i+1] == '/');
         }
 
         //e la rende figlia della radice attuale (inizia con "null")
         //se e' un tag aperto oppure un commento e si vuole salvarlo
-        if(whats_next == 2 || (whats_next == 0 && SAVE_COMMENTS))
+        if(whats_next == 2 || whats_next == 3 || (whats_next == 0 && SAVE_COMMENTS))
             tmp = add_child(tmp, node);
         //l'ultimo nodo aperto e' il padre per i successivi nodi
         tmp = get_last(root_stack);
@@ -133,14 +135,13 @@ char* extract_tag_val(char* text, int dim) {
         out[i] = text[i];
     out[i] = '\0';
 
-    printf("\textract tag val: %s\n\n", out);
-
     return out;
 }
 
 /*
  * funzione che estrae da un tag i vari attributi
  */
+//TODO FIX ESTRAZIONE VALORE DELL'ATTRIBUTO CON / NEI TAG AUTOCHIUDENTI
 xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
     xml_node_attr** out = NULL;
     int i = 0;
@@ -154,23 +155,17 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
             //ottiene la lunghezza dell'attributo
             while(i+j < dim && text[i+j] != '=')
                 j++;
-            for(int x=0; x < n_at; x++)
-                printf("\t\t%d: %s\n", x, out[x]->attr);
-            printf("\tNot broke %d\n", n_at);
-            //TODO: FIX HERE
             if(n_at == 0) {
-                printf("\t\t\tMALLOC\n");
                 out = (xml_node_attr**) malloc(sizeof(xml_node_attr*));
             }
             else {
-                printf("\t\t\tREALLOC BROKE %d\n", n_at);
-                out = (xml_node_attr**) realloc(out, sizeof(xml_node_attr*)*n_at);
+                out = (xml_node_attr**) realloc(out, sizeof(xml_node_attr*)*n_at*2);
             }
-            printf("\tBroke %d\n", n_at);
-            //salva l'attributo
-            out[n_at] = init_xml_node_attr();
+            //printf("\tBroke %d\n", n_at);
             if(out == NULL)
                 break;
+            //salva l'attributo
+            out[n_at] = init_xml_node_attr();
             out[n_at]->attr = substring(text, i, i+j);
             //ottiene la lunghezza del valore dell'attributo
             i += j;
@@ -188,8 +183,6 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
         }
     }
 
-
-    printf("\t--- OUT OF EXTR ATTR\n");
     *n_attr = n_at;
     return out;
 }
@@ -256,8 +249,10 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
             node->tag_value = trim_string(tmp);
         }
     }
-    print_node(node); //TODO: REMOVE ON RELEASE
     *pos = i+1;
+
+    //printf("\nNew node:\n");
+    //print_node(node);
 
     return node;
 }

@@ -11,6 +11,7 @@ stack* pop(stack* head);
 xml_node* get_last(stack* head);
 int count_stack(stack* head);
 
+
 struct STACK {
     xml_node* value;
     stack* next;

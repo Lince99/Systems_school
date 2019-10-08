@@ -74,12 +74,13 @@ int main(int argc, char** argv) {
     printf("after extract\n");
     print_xml_tree(xmldoc); //TODO: REMOVE ON RELEASE
 
-
     //if no output file name is specified, copy the input file name
     if(filename_out == NULL) {
         filename_out = (char*) malloc(sizeof(char)*strlen(filename_in));
         strcpy(filename_out, filename_in);
     }
+
+    free_xml(xmldoc);
 
     return 0;
 }

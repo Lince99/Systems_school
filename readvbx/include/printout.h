@@ -2,6 +2,8 @@
 #define PRINTOUT_H
 
 #include "xmlstruct.h"
+#include "xmlstack.h"
+#include "colors.h"
 
 int xml_to_html(xml_tree* doc, char* filename);
 int xml_to_xml(xml_tree* doc, char* filename);
@@ -12,6 +14,7 @@ int xml_to_user(xml_tree* doc, char* filename);
 void print_node(xml_node* node);
 void print_xml_tree(xml_tree* doc);
 void print_tree(xml_node* root, int level);
+void print_stack(stack* head);
 
 
 
@@ -192,6 +195,29 @@ void print_tree(xml_node* root, int level) {
     for(i = 0; i < root->n_childs; i++) {
         if(root->n_childs != 0)
             print_tree(root->childs[i], level);
+    }
+
+}
+
+/*
+ * print a neat version for the stdout
+ */
+void print_stack(stack* head) {
+
+    if(head == NULL)
+        printf(ANSI_RED "Void stack!" ANSI_RESET "\n");
+    while(head != NULL) {
+        if(head->value == NULL)
+            return;
+        if(head->value->tag == NULL)
+            printf("NULL");
+        else
+            printf("\"%s\"", head->value->tag);
+        if(head->next == NULL)
+            printf(".\n");
+        else
+            printf(",\t");
+        head = head->next;
     }
 
 }
