@@ -1,26 +1,38 @@
 # READVBX
 
-Leggere file .vbox (XML) per poi convertire i dati contenuti a scelta 
+Leggere file .vbox (XML) per poi convertire i dati contenuti a scelta
 in xml, html, rtf, txt
 
 ## Come funziona
 
 1. Legge da stdin o da argomento il file .vbox
-    - -i nomefile.vbox : legge dal file indicato
-        (NECESSARIA ESTENSIONE VBOX, configurabile)
+    -i nomefile.vbox : legge dal file indicato
+    (NECESSARIA ESTENSIONE VBOX, configurabile)
 1. Stampa in uscita i dati selezionati nei vari formati possibili
 	1. Quantità di dati:
-		- -0 livello minimo di dati da esportare
-		- -1 livello intermedio (dati di rete, uuid)
-		- -2 livello completo (ogni dato presente nel .vbox)
-		- in caso nessun livello sia stato selezionato, viene fornito il massimo dei dati
+	    - -0 livello minimo di dati da esportare
+	    - -1 livello intermedio (dati di rete, uuid)
+	    - -2 livello completo (ogni dato presente nel .vbox)
+	    - in caso nessun livello sia stato selezionato, viene fornito il massimo dei dati
 	1. Formato di output:
-		- -html XHTML+CSS : output con maggior stile
-		- -xml XML : output uguale se la quantità è 2
-		- -rtf : output per esportare un documento
-		- -txt : output di anteprima dei contenuti
-		- -o : output con nome scelto a priori con estensione (deve essere valida)
-		- in caso nessun formato sia stato selezionato, stampa in stdout
+	    - -html XHTML+CSS : output con maggior stile
+	    - -xml XML : output uguale se la quantità è 2
+	    - -rtf : output per esportare un documento
+	    - -txt : output di anteprima dei contenuti
+	    - -o : output con nome scelto a priori con estensione (deve essere valida)
+	    - in caso nessun formato sia stato selezionato, stampa in stdout
+
+## Compilare il programma
+
+E' presente un makefile per il progetto
+
+Usare
+```bash
+make help
+```
+per vedere tutte le opzioni disponibili
+
+Usare semplicemente __make__ per una compilazione semplice del programma
 
 ## Esempi
 
@@ -42,10 +54,16 @@ Legge dal file .vbox solamente i dati minimi per esportarli in txt
 readvbx -i client.vbox -0 -o client_info.txt
 ```
 
-Comando minimo possibile
+Comando minimo possibile, richiede file in stdin e produce il risultato in stdout
 
 ```bash
-readvbx -i client.vbox -txt
+readvbx
+```
+
+Comando minimo con redirect
+
+```bash
+readvbx < client.vbox 2> result.txt
 ```
 
 ## Errori

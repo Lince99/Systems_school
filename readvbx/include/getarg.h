@@ -9,6 +9,7 @@ char* read_stdin();
 char* read_file(char* filename);
 int get_pos(char* data, int start, char find);
 char* substring(char* str, int start, int end);
+char* remove_extension(char* str);
 char* trim_string(char* str);
 char* trim_xml(char* str);
 
@@ -21,7 +22,7 @@ char* read_stdin() {
     char* str = NULL;
     int pos = 0;
     char c = 0;
-    
+
     fprintf(stdout, "Waiting for stdin...\n"); //TODO: REMOVE ON RELEASE
     while((c=fgetc(stdin)) != EOF) {
         if(str == NULL)
@@ -33,7 +34,7 @@ char* read_stdin() {
     //add string terminator
     str = (char*) realloc(str, ++pos);
     str[pos] = '\0';
-    
+
     return str;
 }
 
@@ -45,7 +46,7 @@ char* read_file(char* filename) {
     int pos = 0;
     char c = 0;
     FILE* fp = NULL;
-    
+
     //open file
     fp = fopen(filename, "r");
     if(fp == NULL) {
@@ -65,7 +66,7 @@ char* read_file(char* filename) {
     //add string terminator
     str = (char*) realloc(str, ++pos);
     str[pos] = '\0';
-    
+
     return str;
 }
 
@@ -111,6 +112,26 @@ char* substring(char* str, int start, int end) {
     new_s[i] = '\0';
 
     return new_s;
+}
+
+/*
+ * rimuove l'estensione (dall'ultimo punto presente fino all'ultimo carattere)
+ * dal nome di un file, restituendo una nuova stringa
+ */
+char* remove_extension(char* str) {
+    int i = 0;
+    char* new_str = NULL;
+
+    if(str == NULL)
+        return NULL;
+    //reach the last . in the filename
+    for(i = strlen(str)-1; i > 0 && str[i] != '.'; i--);
+    new_str = (char*) malloc(sizeof(char)*(i+1));
+    strncpy(new_str, str, i);
+    //add zero terminator
+    new_str[i] = '\0';
+
+    return new_str;
 }
 
 /*

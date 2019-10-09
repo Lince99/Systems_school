@@ -10,15 +10,17 @@ void print_xmlstruct_html(xml_node* node, FILE* fp);
 int xml_to_xml(xml_tree* doc, char* filename);
 int xml_to_rtf(xml_tree* doc, char* filename);
 int xml_to_txt(xml_tree* doc, char* filename);
+void print_xmlstruct_txt(xml_node* node, FILE* fp);
 int xml_to_stdout(xml_tree* doc);
-int xml_to_user(xml_tree* doc, char* filename);
 void print_node(xml_node* node);
 void print_xml_tree(xml_tree* doc);
 void print_tree(xml_node* root, int level);
 void print_stack(stack* head);
 
 
-
+/*
+ * print xml tree with html format, return 1 on errors, 0 if it's ok
+ */
 int xml_to_html(xml_tree* doc, char* filename) {
     FILE* fp = NULL;
 
@@ -26,8 +28,9 @@ int xml_to_html(xml_tree* doc, char* filename) {
     fp = fopen(filename, "w+");
     if(fp == NULL) {
         fprintf(stderr, "Error on opening %s file!", filename);
-        return -1;
+        return 1;
     }
+    printf("nome file html: %s\n", filename);
     //stampa head
     fprintf(fp,
 "<!DOCTYPE html>\
@@ -42,9 +45,9 @@ int xml_to_html(xml_tree* doc, char* filename) {
     <body>", doc->name, doc->name);
     //stampa content
     fprintf(fp, "<div class=\"content\"><h1>%s xml structure:</h1>", doc->name);
-    fprintf(fp, "<ol>");
+    fprintf(fp, "<ul>");
     print_xmlstruct_html(doc->root, fp);
-	fprintf(fp, "</ol>");
+	fprintf(fp, "</ul>");
 	//stampa footer
     fprintf(fp, "\
         <div class=\"footer\">\
@@ -53,25 +56,16 @@ int xml_to_html(xml_tree* doc, char* filename) {
         </div>\
     </body>\
 </html>");
+
     return 0;
 }
 
 /*
-<ol>
-	<li>nome tag<br/><p>valore del tag</p>
-		<ul>
-			<li>nome attributo = valore dell'attributo</li>
-		</ul>
-		<ol>
-			<li>nome tag figlio<br/>
-			</li>
-		</ol>
-	</li>
-</ol>
-*/
+ * recursive funtion that print xml nodes one by one, with innested lists
+ */
 void print_xmlstruct_html(xml_node* node, FILE* fp) {
 	int i = 0;
-	
+
 	if(node == NULL)
 		return;
 	//se è root passa direttamente ai figli
@@ -87,17 +81,17 @@ void print_xmlstruct_html(xml_node* node, FILE* fp) {
 		if(node->attributes != NULL) {
 			fprintf(fp, "<ul>");
 			for(i = 0; i < node->n_attributes; i++)
-				fprintf(fp, "<li>%s = %s</li>", 
-						node->attributes[i]->attr, 
+				fprintf(fp, "<li>%s = %s</li>",
+						node->attributes[i]->attr,
 						node->attributes[i]->attr_val);
 			fprintf(fp, "</ul>");
 		}
 	}
 	//apre i tag figli
 	for(i = 0; i < node->n_childs; i++) {
-		fprintf(fp, "<ol>");
+		fprintf(fp, "<ul>");
 		print_xmlstruct_html(node->childs[i], fp);
-		fprintf(fp, "</ol>");
+		fprintf(fp, "</ul>");
 	}
 	fprintf(fp, "</li>");
 }
@@ -111,7 +105,48 @@ int xml_to_rtf(xml_tree* doc, char* filename) {
 }
 
 int xml_to_txt(xml_tree* doc, char* filename) {
+    FILE* fp = NULL;
+
+    //open file
+    fp = fopen(filename, "w+");
+    if(fp == NULL) {
+        fprintf(stderr, "Error on opening %s file!", filename);
+        return 1;
+    }
+    print_xmlstruct_txt(doc->root, fp);
+
     return 0;
+}
+
+/*
+ * recursive funtion that print xml nodes one by one, with innested lists
+ */
+void print_xmlstruct_txt(xml_node* node, FILE* fp) {
+	int i = 0;
+
+	if(node == NULL)
+		return;
+	//se è root passa direttamente ai figli
+	if(node->tag != NULL) {
+		//satmpa nome e valore del tag
+		if(node->is_comment)
+			fprintf(fp, "!-- ");
+		fprintf(fp, "%s", node->tag);
+		if(node->tag_value != NULL)
+			fprintf(fp, ": %s", node->tag_value);
+        fprintf(fp, "\n");
+		//stampa gli attributi del tag
+		if(node->attributes != NULL) {
+			for(i = 0; i < node->n_attributes; i++)
+				fprintf(fp, "\t%s = %s\n",
+						node->attributes[i]->attr,
+						node->attributes[i]->attr_val);
+			fprintf(fp, "\n");
+		}
+	}
+	//apre i tag figli
+	for(i = 0; i < node->n_childs; i++)
+		print_xmlstruct_txt(node->childs[i], fp);
 }
 
 int xml_to_stdout(xml_tree* doc) {
@@ -120,10 +155,6 @@ int xml_to_stdout(xml_tree* doc) {
         return -1;
     print_xml_tree(doc);
 
-    return 0;
-}
-
-int xml_to_user(xml_tree* doc, char* filename) {
     return 0;
 }
 

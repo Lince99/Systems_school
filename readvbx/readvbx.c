@@ -16,10 +16,9 @@
 //where magic happens
 int main(int argc, char** argv) {
     int i = 0;
-    char* file_content = NULL; //where XML reside
+    char* file_content = NULL; //where XML content reside
     char* filename_in = NULL; //input file name
     char* filename_out = NULL; //output file name
-    char* file_content_out = NULL; //where output content reside
     int quantity_mode = -1;
     int output_mode = -1;
     int in_check = 0;
@@ -54,7 +53,6 @@ int main(int argc, char** argv) {
         }
     }
 
-    printf("Ready to read file content:\n");
     //Read data from input
     if(in_check && filename_in != NULL)
         file_content = read_file(filename_in);
@@ -69,17 +67,15 @@ int main(int argc, char** argv) {
         fprintf(stderr, "No content inside %s file!\n", filename_in);
         return 3;
     }
-    printf("File letto:\n");
     xmldoc = xml_to_tree(file_content, filename_in);
-    printf("after extract\n");
-    print_xml_tree(xmldoc); //TODO: REMOVE ON RELEASE
 
+    //generate output
+    filename_out = remove_extension(filename_in);
     //if no output file name is specified, copy the input file name
-    if(filename_out == NULL) {
-        filename_out = (char*) malloc(sizeof(char)*strlen(filename_in));
-        strcpy(filename_out, filename_in);
-    }
+    xml_to_html(xmldoc, strcat(filename_out, ".html"));
+    xml_to_txt(xmldoc, strcat(filename_out, ".txt"));
 
+    //free xml structure
     free_xml(xmldoc);
 
     return 0;

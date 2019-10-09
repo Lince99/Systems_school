@@ -251,9 +251,6 @@ xml_node* save_tag(char* data, int data_len, int* pos) {
     }
     *pos = i+1;
 
-    //printf("\nNew node:\n");
-    //print_node(node);
-
     return node;
 }
 
