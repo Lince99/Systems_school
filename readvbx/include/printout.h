@@ -6,6 +6,7 @@
 #include "colors.h"
 
 int xml_to_html(xml_tree* doc, char* filename);
+void print_xmlstruct_html(xml_node* node, FILE* fp);
 int xml_to_xml(xml_tree* doc, char* filename);
 int xml_to_rtf(xml_tree* doc, char* filename);
 int xml_to_txt(xml_tree* doc, char* filename);
@@ -18,7 +19,7 @@ void print_stack(stack* head);
 
 
 
-int xml_to_html(xml_tree* root, char* filename) {
+int xml_to_html(xml_tree* doc, char* filename) {
     FILE* fp = NULL;
 
     //open file
@@ -27,6 +28,7 @@ int xml_to_html(xml_tree* root, char* filename) {
         fprintf(stderr, "Error on opening %s file!", filename);
         return -1;
     }
+    //stampa head
     fprintf(fp,
 "<!DOCTYPE html>\
 <html lang=\"it\" dir=\"ltr\">\
@@ -37,18 +39,67 @@ int xml_to_html(xml_tree* root, char* filename) {
         <meta name = \"description\" content = \"%s\"/>\
         <title>%s</title>\
     </head>\
-    <body>", filename, filename);
-
-    //TODO print LIST of nodes
-
+    <body>", doc->name, doc->name);
+    //stampa content
+    fprintf(fp, "<div class=\"content\"><h1>%s xml structure:</h1>", doc->name);
+    fprintf(fp, "<ol>");
+    print_xmlstruct_html(doc->root, fp);
+	fprintf(fp, "</ol>");
+	//stampa footer
     fprintf(fp, "\
-        <div>\
+        <div class=\"footer\">\
             <a href=\"#\"> RETURN TOP </a>\
             <p><span> (C) Copyright 2019</span><br><br></p>\
         </div>\
     </body>\
 </html>");
     return 0;
+}
+
+/*
+<ol>
+	<li>nome tag<br/><p>valore del tag</p>
+		<ul>
+			<li>nome attributo = valore dell'attributo</li>
+		</ul>
+		<ol>
+			<li>nome tag figlio<br/>
+			</li>
+		</ol>
+	</li>
+</ol>
+*/
+void print_xmlstruct_html(xml_node* node, FILE* fp) {
+	int i = 0;
+	
+	if(node == NULL)
+		return;
+	//se è root passa direttamente ai figli
+	if(node->tag != NULL) {
+		//satmpa nome e valore del tag
+		fprintf(fp, "<li");
+		if(node->is_comment)
+			fprintf(fp, " class=\"comment\" ");
+		fprintf(fp, ">%s<br/>", node->tag);
+		if(node->tag_value != NULL)
+			fprintf(fp, "<p>%s</p>", node->tag_value);
+		//stampa gli attributi del tag
+		if(node->attributes != NULL) {
+			fprintf(fp, "<ul>");
+			for(i = 0; i < node->n_attributes; i++)
+				fprintf(fp, "<li>%s = %s</li>", 
+						node->attributes[i]->attr, 
+						node->attributes[i]->attr_val);
+			fprintf(fp, "</ul>");
+		}
+	}
+	//apre i tag figli
+	for(i = 0; i < node->n_childs; i++) {
+		fprintf(fp, "<ol>");
+		print_xmlstruct_html(node->childs[i], fp);
+		fprintf(fp, "</ol>");
+	}
+	fprintf(fp, "</li>");
 }
 
 int xml_to_xml(xml_tree* doc, char* filename) {
