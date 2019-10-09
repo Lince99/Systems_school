@@ -21,19 +21,17 @@ char* trim_xml(char* str);
 char* read_stdin() {
     char* str = NULL;
     int pos = 0;
-    char c = 0;
+    int c = 0;
 
     fprintf(stdout, "Waiting for stdin...\n"); //TODO: REMOVE ON RELEASE
     while((c=fgetc(stdin)) != EOF) {
         if(str == NULL)
-            str = (char*) malloc(sizeof(c));
+            str = (char*) malloc(sizeof(char));
         else
-            str = (char*) realloc(str, ++pos);
+            str = (char*) realloc(str, sizeof(char)*pos);
         str[pos] = c;
+        pos++;
     }
-    //add string terminator
-    str = (char*) realloc(str, ++pos);
-    str[pos] = '\0';
 
     return str;
 }
@@ -44,28 +42,25 @@ char* read_stdin() {
 char* read_file(char* filename) {
     char* str = NULL;
     int pos = 0;
-    char c = 0;
+    int c = 0;
     FILE* fp = NULL;
 
     //open file
     fp = fopen(filename, "r");
     if(fp == NULL) {
-        fprintf(stderr, "Error on opening %s file!", filename);
+        fprintf(stderr, "Error on opening %s file!\n", filename);
         return NULL;
     }
     //read file content
     while((c=fgetc(fp)) != EOF) {
         if(str == NULL)
-            str = (char*) malloc(sizeof(c));
-        else {
-            pos++;
-            str = (char*) realloc(str, pos);
-        }
+            str = (char*) malloc(sizeof(char));
+        else
+            str = (char*) realloc(str, sizeof(char)*pos);
         str[pos] = c;
+        pos++;
     }
-    //add string terminator
-    str = (char*) realloc(str, ++pos);
-    str[pos] = '\0';
+    fclose(fp);
 
     return str;
 }
