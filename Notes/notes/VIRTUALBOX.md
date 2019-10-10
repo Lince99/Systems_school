@@ -1,7 +1,7 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-03T10:36:49.343Z'
+modified: '2019-10-10T09:38:25.133Z'
 ---
 
 # VIRTUALBOX
@@ -338,9 +338,102 @@ https://www.debian.org/distrib/netinst
         1. Diagnostics -> Backup/Restore (XML)
           1. Download configuration
         1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
+
+1. Rilanciare il router
+1. Svegliare il client
+  1. apt install anacron (opzionale)
+  1. dal browser
+    1. 192.168.1.1
+    1. admin lasolita
+    1. Services -> DHCP Server -> DMZ -> [x] Enable
+    1. Range: 192.168.101.100 al 192.168.101.199
+    1. Save
+1. Configurare il server
+  1. Rete -> Scheda 1 -> Rete interna DMZ
+  1. Avviare il server
+    1. uds lasolita
+    1. testare la rete con ping 1.1.1.1
+    1. FASE DI COLLAUDO:
+      1. CONTROLLARE STACK ISO/OSI DAL LIVELLO 0
+        1. scheda di rete fisica
+        1. arp
+        1. ping
+        1. servizi
+        1. dns e ip
+        1. software
+      1. essendoci delle regole di firewall bisogna collaudarlo (ordine delle righe sbagliate, DMZ, regole di blocco)
+        1. sul router Diagnostics -> DHCP leases
+        1. sul client pingare il server
+          1. ping 192.168.101.100
+        1. testare se server pinga il client
+          1. ping 192.168.1.100
+        1. test dei nomi di dominio nel client ([x] riuscita)
+          1. ping www.e-fermi.it
+        1. test dei nomi di dominio nel server
+          1. ping www.e-fermi.it
+      1. **/etc/resolv.conf**
+        1. file ad attuazione immediata, serve per i programmi per trovare il DNS
+        1. modifica manuale, ma il DHCP va a riscrivere tutto il file (usare solo in caso di disattivazione di DHCP)
+        1. mostra dominio
+        1. mostra quale server viene usato come dns (client .1.1, server .101.1), la regola di firewall vieta l'accesso alla DMZ verso la .1.x
+    1. installare sul client e sul server
+      1. sudo apt install ssh (metapacchetto, crea solo dipendenze come openssh client e server e altro)(dropbear alternativa ad ssh)
+    1. verificare la possibilità di fare ssh da client a server e l'impossibilità di fare ssh dal server al client
+      1. client
+        1. ssh uds@192.168.101.100
+        1. certificato SHA256: yes (usato per verificare l'autenticità del server)
+      1. server
+        1. ssh uds@192.168.1.100 (non deve funzionare)
+    
 ---
 
 ## Robe utili:
+
+1. problemi di rete a casa
+  1. cambiare gli IP
+  1. riga di routing dettagliate da Cisco: "192.168.1.1/32 sono io" e "192.168.1.120/32 sono io", e **il router sceglierà le righe più dettagliate**
+  1. riga di routing: "192.168.1.0/24 via LAN"
+  1. router di casa riesce assegnare DHCP al m0n0wall
+  1. riga di routing aggiunta: "192.168.1.0/24 via WAN"
+  1. riga di routing aggiunta: "0.0.0.0/0 via 192.168.1.1" riga più generica, considerata per ultima dal router
+  1. dal client arriva richiesta di andare verso .1.5, ma non arriva poichè monowall è sulla stessa rete di quella fisica
+  1. verso la .1.7 il router Cisco decide in modalità round-robin, quindi è probabile che non arrivi il pacchetto
+  1. verso la 1.7 il router Linux dedice in modalità cronologica, mandando sempre in LAN il pacchetto
+  1. Anche la metrica viene usata per valutare delle indecisioni di routing (metrica minore viene usata)
+  1. m0n0wall e client a casa non funzionano per il problema della rete
+    1. CREAZIONE DELLA RETE: scegliere 192.168.x.0 x = con uno pseudorandom (188 = BC <-- oh c'mon)
+    1. host www.facebook.com --> IPv6: face:b00c oh c'mooooooon
+    1. ```
+    --- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
+    ```
+
+1. riconfigurazione schede di rete
+  1. ```bash
+    ifup nomeintefraccia
+    ```
+  1. ```bash
+    ifdown nomeinterfaccia
+    ```
+
+1. possibilità di aumentare la banda aumentando il numero di interfacce
+
+1. Cellulari, sia Android che iOS, hanno il problema di cercare di velocizzare l'utilizzo dello stesso:
+  1. cellulare al posto di inviare lo standard RFC 0.0.0.0
+  1. configura i parametri della nuova rete con la vecchia configurazione della rete precedente
+  1. appena si attacca, farà traffico con i vecchi IP
+  1. INCONVENIENTE: cellulare nella vecchia rete era 192.168.1.5, nella rete in cui si connette cerca 192.168.1.5, DHCP se ne accorge dopo secondi, creando disservizio
+
+1. cron (cronos, tempo)
+  1. Serve per eseguire dei comandi in orari prefissati
+  1. Compito da fare alle 4 con pc spento:
+    1. Linux: salta l'esecuzione del compito
+    1. Windows: lo esegue appena acceso
+  1. cron utilizzato per compiti di manutenzione
+    1. compiti orari, giornalieri, settimanali, mensili, senza un'ora precisa
+1. anacron
+  1. collabora con cron e gestisce la periodicità dei compiti da fare
+  1. cron daily: cerca di lanciarlo alle 6, se non è accesa, lo avvia alla prima ora disponibile
+1. Se un pc non viene avviato per un po si crea una coda di programmi in cron.
 
 1. FHS
   1. https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
@@ -397,7 +490,11 @@ sudo nano /etc/profile
 1. In caso di problemi con monowall, basta riavviarlo
 1. Le macchine virtuali possono modificare le schede di rete anche durante le esecuzione delle stesse
 
+---
+
 #### TODO:
+
 - [x] clonare client, configurare clone e rinominarlo SERVER
-- [ ] cron e anacron
-- [ ] come viene gestito DHCP in LAN e cosa fare la DMZ
+- [x] cron e anacron
+- [x] come viene gestito DHCP in LAN e come fare la DMZ
+- [ ] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo. Rinumerare rete IP di tutto con una procedura gestita solamente dal client. Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
