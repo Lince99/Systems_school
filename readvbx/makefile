@@ -42,7 +42,7 @@ C_FOLD_OPT+= -freorder-functions
 #all: clean_reset compile run
 all: clean compile
 
-all_opt: clean_reset compile_optimize run_less
+all_opt: clean_reset compile_optimize
 
 help:
 	@echo "Use make [option]:"

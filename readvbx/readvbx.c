@@ -114,9 +114,6 @@ int main(int argc, char** argv) {
 
     //free xml structure & co
     free_xml(xmldoc);
-    free(file_content);
-    free(filename_in);
-    free(filename_out);
-
+    
     return 0;
 }
