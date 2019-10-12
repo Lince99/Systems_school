@@ -10,6 +10,7 @@ void print_xmlstruct_html(xml_node* node, FILE* fp);
 int xml_to_xml(xml_tree* doc, char* filename);
 void print_xmlstruct_xml(xml_node* node, FILE* fp);
 int xml_to_rtf(xml_tree* doc, char* filename);
+void print_xmlstruct_rtf(xml_node* node, FILE* fp);
 int xml_to_txt(xml_tree* doc, char* filename);
 void print_xmlstruct_txt(xml_node* node, FILE* fp);
 int xml_to_stdout(xml_tree* doc);
@@ -124,7 +125,7 @@ void print_xmlstruct_xml(xml_node* node, FILE* fp) {
 		return;
 	//se è root passa direttamente ai figli
 	if(node->tag != NULL) {
-		//satmpa nome e valore del tag
+		//stampa nome e valore del tag
 		fprintf(fp, "<");
 		if(node->is_comment)
 			fprintf(fp, "!--");
@@ -132,12 +133,15 @@ void print_xmlstruct_xml(xml_node* node, FILE* fp) {
 		//stampa gli attributi del tag
 		if(node->attributes != NULL) {
 			for(i = 0; i < node->n_attributes; i++)
-				fprintf(fp, " %s=\"%s\"",
+				fprintf(fp, " %s=%s",
 						node->attributes[i]->attr,
 						node->attributes[i]->attr_val);
 		}
         if(node->is_comment)
 			fprintf(fp, "--");
+		//tag autochiudenti
+		if(node->tag_value == NULL)
+		    fprintf(fp, "/");
         fprintf(fp, ">");
         if(node->tag_value != NULL)
             fprintf(fp, "%s", node->tag_value);
@@ -147,7 +151,11 @@ void print_xmlstruct_xml(xml_node* node, FILE* fp) {
 		fprintf(fp, "\n");
 		print_xmlstruct_xml(node->childs[i], fp);
 	}
-	fprintf(fp, "</%s>", node->tag);
+	//chiude il tag se non e' uno autochiudente e non e' la radice
+	if(node->tag != NULL && node->n_childs != 0)
+	    fprintf(fp, "</%s>\n", node->tag);
+    else
+        fprintf(fp, "\n");
 }
 
 int xml_to_rtf(xml_tree* doc, char* filename) {
@@ -159,10 +167,52 @@ int xml_to_rtf(xml_tree* doc, char* filename) {
         fprintf(stderr, "Error on opening %s file!", filename);
         return 1;
     }
-    //TODO RECURSIVE PRINT TO RTF
+    fprintf(fp, "{\\rtf1\\ansi\\deff0 {\\fonttbl {\\f0 Times New Roman;}}\
+                              \\deff1 {\\fonttbl {\\f1 Monotype Corsiva;}}");
+    print_xmlstruct_rtf(doc->root, fp);
+    fprintf(fp, "\n");
     fclose(fp);
 
     return 0;
+}
+
+// https://www.oreilly.com/library/view/rtf-pocket-guide/9781449302047/ch01.html
+
+/*
+ * recursive funtion that print xml nodes one by one, with innested lists
+ */
+void print_xmlstruct_rtf(xml_node* node, FILE* fp) {
+	int i = 0;
+
+	if(node == NULL)
+		return;
+	//se è root passa direttamente ai figli
+	if(node->tag != NULL) {
+		//satmpa nome e valore del tag
+		if(!node->is_comment)
+			fprintf(fp, "\\f1");
+        else
+            fprintf(fp, "\\f0");
+        /* TODO: fix char escaping { } \  */
+		fprintf(fp, "\\fs60 %s", node->tag);
+		if(node->tag_value != NULL)
+			fprintf(fp, " = %s", node->tag_value);
+        fprintf(fp, "\n");
+		//stampa gli attributi del tag
+		if(node->attributes != NULL) {
+			for(i = 0; i < node->n_attributes; i++)
+				fprintf(fp, "{\\f0\\fs60%s = %s \\line}",
+						node->attributes[i]->attr,
+						node->attributes[i]->attr_val);
+			fprintf(fp, "}");
+		}
+	}
+	//apre i tag figli
+	for(i = 0; i < node->n_childs; i++) {
+        fprintf(fp, "{");
+		print_xmlstruct_rtf(node->childs[i], fp);
+    }
+    fprintf(fp, "}");
 }
 
 int xml_to_txt(xml_tree* doc, char* filename) {

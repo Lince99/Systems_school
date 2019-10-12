@@ -161,7 +161,6 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
             else {
                 out = (xml_node_attr**) realloc(out, sizeof(xml_node_attr*)*n_at*2);
             }
-            //printf("\tBroke %d\n", n_at);
             if(out == NULL)
                 break;
             //salva l'attributo
@@ -172,7 +171,11 @@ xml_node_attr** extract_attributes(char* text, int dim, int* n_attr) {
             j = 0;
             if(text[i] == '=')
                 i++;
+            //scorre finche' non trova uno spazio tra attributi
             while(i+j < dim && text[i+j] != ' ') {
+                //oppure si ferma prima in caso di autochiusura tag
+                if(text[i+j] == '/')
+                    break;
                 j++;
             }
             out[n_at]->attr_val = substring(text, i, i+j);
@@ -299,6 +302,8 @@ xml_node* get_child(xml_node* root, int pos) {
 
 //TODO
 xml_tree* modify_data_level(xml_tree* doc, int level) {
+
+
     return doc;
 }
 

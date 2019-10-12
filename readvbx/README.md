@@ -5,22 +5,28 @@ in xml, html, rtf, txt
 
 ## Come funziona
 
-1. Legge da stdin o da argomento il file .vbox
+1. [x] Legge da stdin o da argomento il file .vbox
     -i nomefile.vbox : legge dal file indicato
     (NECESSARIA ESTENSIONE VBOX, configurabile)
-1. Stampa in uscita i dati selezionati nei vari formati possibili
-	1. Quantità di dati:
+1. [ ] Stampa in uscita i dati selezionati nei vari formati possibili
+	1. [ ] Quantità di dati:
 	    - -1 livello minimo di dati da esportare
 	    - -2 livello intermedio (dati di rete, uuid)
 	    - -3 livello completo (ogni dato presente nel .vbox)
 	    - nel caso di nessun livello selezionato, viene fornito il massimo dei dati
-	1. Formato di output:
+	1. [x] Formato di output:
 	    - -html XHTML+CSS : output con maggior stile
 	    - -xml XML : output uguale se la quantità è 2
 	    - -rtf : output per esportare un documento
 	    - -txt : output di anteprima dei contenuti
 	    - -o : output con nome scelto a priori con estensione (deve essere valida)
 	    - nel caso di nessun formato selezionato, stampa in stdout
+	1. [x] Informazioni aggiuntive:
+	    - -h : stampa le informazioni del programma e termina
+	    - --comments : salva i commenti presenti nel file di input (xml)
+	    - --license : stampa la licenza del programma
+
+---
 
 ## Compilare il programma
 
@@ -63,17 +69,27 @@ readvbx
 Comando minimo con redirect
 
 ```bash
-readvbx < client.vbox 2> result.txt
+readvbx < client.vbox > result.txt
 ```
+
+Readvbx offre la possibilita' di salvare i commenti tramite parametro --comments
 
 ## Errori
 
 -1: errore fatale nell'esecuzione del comando
 
-0: tutto ok
+0: esecuzione terminata con successo
 
 1: errore nella lettura dei comandi o da stdin
 
 2: errore nella lettura o apertura dei file
 
 3: nessun contenuto, valori mancanti
+
+---
+
+## Licenza
+
+**readvbx  Copyright (C) 2019  Lince99**
+
+Programma sotto licenza GNU GPL v3
