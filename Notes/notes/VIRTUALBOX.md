@@ -1,7 +1,7 @@
 ---
 title: VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-10T09:38:25.133Z'
+modified: '2019-10-12T07:34:04.994Z'
 ---
 
 # VIRTUALBOX
@@ -375,7 +375,7 @@ https://www.debian.org/distrib/netinst
         1. file ad attuazione immediata, serve per i programmi per trovare il DNS
         1. modifica manuale, ma il DHCP va a riscrivere tutto il file (usare solo in caso di disattivazione di DHCP)
         1. mostra dominio
-        1. mostra quale server viene usato come dns (client .1.1, server .101.1), la regola di firewall vieta l'accesso alla DMZ verso la .1.x
+        1. mostra quale server viene usato come dns (client .1.1, server .101.1), la regola di firewall vieta l'accesso alla DMZ verso la 192.168.1.x
     1. installare sul client e sul server
       1. sudo apt install ssh (metapacchetto, crea solo dipendenze come openssh client e server e altro)(dropbear alternativa ad ssh)
     1. verificare la possibilità di fare ssh da client a server e l'impossibilità di fare ssh dal server al client
@@ -384,6 +384,47 @@ https://www.debian.org/distrib/netinst
         1. certificato SHA256: yes (usato per verificare l'autenticità del server)
       1. server
         1. ssh uds@192.168.1.100 (non deve funzionare)
+1. Riavviare macchine virtuali
+1. Il client deve identificare il server sempre con lo stesso indirizzo
+  1. ip addr sul client: 192.168.1.100 e mostra il mac
+  1. ip addr sul server: 192.168.101.100 e mostra il mac
+  1. sulla configurazione del router:
+    1. Diagnostics -> ARP table
+    1. Services -> DHCP Server -> DMZ -> Reservations
+      1. Possibilità di assegnare lo stesso ip ad una macchina specifica tramite indirizzo MAC
+        1. MAC del server
+        1. 192.168.101.250 (fuori dal range DHCP poichè al server necessita un indirizzo ip statico anche per i successivi riavvii)
+        1. Ip statico del server
+        1. "Deny unknown clients" Only respond to reserved clients listed below. LASCIARE DISATTIVATA (il firewall si occupa degli indirizzi esterni, DMZ per il range di indirizzi locali, no MAC, no IP)
+  1. aliases:
+    1. Firewall -> Rules
+      1. WAN ha solo il PC fisico
+      1. Possibilità di aggiungere più regole di firewall allo stesso indirizzo IP, senza andare a modificare tutte le regole di firewall riguardanti quell'IP
+      1. Firewall -> Aliases
+        1. host-pcospitante
+        1. 172.30.4.x
+        1. Il computer da cui opero
+      1. tornare in Firewall -> Rules
+        1. modificare la regola WAN
+          1. Source
+          1. Type: Single host or alias
+          1. host-pcospitante
+        1. Tutti con regole uguali, ma con alias diversi. Questo permette di configurare diversamente i router ma con alias uguali. D'ora in poi le regole di firewall vanno fatte con alias standardizzati: WAN-descrizione LAN-descrizione HOST-descrizione-interfaccia
+      1. creare un altro alias:
+        1. lan-labsistemi
+        1. Network
+        1. 172.30.4.0/24 (a casa 192.168.1.1/24)
+        1. La rete in cui appoggia la mia WAN
+  1. Studiare la migrazione degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
+    1. socchiudere monowall
+    1. server via ssh, quindi exit e socchiudere il server
+    1. lasciare aperto solo il client
+    1. usare ssh sul client e web 
+    1. attenzione: timing DHCP, ordine degli eventi, documentare tutto
+    1. SNAPSHOT di tutte le macchine virtuali, salvare configurazione monowall nel client e in piattaforma (Istantanea 1, descrizione: pre-antartide)
+    1. 192.168.x.0/24 LAN lab virtuale (192.168.11./24)
+    1. 192.168.100+x.0/24 DMZ lab virtuale (192.168.111.0/24)
+
     
 ---
 
@@ -406,6 +447,9 @@ https://www.debian.org/distrib/netinst
     1. ```
     --- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
     ```
+
+1. pacchetto da installare
+  1. sudo apt install virtualbox-
 
 1. riconfigurazione schede di rete
   1. ```bash
