@@ -328,7 +328,7 @@ void print_xml_tree(xml_tree* doc) {
         fprintf(stderr, "NOTHING TO PRINT!\n");
         return;
     }
-    fprintf(stdout, "\t\t\tXML Tree Structure:\n");
+    //fprintf(stdout, "\t\t\tXML Tree Structure:\n");
     //stampa a partire dalla radice
     print_tree(doc->root, 0);
     fprintf(stdout, "\n");
@@ -398,18 +398,18 @@ void print_tree(xml_node* root, int level) {
 void print_stack(stack* head) {
 
     if(head == NULL)
-        printf(ANSI_RED "Void stack!" ANSI_RESET "\n");
+        fprintf(stderr, "Void stack!\n");
     while(head != NULL) {
         if(head->value == NULL)
             return;
         if(head->value->tag == NULL)
-            printf("NULL");
+            fprintf(stdout, "NULL");
         else
-            printf("\"%s\"", head->value->tag);
+            fprintf(stdout, "\"%s\"", head->value->tag);
         if(head->next == NULL)
-            printf(".\n");
+            fprintf(stdout, ".\n");
         else
-            printf(",\t");
+            fprintf(stdout, ",\t");
         head = head->next;
     }
 

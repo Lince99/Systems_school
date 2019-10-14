@@ -23,7 +23,7 @@ char* read_stdin() {
     int pos = 0;
     int c = 0;
 
-    fprintf(stdout, "Waiting for stdin...\n"); //TODO: REMOVE ON RELEASE
+    //fprintf(stdout, "Waiting for stdin...\n"); //TODO: REMOVE ON RELEASE
     while((c=fgetc(stdin)) != EOF) {
         if(str == NULL)
             str = (char*) malloc(sizeof(char));
