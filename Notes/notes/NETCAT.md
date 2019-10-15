@@ -2,7 +2,7 @@
 tags: [nc, TPSIT]
 title: NETCAT
 created: '2019-10-08T10:32:06.437Z'
-modified: '2019-10-08T10:38:31.523Z'
+modified: '2019-10-15T09:23:00.356Z'
 ---
 
 # NETCAT
@@ -56,11 +56,22 @@ In questo caso è il server a terminare la connessione.
 
 ### Accettazione più chiamate consecutive e contemporanee
 
+- Creazione variabili di sistema
+
 ```bash
-#!/bin/bash <-- interpreta i successivi comandi con l'interprete corrent (chiamato SHABANG per bash)
+#!/bin/bash
+#interpreta i successivi comandi con l'interprete corrent (chiamato SHABANG per bash), SOLO LA PRIMA RIGA con #! allora usa quell'interpete
+PORTA=9970
+ESEGUIBILE="./eseguibile"
+```
+
+- Creazione demone netcat che esegue richieste consecutive
+
+```bash
 while true
 do
-    nc.traditional -l -p9800 -c cowsay
+    echo eseguo $ESEGUIBILE in ascolto sulla porta $PORTA
+    nc.traditional -l -p $PORTA -c "$ESEGUIBILE"
 done
 ```
 
@@ -69,6 +80,35 @@ poi renderlo eseguibile con
 chmod +x nomefile.sh
 ```
 
+esempio: (ATTENZIONE VA ALL'INFINITO!)
+```bash
+while true; do echo "invocazione"; nc.traditional -l -p 9970 -c "cowthink -f vader" ; done
+```
+
+```bash
+nc 172.30.4.129 9970
+```
+
 richiede CTRL + Z o CTRL + C per terminarlo
 
+---
 
+## Variabili d'ambiente
+
+Serve per appendere altro testo
+
+```bash
+${nomevariabile}testoattaccato
+```
+
+## Piping
+
+```bash
+date | cowsay
+```
+
+stdout di _date_ --> stdin di _cowsay_ --> stdout
+
+In netcat traditional serve -c, che va a prendere l'stdout oltre a dare l'stdin al programma.
+
+cat --> stdin --> **nc client** - - net - -> **nc server** --> stdin --> programma --> stdout --> **nc server** - - net - -> **nc client** --> stdout 
