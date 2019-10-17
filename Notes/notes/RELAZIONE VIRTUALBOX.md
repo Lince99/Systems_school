@@ -1,15 +1,16 @@
 ---
-title: VIRTUALBOX
+title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-12T07:34:04.994Z'
+modified: '2019-10-17T09:42:24.259Z'
 ---
 
-# VIRTUALBOX
+# RELAZIONE VIRTUALBOX
 
 ## INTRODUZIONE
 
 - Descrizione VirtualBox
 - Introduzione specifica per ogni paragrafo
+- Indice: TODO
 
 ## CLIENT
 
@@ -341,81 +342,81 @@ https://www.debian.org/distrib/netinst
 
 1. Rilanciare il router
 1. Svegliare il client
-  1. apt install anacron (opzionale)
-  1. dal browser
-    1. 192.168.1.1
-    1. admin lasolita
-    1. Services -> DHCP Server -> DMZ -> [x] Enable
-    1. Range: 192.168.101.100 al 192.168.101.199
-    1. Save
+    1. apt install anacron (opzionale)
+    1. dal browser
+        1. 192.168.1.1
+        1. admin lasolita
+        1. Services -> DHCP Server -> DMZ -> [x] Enable
+        1. Range: 192.168.101.100 al 192.168.101.199
+        1. Save
 1. Configurare il server
-  1. Rete -> Scheda 1 -> Rete interna DMZ
-  1. Avviare il server
-    1. uds lasolita
-    1. testare la rete con ping 1.1.1.1
-    1. FASE DI COLLAUDO:
-      1. CONTROLLARE STACK ISO/OSI DAL LIVELLO 0
-        1. scheda di rete fisica
-        1. arp
-        1. ping
-        1. servizi
-        1. dns e ip
-        1. software
-      1. essendoci delle regole di firewall bisogna collaudarlo (ordine delle righe sbagliate, DMZ, regole di blocco)
-        1. sul router Diagnostics -> DHCP leases
-        1. sul client pingare il server
-          1. ping 192.168.101.100
-        1. testare se server pinga il client
-          1. ping 192.168.1.100
-        1. test dei nomi di dominio nel client ([x] riuscita)
-          1. ping www.e-fermi.it
-        1. test dei nomi di dominio nel server
-          1. ping www.e-fermi.it
-      1. **/etc/resolv.conf**
-        1. file ad attuazione immediata, serve per i programmi per trovare il DNS
-        1. modifica manuale, ma il DHCP va a riscrivere tutto il file (usare solo in caso di disattivazione di DHCP)
-        1. mostra dominio
-        1. mostra quale server viene usato come dns (client .1.1, server .101.1), la regola di firewall vieta l'accesso alla DMZ verso la 192.168.1.x
+    1. Rete -> Scheda 1 -> Rete interna DMZ
+    1. Avviare il server
+        1. uds lasolita
+        1. testare la rete con ping 1.1.1.1
+        1. FASE DI COLLAUDO:
+            1. CONTROLLARE STACK ISO/OSI DAL LIVELLO 0
+                1. scheda di rete fisica
+                1. arp
+                1. ping
+                1. servizi
+                1. dns e ip
+                1. software
+            1. essendoci delle regole di firewall bisogna collaudarlo (ordine delle righe sbagliate, DMZ, regole di blocco)
+            1. sul router Diagnostics -> DHCP leases
+            1. sul client pingare il server
+                1. ping 192.168.101.100
+            1. testare se server pinga il client
+                1. ping 192.168.1.100
+            1. test dei nomi di dominio nel client ([x] riuscita)
+                1. ping www.e-fermi.it
+            1. test dei nomi di dominio nel server
+                1. ping www.e-fermi.it
+        1. **/etc/resolv.conf**
+            1. file ad attuazione immediata, serve per i programmi per trovare il DNS
+            1. modifica manuale, ma il DHCP va a riscrivere tutto il file (usare solo in caso di disattivazione di DHCP)
+            1. mostra dominio
+            1. mostra quale server viene usato come dns (client .1.1, server .101.1), la regola di firewall vieta l'accesso alla DMZ verso la 192.168.1.x
     1. installare sul client e sul server
-      1. sudo apt install ssh (metapacchetto, crea solo dipendenze come openssh client e server e altro)(dropbear alternativa ad ssh)
+        1. sudo apt install ssh (metapacchetto, crea solo dipendenze come openssh client e server e altro)(dropbear alternativa ad ssh)
     1. verificare la possibilità di fare ssh da client a server e l'impossibilità di fare ssh dal server al client
-      1. client
-        1. ssh uds@192.168.101.100
-        1. certificato SHA256: yes (usato per verificare l'autenticità del server)
-      1. server
-        1. ssh uds@192.168.1.100 (non deve funzionare)
+        1. client
+            1. ssh uds@192.168.101.100
+            1. certificato SHA256: yes (usato per verificare l'autenticità del server)
+        1. server
+            1. ssh uds@192.168.1.100 (non deve funzionare)
 1. Riavviare macchine virtuali
 1. Il client deve identificare il server sempre con lo stesso indirizzo
-  1. ip addr sul client: 192.168.1.100 e mostra il mac
-  1. ip addr sul server: 192.168.101.100 e mostra il mac
-  1. sulla configurazione del router:
-    1. Diagnostics -> ARP table
-    1. Services -> DHCP Server -> DMZ -> Reservations
-      1. Possibilità di assegnare lo stesso ip ad una macchina specifica tramite indirizzo MAC
-        1. MAC del server
-        1. 192.168.101.250 (fuori dal range DHCP poichè al server necessita un indirizzo ip statico anche per i successivi riavvii)
-        1. Ip statico del server
-        1. "Deny unknown clients" Only respond to reserved clients listed below. LASCIARE DISATTIVATA (il firewall si occupa degli indirizzi esterni, DMZ per il range di indirizzi locali, no MAC, no IP)
+    1. ip addr sul client: 192.168.1.100 e mostra il mac
+    1. ip addr sul server: 192.168.101.100 e mostra il mac
+    1. sulla configurazione del router:
+        1. Diagnostics -> ARP table
+        1. Services -> DHCP Server -> DMZ -> Reservations
+        1. Possibilità di assegnare lo stesso ip ad una macchina specifica tramite indirizzo MAC
+            1. MAC del server
+            1. 192.168.101.250 (fuori dal range DHCP poichè al server necessita un indirizzo ip statico anche per i successivi riavvii)
+            1. Ip statico del server
+            1. "Deny unknown clients" Only respond to reserved clients listed below. LASCIARE DISATTIVATA (il firewall si occupa degli indirizzi esterni, DMZ per il range di indirizzi locali, no MAC, no IP)
   1. aliases:
-    1. Firewall -> Rules
-      1. WAN ha solo il PC fisico
-      1. Possibilità di aggiungere più regole di firewall allo stesso indirizzo IP, senza andare a modificare tutte le regole di firewall riguardanti quell'IP
-      1. Firewall -> Aliases
-        1. host-pcospitante
-        1. 172.30.4.x
-        1. Il computer da cui opero
-      1. tornare in Firewall -> Rules
-        1. modificare la regola WAN
-          1. Source
-          1. Type: Single host or alias
-          1. host-pcospitante
-        1. Tutti con regole uguali, ma con alias diversi. Questo permette di configurare diversamente i router ma con alias uguali. D'ora in poi le regole di firewall vanno fatte con alias standardizzati: WAN-descrizione LAN-descrizione HOST-descrizione-interfaccia
+      1. Firewall -> Rules
+          1. WAN ha solo il PC fisico
+          1. Possibilità di aggiungere più regole di firewall allo stesso indirizzo IP, senza andare a modificare tutte le regole di firewall riguardanti quell'IP
+          1. Firewall -> Aliases
+              1. host-pcospitante
+              1. 172.30.4.x
+              1. Il computer da cui opero
+          1. tornare in Firewall -> Rules
+          1. modificare la regola WAN
+              1. Source
+              1. Type: Single host or alias
+              1. host-pcospitante
+          1. Tutti con regole uguali, ma con alias diversi. Questo permette di configurare diversamente i router ma con alias uguali. D'ora in poi le regole di firewall vanno fatte con alias standardizzati: WAN-descrizione LAN-descrizione HOST-descrizione-interfaccia
       1. creare un altro alias:
-        1. lan-labsistemi
-        1. Network
-        1. 172.30.4.0/24 (a casa 192.168.1.1/24)
-        1. La rete in cui appoggia la mia WAN
-  1. Studiare la migrazione degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
+          1. lan-labsistemi
+          1. Network
+              1. 172.30.4.0/24 (a casa 192.168.1.1/24)
+          1. La rete in cui appoggia la mia WAN
+1. Studiare la migrazione degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
     1. socchiudere monowall
     1. server via ssh, quindi exit e socchiudere il server
     1. lasciare aperto solo il client
@@ -425,76 +426,89 @@ https://www.debian.org/distrib/netinst
     1. 192.168.x.0/24 LAN lab virtuale (192.168.11./24)
     1. 192.168.100+x.0/24 DMZ lab virtuale (192.168.111.0/24)
 
+1. Impostare IP statico:
+    1. nano /etc/network/interfaces
+    1. dhcp to static
+    1. address 192.168.x.2/24
+    1. gateway 192.168.x.1
+1. Pure nel server, ma con 192.168.100+x.2/24 e gateway .1
+1. In monowall
+    1. Interfaces
+    1. Ip di gateway di LAN e DMZ
+    1. Server DHCP
+        1. LAN cambiare range in .x.100 e .x.199
+        1. LAN cambiare range in .100+x.100 e .100+x.199
     
 ---
 
 ## Robe utili:
 
 1. problemi di rete a casa
-  1. cambiare gli IP
-  1. riga di routing dettagliate da Cisco: "192.168.1.1/32 sono io" e "192.168.1.120/32 sono io", e **il router sceglierà le righe più dettagliate**
-  1. riga di routing: "192.168.1.0/24 via LAN"
-  1. router di casa riesce assegnare DHCP al m0n0wall
-  1. riga di routing aggiunta: "192.168.1.0/24 via WAN"
-  1. riga di routing aggiunta: "0.0.0.0/0 via 192.168.1.1" riga più generica, considerata per ultima dal router
-  1. dal client arriva richiesta di andare verso .1.5, ma non arriva poichè monowall è sulla stessa rete di quella fisica
-  1. verso la .1.7 il router Cisco decide in modalità round-robin, quindi è probabile che non arrivi il pacchetto
-  1. verso la 1.7 il router Linux dedice in modalità cronologica, mandando sempre in LAN il pacchetto
-  1. Anche la metrica viene usata per valutare delle indecisioni di routing (metrica minore viene usata)
-  1. m0n0wall e client a casa non funzionano per il problema della rete
-    1. CREAZIONE DELLA RETE: scegliere 192.168.x.0 x = con uno pseudorandom (188 = BC <-- oh c'mon)
-    1. host www.facebook.com --> IPv6: face:b00c oh c'mooooooon
-    1. ```
-    --- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
-    ```
+    1. cambiare gli IP
+    1. riga di routing dettagliate da Cisco: "192.168.1.1/32 sono io" e "192.168.1.120/32 sono io", e **il router sceglierà le righe più dettagliate**
+    1. riga di routing: "192.168.1.0/24 via LAN"
+    1. router di casa riesce assegnare DHCP al m0n0wall
+    1. riga di routing aggiunta: "192.168.1.0/24 via WAN"
+    1. riga di routing aggiunta: "0.0.0.0/0 via 192.168.1.1" riga più generica, considerata per ultima dal router
+    1. dal client arriva richiesta di andare verso .1.5, ma non arriva poichè monowall è sulla stessa rete di quella fisica
+    1. verso la .1.7 il router Cisco decide in modalità round-robin, quindi è probabile che non arrivi il pacchetto
+    1. verso la 1.7 il router Linux dedice in modalità cronologica, mandando sempre in LAN il pacchetto
+    1. Anche la metrica viene usata per valutare delle indecisioni di routing (metrica minore viene usata)
+    1. m0n0wall e client a casa non funzionano per il problema della rete
+        1. CREAZIONE DELLA RETE: scegliere 192.168.x.0 x = con uno pseudorandom (188 = BC <-- oh c'mon)
+        1. host www.facebook.com --> IPv6: face:b00c oh c'mooooooon
+```txt
+--- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
+```
 
 1. pacchetto da installare
-  1. sudo apt install virtualbox-
+  1. sudo apt install virtualbox-...
 
 1. riconfigurazione schede di rete
-  1. ```bash
-    ifup nomeintefraccia
-    ```
-  1. ```bash
-    ifdown nomeinterfaccia
-    ```
+  ```bash
+  ifup nomeintefraccia
+  ```
+  ```bash
+  ifdown nomeinterfaccia
+  ```
 
 1. possibilità di aumentare la banda aumentando il numero di interfacce
 
 1. Cellulari, sia Android che iOS, hanno il problema di cercare di velocizzare l'utilizzo dello stesso:
-  1. cellulare al posto di inviare lo standard RFC 0.0.0.0
-  1. configura i parametri della nuova rete con la vecchia configurazione della rete precedente
-  1. appena si attacca, farà traffico con i vecchi IP
-  1. INCONVENIENTE: cellulare nella vecchia rete era 192.168.1.5, nella rete in cui si connette cerca 192.168.1.5, DHCP se ne accorge dopo secondi, creando disservizio
+    1. cellulare al posto di inviare lo standard RFC 0.0.0.0
+    1. configura i parametri della nuova rete con la vecchia configurazione della rete precedente
+    1. appena si attacca, farà traffico con i vecchi IP
+    1. INCONVENIENTE: cellulare nella vecchia rete era 192.168.1.5, nella rete in cui si connette cerca 192.168.1.5, DHCP se ne accorge dopo secondi, creando disservizio
 
 1. cron (cronos, tempo)
-  1. Serve per eseguire dei comandi in orari prefissati
-  1. Compito da fare alle 4 con pc spento:
-    1. Linux: salta l'esecuzione del compito
-    1. Windows: lo esegue appena acceso
-  1. cron utilizzato per compiti di manutenzione
-    1. compiti orari, giornalieri, settimanali, mensili, senza un'ora precisa
+    1. Serve per eseguire dei comandi in orari prefissati
+    1. Compito da fare alle 4 con pc spento:
+        1. Linux: salta l'esecuzione del compito
+        1. Windows: lo esegue appena acceso
+    1. cron utilizzato per compiti di manutenzione
+        1. compiti orari, giornalieri, settimanali, mensili, senza un'ora precisa
+
 1. anacron
-  1. collabora con cron e gestisce la periodicità dei compiti da fare
-  1. cron daily: cerca di lanciarlo alle 6, se non è accesa, lo avvia alla prima ora disponibile
-1. Se un pc non viene avviato per un po si crea una coda di programmi in cron.
+    1. collabora con cron e gestisce la periodicità dei compiti da fare
+    1. cron daily: cerca di lanciarlo alle 6, se non è accesa, lo avvia alla prima ora disponibile
+    1. Se un pc non viene avviato per un po si crea una coda di programmi in cron.
 
 1. FHS
-  1. https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
-  1. dove sono i file nel filesystem linux
-  1. sotto /etc/apt/sources.list o cartella sources.list.d/...
-    1. in Debian si trovano delle configurazioni modulari = installare un software ha eseguibili, configurazioni e .deb per la configurazione iniziale
-    1. aggiunge alla configurazione precedente
-    1. ESEMPIO: scaricare Firefox, plugin installabili in maniera centralizzata, passando la configurazione nella sottocartella del file di configurazione di Firefox.
-    1. FILE SOURCES.LIST contiene le configurazioni di dove trovare gli aggiornamenti Debian
-    1. Commentare riga contenente gli aggiornamenti via CD
+    1. https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+    1. dove sono i file nel filesystem linux
+    1. sotto /etc/apt/sources.list o cartella sources.list.d/...
+        1. in Debian si trovano delle configurazioni modulari = installare un software ha eseguibili, configurazioni e .deb per la configurazione iniziale
+        1. aggiunge alla configurazione precedente
+        1. ESEMPIO: scaricare Firefox, plugin installabili in maniera centralizzata, passando la configurazione nella sottocartella del file di configurazione di Firefox.
+        1. FILE SOURCES.LIST contiene le configurazioni di dove trovare gli aggiornamenti Debian
+        1. Commentare riga contenente gli aggiornamenti via CD
     1. apt update: scarica l'elenco del software per il controllo delle versioni
     1. apt upgrade: scarica il software aggiornato, momento delicato poichè deve seguire una scaletta di dipendenze
     1. aggiornamento della versione di Debian: tutte le dipendenze rischiano di rompere l'upgrade (dependency hell)
-      1. dist-upgrade: esegue l'upgrade senza dare peso alle dipendenze, però portando ad interruzioni di servizio
+        1. dist-upgrade: esegue l'upgrade senza dare peso alle dipendenze, però portando ad interruzioni di servizio
 
 1. Usando il CD a casa richiede se si vuole scaricare dal CD o dalla rete, per rendere indipendente la macchina dall'uso del CD:
-  1. source
+    1. source
 
 1. echo $TERM : stampa il nome del terminale
 1. CTRL+D : uscire dall'utente
@@ -507,15 +521,15 @@ alias shutdown=/sbin/shutdown
 ```
 
   1. LIBRERIE
-    - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
-    - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
-    Android: il Play store colleziona software adatto al sistema insieme alle loro liberie
+      - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
+      - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
+      Android: il Play store colleziona software adatto al sistema insieme alle loro liberie
       - DEBIAN usa .deb (creato da Ian Mardock, Deb "Deborah" Ian)
       - DPKG gestore di file
-        - vincoli di dipendenze (con limiti sulle versioni)
+          - vincoli di dipendenze (con limiti sulle versioni)
       - APT
-        - utilizza dpkg
-        - retrocompatibile con i comandi dpkg
+          - utilizza dpkg
+          - retrocompatibile con i comandi dpkg
       - deb: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
       - deborphan: cerca le librerie orfane, non necessarie a nessun software
       deb auto... : rimuove le librerie inutilizzate in automatico
