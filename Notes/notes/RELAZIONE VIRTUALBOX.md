@@ -4,12 +4,18 @@ created: '2019-09-26T08:50:05.352Z'
 modified: '2019-10-17T09:42:24.259Z'
 ---
 
-# RELAZIONE VIRTUALBOX
+# RELAZIONE VIRTUALBOX e M0N0WALL
 
 ## INTRODUZIONE
 
 - Descrizione VirtualBox
-- Introduzione specifica per ogni paragrafo
+
+![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)
+
+- Descrizione M0n0wall
+
+![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)
+
 - Indice: TODO
 
 ## CLIENT
@@ -17,11 +23,12 @@ modified: '2019-10-17T09:42:24.259Z'
 ### Configurazione:
 
 - clientcognome lasolita
-Debian (64bit)
-RAM 1MB
-HDD 4 GB (4.0 GB root, 368 MB swap)
-NAT
-https://www.debian.org/distrib/netinst
+- Debian (64bit)
+- RAM 1 GB
+- HDD 4 GB (4.0 GB root, 368 MB swap)
+- NAT
+
+[distribuzione debian](https://www.debian.org/distrib/netinst)
 
 **Screenshot: CTRL DX + E**
 
@@ -337,7 +344,7 @@ https://www.debian.org/distrib/netinst
         1. Diagnostics -> DHCP leases ()
         1. Diagnostics -> ARP table (MAC registrati)
         1. Diagnostics -> Backup/Restore (XML)
-          1. Download configuration
+            1. Download configuration
         1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
 
 1. Rilanciare il router
@@ -462,15 +469,15 @@ https://www.debian.org/distrib/netinst
 ```
 
 1. pacchetto da installare
-  1. sudo apt install virtualbox-...
+    1. sudo apt install virtualbox-...
 
 1. riconfigurazione schede di rete
-  ```bash
-  ifup nomeintefraccia
-  ```
-  ```bash
-  ifdown nomeinterfaccia
-  ```
+```bash
+ifup nomeintefraccia
+```
+```bash
+ifdown nomeinterfaccia
+```
 
 1. possibilità di aumentare la banda aumentando il numero di interfacce
 
