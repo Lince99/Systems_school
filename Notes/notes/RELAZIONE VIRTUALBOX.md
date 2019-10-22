@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-17T09:42:24.259Z'
+modified: '2019-10-22T06:59:49.815Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -554,6 +554,24 @@ sudo nano /etc/profile
 
 1. In caso di problemi con monowall, basta riavviarlo
 1. Le macchine virtuali possono modificare le schede di rete anche durante le esecuzione delle stesse
+
+---
+
+SPERIMENTAZIONE VLAN CON ROUTER CISCO
+
+```
+192.168.3.0/24
+
+R1 .101                                                   R2 .102
+        \                                           /
+    1.100 access VLAN 100    .1               .2    VLAN 100
+                          SW1 Ge1         Ge1   SW2       
+    1.200 access VLAN 200        VLAN100            VLAN 200
+                                 VLAN200                   
+        /                                           \
+R3 .201                                                   R3 .202
+```
+
 
 ---
 
