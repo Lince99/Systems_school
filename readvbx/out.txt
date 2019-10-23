@@ -1,0 +1,120 @@
+ROOT
+Childs:
+	"VirtualBox".
+
+VirtualBox
+Attributes:	xmlns = "http:	version = "1.16-linux"	
+Childs:
+	"Machine".
+
+Machine
+Attributes:	uuid = "{827810e0-21ce-4282-bfc2-cfd981a45ce0}"	name = "clientbasso"	OSType = "Debian_64"	stateFile = "Snapshots	snapshotFolder = "Snapshots"	lastStateChange = "2019-09-26T10:37:25Z"	
+Childs:
+	"MediaRegistry";
+	"ExtraData";
+	"Hardware";
+	"StorageControllers".
+
+MediaRegistry
+Childs:
+	"HardDisks".
+
+HardDisks
+Childs:
+	"HardDisk".
+
+ExtraData
+Childs:
+	"ExtraDataItem";
+	"ExtraDataItem";
+	"ExtraDataItem";
+	"ExtraDataItem";
+	"ExtraDataItem".
+
+Hardware
+Childs:
+	"CPU";
+	"Memory";
+	"HID";
+	"Boot";
+	"Display";
+	"BIOS";
+	"USB";
+	"Network";
+	"AudioAdapter";
+	"RTC";
+	"GuestProperties".
+
+CPU
+Childs:
+	"PAE";
+	"LongMode";
+	"X2APIC";
+	"HardwareVirtExLargePages".
+
+Boot
+Childs:
+	"Order";
+	"Order";
+	"Order";
+	"Order".
+
+BIOS
+Childs:
+	"IOAPIC".
+
+USB
+Childs:
+	"Controllers".
+
+Controllers
+Childs:
+	"Controller".
+
+Network
+Childs:
+	"Adapter";
+	"Adapter";
+	"Adapter";
+	"Adapter";
+	"Adapter";
+	"Adapter";
+	"Adapter";
+	"Adapter".
+
+Adapter
+Attributes:	slot = "0"	enabled = "true"	MACAddress = "080027BB3AD9"	type = "82540EM"	
+Childs:
+	"DisabledModes";
+	"BridgedInterface".
+
+DisabledModes
+Childs:
+	"InternalNetwork";
+	"NATNetwork".
+
+GuestProperties
+Childs:
+	"GuestProperty".
+
+StorageControllers
+Childs:
+	"StorageController";
+	"StorageController".
+
+StorageController
+Attributes:	name = "IDE"	type = "PIIX4"	PortCount = "2"	useHostIOCache = "true"	Bootable = "true"	
+Childs:
+	"AttachedDevice".
+
+StorageController
+Attributes:	name = "SATA"	type = "AHCI"	PortCount = "1"	useHostIOCache = "false"	Bootable = "true"	IDE0MasterEmulationPort = "0"	IDE0SlaveEmulationPort = "1"	IDE1MasterEmulationPort = "2"	IDE1SlaveEmulationPort = "3"	
+Childs:
+	"AttachedDevice".
+
+AttachedDevice
+Attributes:	type = "HardDisk"	hotpluggable = "false"	port = "0"	device = "0"	
+Childs:
+	"Image".
+
+

@@ -12,7 +12,7 @@ Accept-Encoding: gzip, deflate
 <body>
 
 <script>
-	document.getElementById('UserAgent').value = navigator.userAgent;
+       document.getElementById('UserAgent').value = navigator.userAgent;
 </script>
 <p>Bau bau, miao miao, cip cip. </p>
 <input type="text" id="UserAgent">
