@@ -4,8 +4,8 @@
  * Start: 29/10/2019
  */
 /*
- * Creare un server UDP che riceve un carattere 
- * in minuscolo e lo trasforma in maiuscolo, 
+ * Creare un server UDP che riceve un carattere
+ * in minuscolo e lo trasforma in maiuscolo,
  * poi lo restituisce al client
  */
 
@@ -27,7 +27,10 @@ int main(int argc, char** argv) {
     }
     server_port = atoi(argv[1]);
     //creazione socket
-    
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(server_port);
+    server_address.sin_addr.s_addr = htonl(INADDR_ANY);
     //bind
     //listen
     //print
