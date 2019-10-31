@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-22T06:59:49.815Z'
+modified: '2019-10-31T10:54:47.101Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -35,6 +35,8 @@ modified: '2019-10-22T06:59:49.815Z'
 **Clonazione: CTRL DX + T**
 
 1. Creazione macchina virtuale
+ ![Screenshot VM server](https://raw.githubusercontent.com/Lince99/Systems_school/master/Notes/notes/screenshots/Screen_VM_server_config_0.png)
+ > Creazione server
 1. abilitare Network con NAT
 1. expert install
 1. Choose language
@@ -445,7 +447,40 @@ modified: '2019-10-22T06:59:49.815Z'
     1. Server DHCP
         1. LAN cambiare range in .x.100 e .x.199
         1. LAN cambiare range in .100+x.100 e .100+x.199
+
+### Migrazione IP
+
+1. Nel SERVER da client in ssh
+    1. ssh uds@192.168.101.250
+    1. su -
+    1. nano /etc/network/interfaces
+        1. ... inet static
+        1. address 192.168.100+x.250/24
+           gateway 192.168.100+x.1
+        1. ifup enp0s3
+1. In M0n0wall
+    1. Interfaces -> DMZ
+        1. IP address = 192.168.111.1/24
+    1. Services -> DHCP Server -> DMZ
+        1. Range 192.168.111.100 to 192.168.111.199
+        1. Reservations da 192.168.101.250 a 192.168.111.250
+    1. Interfaces -> LAN (NON RIAVVIARE)
+        1. IP 192.168.11.1/24
+    1. Services -> DHCP Server -> LAN
+        1. Enable
+        1. Range 192.168.11.100 to 192.168.11.199
+    1. Reboot system
+1. Nel client
+    1. ifup enp0s3
+    1. testare il server
+        1. ping 192.168.111.250
+    1. testare la rete
+        1. ping 1.1.1.1
+    1. dal server pingare l'esterno
+        1. ssh uds@192.168.111.250
+        1. ping 1.1.1.1
     
+
 ---
 
 ## Robe utili:
