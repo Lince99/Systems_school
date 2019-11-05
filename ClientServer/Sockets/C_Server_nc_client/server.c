@@ -8,6 +8,7 @@
  * in minuscolo e lo trasforma in maiuscolo,
  * poi lo restituisce al client
  * https://www.tutorialspoint.com/unix_sockets/socket_server_example.htm
+ * https://stackoverflow.com/questions/24194961/how-do-i-use-setsockoptso-reuseaddr#24194999
  */
 
 #include <stdio.h>
@@ -44,6 +45,11 @@ int main(int argc, char** argv) {
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     server.sin_port = htons(server_port);
+    
+    //gestisce il TIME-WAIT
+    int enable = 1;
+	if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+		error("setsockopt(SO_REUSEADDR) failed");
     //bind
     if(bind(socketfd, (struct sockaddr*) &server,
             (socklen_t)sizeof(server)) < 0) {

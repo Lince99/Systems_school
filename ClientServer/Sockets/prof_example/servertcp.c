@@ -17,6 +17,7 @@
 
 static void catch_function(int signo) {
     fprintf(stdout, "Interactive attention signal caught.");
+    exit(signo);
 }
 
 
@@ -38,12 +39,11 @@ void CharMaiuscola(int i, int o)
 }
 
 int main (int argc, char **argv) {
-
-  
-
   int socketfd, client_len, fd;
   struct sockaddr_in servizio,cliente;   //  record con gli indirizzi
                                          //  del server  e del client
+
+  signal(SIGINT, catch_function);
 
   /* impostazione del transport endpoint */
   printf ("socket()\n");
