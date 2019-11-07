@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-10-31T10:54:47.101Z'
+modified: '2019-11-07T11:22:43.939Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -463,7 +463,7 @@ modified: '2019-10-31T10:54:47.101Z'
         1. IP address = 192.168.111.1/24
     1. Services -> DHCP Server -> DMZ
         1. Range 192.168.111.100 to 192.168.111.199
-        1. Reservations da 192.168.101.250 a 192.168.111.250
+        1. Reservations da 192.168.101.250 a 192.168.111.250```bash
     1. Interfaces -> LAN (NON RIAVVIARE)
         1. IP 192.168.11.1/24
     1. Services -> DHCP Server -> LAN
@@ -479,7 +479,82 @@ modified: '2019-10-31T10:54:47.101Z'
     1. dal server pingare l'esterno
         1. ssh uds@192.168.111.250
         1. ping 1.1.1.1
-    
+
+- DHCP è debole:
+    - boot da rete del lab: server fa anche da DHCP, si può osservare il server ufficiale, mandare un pacchetto UDP durante l'avvio che aggiunge le opzioni di avvio da rete del sistema operativo
+    - nel caso di manutenzione di ip statici, questo stratagemma permette di ottenere sempre lo stesso indirizzo del DHCP
+
+### Restrizioni aggiuntive sul firewall del laboratorio virtuale
+
+|  da/a  | LAN      |    WAN           |      DMZ   |
+|:------:|:--------:|:----------------:|:----------:|
+| LAN    |  v       | v(dns)           |  v*2       |
+| WAN    |  x       | v                | v*2(dnat)  |
+| DMZ    |  x       | v(dns,ntp,http)  |  v         |
+
+- Sia il client che il server devono essere protetti da virus (cercano di inibire chi li sconfigge, anti-antivirus)
+- Firewall esterno devono proteggere sia LAN che DMZ anche nel caso uno dei due o entrambi siano stati attaccati e vogliono diffondersi
+
+- Da LAN a WAN: DNS riceve un nome e restituisce l'IP (elenco del telefono per la nonnina)
+    - **IMPEDIRE IL CAMBIO DEL DNS**
+    - chiamata telefono fisso tradizionale: il chiamante occupa il chiamato anche se il chiamato mette giù il telefono = truffa vecchio stile
+    - Un client riceve il DNS dal router tramite la richiesta DHCP (dns livello applicazione, dhcp livello IP)
+    - Client scrive il server DNS nel file /etc/resolve.conf, file continuamente riscritto dal router
+    Nel client
+```bash
+cat /etc/resolv.conf
+```
+    - LAN deve permettere al servizio DNS di andare solo nel M0n0wall lato LAN, le altre richieste TCP/UDP per il DNS da tagliare
+- Creare alias per host-server, host-router-lan, host-router-dmz
+
+- LAN e WAN verso DMZ
+    - DMZ esce solo con la porta 80 (ora solo porta 22 per SSH)
+    - LAN può essere infettata
+    - DMZ zona sicura dall'accesso sia da WAN che da LAN
+    - DMZ deve dare accesso ad una lista di servizi, mentre il resto no (ora c'è Allow: DMZ to any)
+    - permetti tutto dalla LAN alla DMZ disabilitata e da attivare in caso di manutenzione (descrizione: NORMALMENTE INATTIVA)
+
+- DMZ verso LAN **PROIBITO**
+
+- DMZ verso WAN
+    - potrebbe ricevere attacchi anche da un ping fraudolento
+    - Server ha bisogno di *rispondere* ad internet, non di *andare* verso internet
+    - **VIETARE TRAFFICO IN BASE AL SERVIZIO**
+        - minimo traffico ICMP
+        - DNS verso il server giusto
+        - NTP per l'orario (tempo in rete è importante, solo orologi fidati)
+        - aggiornamenti, regola a scuola è differente da casa (apt-cache porta 3142 ip 172.30.1.199), a casa /etc/apt/sources ci sono gli indirizzi
+        - /etc/apt/sources.list.d e il file pbiso.list aggiunge una fonte aggiuntiva oltre a sources, durante gli aggiornamenti controllerà anche questa repo
+        - per windows esistono degli host per windows update
+
+- Monowall -> Services -> Scheduler
+    - Permette di limitare i servizi in certe fasce orarie
+
+- Collaudare il DNS
+Testare la rete anche con DNS diversi
+```bash
+host www.casettamia.it 8.8.8.8
+```
+- Al posto di bloccare le chiamate DNS illecite, si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
+
+- NAT
+    - indirizzi privati non possono andare su internet, poichè gli altri host non sanno come rispondere
+    - IP sorgente dell'host privato viene sostituito con quello del router privato -> esce con IP pubblico -> traffico torna verso il router -> router ritorna il traffico all'ip privato dell'host
+
+- DNAT
+    - altero la destinazione
+    - nel router si chiama port-forwarding, virtual-server, server-port, port-mapping, ...
+    - DMZ con indirizzo pubblico, oppure se ha un indirizzo privato = ho solo l'ip pubblico del router
+    - m0n0wall -> Firewall -> NAT -> Inbound
+        - Regola di controllo del server da rete esterna (per teleassistenza, con la possibilità di accesso da solo alcuni IP statici (o aziendali o da server redirect))
+        - from: SSH
+        - NAT IP: host-server (accetta alias, ma attenzione)
+        - Description: Server in SSH
+        - Auto-add a firewall rule to permit traffic through this NAT rule (crea una regola permissiva da poi adattare nel firewall, solo in fase di creazione)
+    - m0n0wall -> Firewall -> Rules 
+        - si vede l'aggiunta della regola di NAT
+        - da modificare che permette di accedere al server solo dal pc ospitante (edit -> host-pcospitante)
+
 
 ---
 
@@ -616,3 +691,4 @@ R3 .201                                                   R3 .202
 - [x] cron e anacron
 - [x] come viene gestito DHCP in LAN e come fare la DMZ
 - [ ] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo. Rinumerare rete IP di tutto con una procedura gestita solamente dal client. Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
+- [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall del laboratorio virtuale**
