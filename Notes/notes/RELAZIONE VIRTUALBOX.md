@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-07T11:22:43.939Z'
+modified: '2019-11-09T08:20:27.768Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -499,11 +499,8 @@ modified: '2019-11-07T11:22:43.939Z'
     - **IMPEDIRE IL CAMBIO DEL DNS**
     - chiamata telefono fisso tradizionale: il chiamante occupa il chiamato anche se il chiamato mette giù il telefono = truffa vecchio stile
     - Un client riceve il DNS dal router tramite la richiesta DHCP (dns livello applicazione, dhcp livello IP)
-    - Client scrive il server DNS nel file /etc/resolve.conf, file continuamente riscritto dal router
-    Nel client
-```bash
-cat /etc/resolv.conf
-```
+    - Client scrive il server DNS nel file /etc/resolve.conf, file continuamente riscritto dal router  
+    Nel client cat /etc/resolv.conf
     - LAN deve permettere al servizio DNS di andare solo nel M0n0wall lato LAN, le altre richieste TCP/UDP per il DNS da tagliare
 - Creare alias per host-server, host-router-lan, host-router-dmz
 
@@ -554,6 +551,24 @@ host www.casettamia.it 8.8.8.8
     - m0n0wall -> Firewall -> Rules 
         - si vede l'aggiunta della regola di NAT
         - da modificare che permette di accedere al server solo dal pc ospitante (edit -> host-pcospitante)
+
+- Installare il plugin Foxyproxy Standard sia nel pc ospitante che nel client
+    - options (crea più profili proxy da switchare)
+        - piu
+            - diretto
+            - #000
+            - Type: Direct (no proxy)
+        - piu
+            - scuola
+            - #66cc66
+            - 172.30.1.199
+            - 3128
+    - diretto -> patterns
+        - se l'ip ha una forma usa un certo proxy, altrimenti usa l'altro
+        - New White
+            - Pattern: 192.168.*
+    - permette di usare un proxy per gli ip locali, mentre
+    - In firefox -> Preferenze -> nessun proxy
 
 
 ---
