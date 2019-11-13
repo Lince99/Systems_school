@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-09T08:20:27.768Z'
+modified: '2019-11-13T10:43:19.548Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -570,6 +570,18 @@ host www.casettamia.it 8.8.8.8
     - permette di usare un proxy per gli ip locali, mentre
     - In firefox -> Preferenze -> nessun proxy
 
+- LAN to WAN: solo DNS in TCP/UDP
+    - TCP/UDP from LAN port any to WAN port 53 (Block: LAN to WAN - DNS)
+- LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
+    - TCP/UDP from LAN port any to DMZ port 80 (Pass: LAN to DMZ - HTTP)
+    - TCP/UDP from LAN port any to DMZ port 443 (Pass: LAN to DMZ - HTTPS)
+- WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
+    - TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
+    - TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
+- DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
+    - TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
+    - UDP from DMZ port any to WAN port 123 (Pass: DMZ to WAN - NTP)
+    - TCP/UDP from DMZ port any to WAN port 3142 (Pass: DMZ to WAN - Updates)
 
 ---
 
