@@ -6,15 +6,17 @@
 static volatile sig_atomic_t stop = 0;
 
 void signalHandler(int signo) {
+	fprintf(stdout, "SIGNAL CATCH\n");
+	fflush(stdout);
 	exit(signo);
 }
 
 int main(int argc, char** argv) {
 	struct sigaction act;
-	
+
 	act.sa_handler = signalHandler;
 	sigaction(SIGINT, &act, NULL);
-	
+
 	while(!stop) {
 		puts("Running...\n");
 		sleep(100);
