@@ -2,7 +2,7 @@
 tags: [Import-0f7e]
 title: READVBX
 created: '2019-10-01T10:05:06.945Z'
-modified: '2019-10-01T10:37:03.644Z'
+modified: '2019-11-20T09:55:19.001Z'
 ---
 
 # READVBX
@@ -37,17 +37,17 @@ Leggere file .vbox (XML) per poi convertire i dati contenuti a scelta in xml, ht
 
 **IMPORTANTE! non specificare il formato nel file di output poichè è inserito dal programma in base al formato scelto via parametro**
 
-```
+```bash
 ./readvbx -0 -xml -i nomefile.vbox -o nomefile
 ```
 
 oppure
-```
+```bash
 ./readvbx -0 -xml < nomefile.vbox > nomefile
 ```
 
 oppure
-```
+```bash
 ./readvbx -0 -xml > nomeout
 #da scrivere tutto in stdin 
 ```
@@ -60,9 +60,9 @@ oppure
 
 ## TODO
 
-[] Creare libreria di lettura albero XML
-[] Creare liberia di output
-[] Unire e fare la prima release
+[ ] Creare libreria di lettura albero XML
+[ ] Creare liberia di output
+[ ] Unire e fare la prima release
 
 ## Disclaimer
 

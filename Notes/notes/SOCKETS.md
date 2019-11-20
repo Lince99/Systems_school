@@ -1,7 +1,7 @@
 ---
 title: SOCKETS
 created: '2019-11-05T08:29:31.370Z'
-modified: '2019-11-05T09:43:24.650Z'
+modified: '2019-11-20T09:50:23.253Z'
 ---
 
 # SOCKETS
@@ -47,3 +47,5 @@ Per catturare un segnale basta usare la funzione asincrona signal.h
 #include <signal.h>
 
 ```
+
+
