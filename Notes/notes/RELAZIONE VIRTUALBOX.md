@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-13T10:43:19.548Z'
+modified: '2019-11-21T11:21:14.074Z'
 ---
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
@@ -16,11 +16,13 @@ modified: '2019-11-13T10:43:19.548Z'
 
 ![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)
 
-- Indice: TODO
+## INDICE
+
+- [Configurazione client](#Configurazione-client-)
 
 ## CLIENT
 
-### Configurazione:
+### Configurazione client [↑](#INDICE "Indice")
 
 - clientcognome lasolita
 - Debian (64bit)
@@ -571,17 +573,35 @@ host www.casettamia.it 8.8.8.8
     - In firefox -> Preferenze -> nessun proxy
 
 - LAN to WAN: solo DNS in TCP/UDP
-    - TCP/UDP from LAN port any to WAN port 53 (Block: LAN to WAN - DNS)
+    - TCP/UDP from LAN port NOT host-router-lan to WAN port 53 (Block: LAN to WAN - DNS)
 - LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
     - TCP/UDP from LAN port any to DMZ port 80 (Pass: LAN to DMZ - HTTP)
     - TCP/UDP from LAN port any to DMZ port 443 (Pass: LAN to DMZ - HTTPS)
 - WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
     - TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
     - TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
+- WAN to LAN: blocca 
 - DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
+    - protocol ICMP from DMZ port any to WAN port any (Pass: DMZ to WAN - ICMP)
     - TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
     - UDP from DMZ port any to WAN port 123 (Pass: DMZ to WAN - NTP)
     - TCP/UDP from DMZ port any to WAN port 3142 (Pass: DMZ to WAN - Updates)
+- DMZ to client LAN port 2222
+    - (in LAN) TCP from DMZ port 2222 to LAN port 22 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
+    - (in DMZ) TCP from LAN client port 22 to DMZ port 2222 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
+
+- Dal server DMZ per connettersi al client usare il NAT tramite porta 2222 (scelta)
+
+- TEST:
+    - client:
+        - ping 1.1.1.1
+
+
+
+
+
+
+
 
 ---
 
