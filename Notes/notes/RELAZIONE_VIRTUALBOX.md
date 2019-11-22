@@ -1,21 +1,13 @@
 ---
-title: RELAZIONE VIRTUALBOX
+title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-21T11:21:14.074Z'
+modified: '2019-11-22T21:46:14.074Z'
+author: Basso Nicola - 5 AI
 ---
 
-### Virtualbox, M0n0wall e l'architettura client-server {#top}
+# Virtualbox, M0n0wall e l'architettura client-server {#top}
 
 ---
-
-> ITIS "E. Fermi" Bassano del Grappa  
-> 5^AI  
-> Basso Nicola  
-> aka Lince99
-
----
-
-<!--# RELAZIONE VIRTUALBOX e M0N0WALL-->
 
 ## INTRODUZIONE [↑](#top)
 
