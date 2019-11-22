@@ -4,67 +4,72 @@ created: '2019-09-26T08:50:05.352Z'
 modified: '2019-11-21T11:21:14.074Z'
 ---
 
-> 5^AI - ITIS "E. Fermi" Bassano del Grappa  
+### Virtualbox, M0n0wall e l'architettura client-server {#top}
+
+---
+
+> ITIS "E. Fermi" Bassano del Grappa  
+> 5^AI  
 > Basso Nicola  
 > aka Lince99
 
-# RELAZIONE VIRTUALBOX e M0N0WALL
+---
 
-## INTRODUZIONE
+<!--# RELAZIONE VIRTUALBOX e M0N0WALL-->
 
-- Strumenti utilizzati
-    - Linux Mint (Laboratorio Sistemi)
-    - Kubuntu 19.04 (casa)
-    - Oracle VirtualBox versione 6.0.2
-    - Debian GNU/Linux
-    - M0n0wall
+## INTRODUZIONE [↑](#top)
 
-- Descrizione VirtualBox
+#### Descrizione VirtualBox
 
-<!--![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)-->
+![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)
 
-- Descrizione M0n0wall
+Virtualbox è un software che ci permette di emulare il funzionamento di altri sistemi operativi
+al di sopra di un altro che sarà il nostro "pc ospite".
 
-<!--![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)-->
+#### Descrizione M0n0wall
 
-- Obbiettivo
+![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)
 
-- Informazioni aggiuntive
+M0n0wall è un sistema operativo open source ora abbandonato che ci permette di gestire
+tutti gli aspetti avanzati di un router.
+
+#### Obbiettivo
+
+Riuscire a creare un laboratorio virtuale completo:
+- router con firewall, NAT e DMZ
+- server fruitore di servizi in locale e all'esterno verso il laboratorio fisico
+- svariati client virtuali, tra i quali alcuni vulnerabili per svariati attacchi da provare
+
+#### Informazioni aggiuntive
+
 
 ---
 
-## INDICE
+## Utilità [↑](#top)
 
-- [Configurazione client](#Configurazione-client)
-
----
-
-## CLIENT [↑](#INDICE)
-
-### Configurazione client [↑](#INDICE)
-
-
-#### Informazioni generali
-    - clientcognome lasolita
-    - Debian (64bit)
-    - RAM 1 GB
-    - HDD 4 GB (4.0 GB root, 368 MB swap)
-    - NAT
-
-#### Utilità
-
-##### Download links
+### Download links
 
 [Distribuzione debian](https://www.debian.org/distrib/netinst)
 
-##### Funzioni utili Virtualbox
+### Funzioni utili Virtualbox
 
-**Screenshot Virtualbox: CTRL DX + E**  
-**Clonazione Virtualbox: CTRL DX + T**
+Screenshot Virtualbox: **R-CTRL + E**  
+Clonazione Virtualbox: **R-CTRL + T**
 
 ---
 
-#### Creazione VM Client [↑](#INDICE)
+## Creazione VM Client [↑](#top)
+
+#### Informazioni generali
+
+- nome VM = clientcognome
+- password per tutto = lasolita
+- Debian (64bit)
+- RAM 1 GB
+- HDD 4 GB (4.0 GB root, 368 MB swap)
+- Rete con NAT
+
+### Installazione OS client [↑](#top)
 
 1. Creazione macchina virtuale
     <!--![Screenshot VM server](https://raw.githubusercontent.com/Lince99/Systems_school/master/Notes/notes/screenshots/Screen_VM_server_config_0.png)
@@ -173,7 +178,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Continua
             - (RIMUOVERE IL CD DAL LETTORE VIRTUALE SE USATA UNA ISO)
 
-#### Configurazione OS Client [↑](#INDICE)
+### Configurazione OS Client [↑](#top)
 
 1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
 1. Segnalazione dell'integrazione del puntatore del mouse
@@ -189,7 +194,7 @@ modified: '2019-11-21T11:21:14.074Z'
     1. apt update
     1. apt upgrade
     1. (in caso di problemi: nano /etc/apt/sources.list)
-    ```
+    ```bash
     deb http://deb.debian.org/debian buster main
     deb-src http://deb.debian.org/debian buster main
 
@@ -221,15 +226,13 @@ modified: '2019-11-21T11:21:14.074Z'
     1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
     1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
 
-
-
-## Creazione VM Server [↑](#INDICE)
+## Creazione VM Server [↑](#top)
 
 1. Server debian
     1. spegnere la macchina da amministratore
         1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
         1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
-    1. clonare la macchina virtuale
+    1. clonare la macchina virtuale *clientcognome*
         1. CTRL + O o Pecora Dolly nel menu a tendina
         1. servercognome
         1. ABILITARE "Inizializza nuovamente l'indirizzo MAC di tutte le schede di rete", (serve per sperimentare lo stesso sistema su sistemi differenti ma con MAC uguale)
@@ -244,7 +247,7 @@ modified: '2019-11-21T11:21:14.074Z'
     1. ping 127.0.x.x
     1. shutdown -h now
 
-## Creazione VM Router [↑](#INDICE)
+## Creazione VM Router [↑](#top)
 
 1. Creare nuova macchina per monowall
     1. configurazione macchina virtuale:
@@ -286,7 +289,9 @@ modified: '2019-11-21T11:21:14.074Z'
         1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
         1. Ora bisogna configurare gli host
 
-## Grafica sul Client [↑](#INDICE)
+---
+
+### Grafica sul Client [↑](#top)
 
 1. Avviare il clientcognome
     1. entrare con uds
@@ -317,7 +322,7 @@ modified: '2019-11-21T11:21:14.074Z'
                 1. dhclient enp0s3
                 1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
 
-## Configurazione M0n0wall [↑](#INDICE)
+### Configurazione M0n0wall [↑](#top)
 
 1. tornare su Firefox
     1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
@@ -388,11 +393,11 @@ modified: '2019-11-21T11:21:14.074Z'
             1. Download configuration
         1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
 
+---
 
+## Configurare la rete [↑](#top)
 
-## Configurare la rete [↑](#INDICE)
-
-### Impostare l'ip del client [↑](#INDICE)
+### Impostare l'ip del client
 
 1. Rilanciare il router
 1. Svegliare il client
@@ -404,7 +409,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Range: 192.168.101.100 al 192.168.101.199
         1. Save
 
-### Impostare DMZ nel router [↑](#INDICE)
+### Impostare DMZ nel router [↑](#top)
 
 1. Configurare il server
     1. Rete -> Scheda 1 -> Rete interna DMZ
@@ -443,9 +448,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. server
             1. ssh uds@192.168.1.100 (non deve funzionare)
 
-
-
-## Applicare modifiche della rete [↑](#INDICE)
+### Applicare modifiche della rete [↑](#top)
 
 1. Riavviare macchine virtuali
 1. Il client deve identificare il server sempre con lo stesso indirizzo
@@ -460,9 +463,9 @@ modified: '2019-11-21T11:21:14.074Z'
             1. Ip statico del server
             1. "Deny unknown clients" Only respond to reserved clients listed below. LASCIARE DISATTIVATA (il firewall si occupa degli indirizzi esterni, DMZ per il range di indirizzi locali, no MAC, no IP)
 
+---
 
-
-## Aggiungere regole in M0n0wall [↑](#INDICE)
+## Aggiungere regole in M0n0wall [↑](#top)
 
 1. aliases:
     1. Firewall -> Rules
@@ -506,7 +509,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. LAN cambiare range in .x.100 e .x.199
         1. LAN cambiare range in .100+x.100 e .100+x.199
 
-## Migrazione IP [↑](#INDICE)
+## Migrazione IP [↑](#top)
 
 1. Nel SERVER da client in ssh
     1. ssh uds@192.168.101.250
@@ -542,16 +545,22 @@ modified: '2019-11-21T11:21:14.074Z'
     - boot da rete del lab: server fa anche da DHCP, si può osservare il server ufficiale, mandare un pacchetto UDP durante l'avvio che aggiunge le opzioni di avvio da rete del sistema operativo
     - nel caso di manutenzione di ip statici, questo stratagemma permette di ottenere sempre lo stesso indirizzo del DHCP
 
-## Restrizioni aggiuntive sul firewall del laboratorio virtuale [↑](#INDICE)
+## Restrizioni aggiuntive sul firewall [↑](#top)
 
-|  da/a  | LAN      |    WAN           |      DMZ   |
-|:------:|:--------:|:----------------:|:----------:|
-| LAN    |  v       | v(dns)           |  v*2       |
-| WAN    |  x       | v                | v*2(dnat)  |
-| DMZ    |  x       | v(dns,ntp,http)  |  v         |
+### Schema
 
-- Sia il client che il server devono essere protetti da virus (cercano di inibire chi li sconfigge, anti-antivirus)
-- Firewall esterno devono proteggere sia LAN che DMZ anche nel caso uno dei due o entrambi siano stati attaccati e vogliono diffondersi
+|  da/a      | LAN      |    WAN           |      DMZ   |
+|:----------:|:--------:|:----------------:|:----------:|
+| **LAN**    |  v       | v(dns)           |  v*2       |
+| **WAN**    |  x       | v                | v*2(dnat)  |
+| **DMZ**    |  x       | v(dns,ntp,http)  |  v         |
+
+### Condizioni [↑](#top)
+
+- Sia il client che il server devono essere protetti da virus
+(cercano di inibire chi li sconfigge, anti-antivirus)
+- Firewall esterno devono proteggere sia LAN che DMZ
+anche nel caso uno dei due o entrambi siano stati attaccati e vogliono diffondersi
 
 - Da LAN a WAN: DNS riceve un nome e restituisce l'IP (elenco del telefono per la nonnina)
     - **IMPEDIRE IL CAMBIO DEL DNS**
@@ -590,7 +599,8 @@ Testare la rete anche con DNS diversi
 ```bash
 host www.casettamia.it 8.8.8.8
 ```
-- Al posto di bloccare le chiamate DNS illecite, si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
+- Al posto di bloccare le chiamate DNS illecite,
+si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 - NAT
     - indirizzi privati non possono andare su internet, poichè gli altri host non sanno come rispondere
@@ -628,6 +638,8 @@ host www.casettamia.it 8.8.8.8
     - permette di usare un proxy per gli ip locali, mentre
     - In firefox -> Preferenze -> nessun proxy
 
+### Realizzazione [↑](#top)
+
 - LAN to WAN: solo DNS in TCP/UDP
     - TCP/UDP from LAN port NOT host-router-lan to WAN port 53 (Block: LAN to WAN - DNS)
 - LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
@@ -654,16 +666,11 @@ host www.casettamia.it 8.8.8.8
         - TODO
 
 
-
-
-
-
-
 ---
 
-## Utility [↑](#INDICE)
+## Utilità [↑](#top)
 
-### Possibili problemi [↑](#INDICE)
+### Possibili problemi
 
 1. problemi di rete a casa
     1. cambiare gli IP
@@ -678,13 +685,17 @@ host www.casettamia.it 8.8.8.8
     1. Anche la metrica viene usata per valutare delle indecisioni di routing (metrica minore viene usata)
     1. m0n0wall e client a casa non funzionano per il problema della rete
         1. CREAZIONE DELLA RETE: scegliere 192.168.x.0 x = con uno pseudorandom (188 = BC <-- oh c'mon)
-        1. host www.facebook.com --> IPv6: face:b00c oh c'mooooooon
+        1. host www.facebook.com --> IPv6: face:b00c _oh c'mooooooon_
+
 ```
---- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
+(WAN) <---> 1.120 (DMZ router1) <---> |rete diversa| (LAN router2) .2.1 <---> host
 ```
 
-1. pacchetto da installare
-    1. sudo apt install virtualbox-...
+1. pacchetti da installare (per Debian/Ubuntu e derivate) che potrebbero mancare
+    ```bash
+    sudo apt search virtualbox-
+    #fare apt install di quelli desiderati
+    ```
 
 1. riconfigurazione schede di rete
 ```bash
@@ -694,17 +705,17 @@ ifup nomeintefraccia
 ifdown nomeinterfaccia
 ```
 
-### Curiosità varie [↑](#INDICE)
+### Curiosità varie [↑](#top)
 
-1. possibilità di aumentare la banda aumentando il numero di interfacce
+- possibilità di aumentare la banda aumentando il numero di interfacce
 
-1. Cellulari, sia Android che iOS, hanno il problema di cercare di velocizzare l'utilizzo dello stesso:
+- Cellulari, sia Android che iOS, hanno il problema di cercare di velocizzare l'utilizzo dello stesso:
     1. cellulare al posto di inviare lo standard RFC 0.0.0.0
     1. configura i parametri della nuova rete con la vecchia configurazione della rete precedente
     1. appena si attacca, farà traffico con i vecchi IP
     1. INCONVENIENTE: cellulare nella vecchia rete era 192.168.1.5, nella rete in cui si connette cerca 192.168.1.5, DHCP se ne accorge dopo secondi, creando disservizio
 
-1. cron (cronos, tempo)
+- cron (cronos, tempo)
     1. Serve per eseguire dei comandi in orari prefissati
     1. Compito da fare alle 4 con pc spento:
         1. Linux: salta l'esecuzione del compito
@@ -712,13 +723,13 @@ ifdown nomeinterfaccia
     1. cron utilizzato per compiti di manutenzione
         1. compiti orari, giornalieri, settimanali, mensili, senza un'ora precisa
 
-1. anacron
+- anacron
     1. collabora con cron e gestisce la periodicità dei compiti da fare
     1. cron daily: cerca di lanciarlo alle 6, se non è accesa, lo avvia alla prima ora disponibile
     1. Se un pc non viene avviato per un po si crea una coda di programmi in cron.
 
-1. FHS
-    1. https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard
+- FHS
+    1. [Filesystem Hierarchy _wikipedia_](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)
     1. dove sono i file nel filesystem linux
     1. sotto /etc/apt/sources.list o cartella sources.list.d/...
         1. in Debian si trovano delle configurazioni modulari = installare un software ha eseguibili, configurazioni e .deb per la configurazione iniziale
@@ -731,42 +742,41 @@ ifdown nomeinterfaccia
     1. aggiornamento della versione di Debian: tutte le dipendenze rischiano di rompere l'upgrade (dependency hell)
         1. dist-upgrade: esegue l'upgrade senza dare peso alle dipendenze, però portando ad interruzioni di servizio
 
-1. Usando il CD a casa richiede se si vuole scaricare dal CD o dalla rete, per rendere indipendente la macchina dall'uso del CD:
-    1. source
+- Usando il CD a casa richiede se si vuole scaricare dal CD o dalla rete, per rendere indipendente la macchina dall'uso del CD: _source_
 
-1. echo $TERM : stampa il nome del terminale
-1. CTRL+D : uscire dall'utente
-1. nano .bashrc:
+- echo $TERM : stampa il nome del terminale
+- CTRL+D : uscire dall'utente
+- nano .bashrc:
 ```
 case "$TERM" in
        xterm-color|linux|...
 alias shutdown=/sbin/shutdown
 ```
 
-### Funzionamento librerie [↑](#INDICE)
+### Funzionamento librerie [↑](#top)
 
 - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
 - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
 Android: il Play store colleziona software adatto al sistema insieme alle loro liberie
 - DEBIAN usa .deb (creato da Ian Mardock, Deb "Deborah" Ian)
-- DPKG gestore di file
+- **DPKG** gestore di file
     - vincoli di dipendenze (con limiti sulle versioni)
-- APT altro gestore
+- **APT** altro gestore
     - utilizza dpkg
     - retrocompatibile con i comandi dpkg
-- deb: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
-- deborphan: cerca le librerie orfane, non necessarie a nessun software
+- **deb**: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
+- **deborphan**: cerca le librerie orfane, non necessarie a nessun software
 deb auto... : rimuove le librerie inutilizzate in automatico
 
-### File utili [↑](#INDICE)
+### File utili [↑](#top)
 
 file password:
-```
+```bash
 cat /etc/shadow
 ```
 
 file con la configurazione del profilo utente
-```
+```bash
 sudo nano /etc/profile
 # aggiungere :/usr/sbin dopo PATH
 ```
@@ -776,7 +786,7 @@ sudo nano /etc/profile
 
 ---
 
-## Esercizio Cisco [↑](#INDICE)
+## Esercizio Cisco [↑](#top)
 
 #### SPERIMENTAZIONE VLAN CON ROUTER CISCO
 
@@ -793,10 +803,9 @@ R1 .101                                              R2 .102
 R3 .201                                              R3 .202
 ```
 
-
 ---
 
-## TODO [↑](#INDICE)
+## TODO [↑](#top)
 
 - [x] clonare client, configurare clone e rinominarlo SERVER
 - [x] cron e anacron
@@ -804,4 +813,4 @@ R3 .201                                              R3 .202
 - [x] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo.  
  Rinumerare rete IP di tutto con una procedura gestita solamente dal client.   
  Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
-- [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall del laboratorio virtuale**
+- [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall**
