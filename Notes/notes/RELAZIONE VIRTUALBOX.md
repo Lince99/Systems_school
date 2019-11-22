@@ -4,10 +4,11 @@ created: '2019-09-26T08:50:05.352Z'
 modified: '2019-11-21T11:21:14.074Z'
 ---
 
-# RELAZIONE VIRTUALBOX e M0N0WALL
+> 5^AI - ITIS "E. Fermi" Bassano del Grappa  
+> Basso Nicola  
+> aka Lince99
 
-> Basso Nicola 5^AI  
-  aka Lince99
+# RELAZIONE VIRTUALBOX e M0N0WALL
 
 ## INTRODUZIONE
 
@@ -34,13 +35,13 @@ modified: '2019-11-21T11:21:14.074Z'
 
 ## INDICE
 
-- [Configurazione client](#Configurazione-client-)
+- [Configurazione client](#Configurazione-client)
 
 ---
 
-## CLIENT [↑](#INDICE "Return to top")
+## CLIENT [↑](#INDICE)
 
-### Configurazione client [↑](#INDICE "Return to top")
+### Configurazione client [↑](#INDICE)
 
 
 #### Informazioni generali
@@ -50,15 +51,20 @@ modified: '2019-11-21T11:21:14.074Z'
     - HDD 4 GB (4.0 GB root, 368 MB swap)
     - NAT
 
-##### Utilità
+#### Utilità
 
-[distribuzione debian](https://www.debian.org/distrib/netinst)
+##### Download links
 
-**Screenshot Virtualbox: CTRL DX + E**
+[Distribuzione debian](https://www.debian.org/distrib/netinst)
 
+##### Funzioni utili Virtualbox
+
+**Screenshot Virtualbox: CTRL DX + E**  
 **Clonazione Virtualbox: CTRL DX + T**
 
-#### Creazione VM Client [↑](#INDICE "Return to top")
+---
+
+#### Creazione VM Client [↑](#INDICE)
 
 1. Creazione macchina virtuale
     <!--![Screenshot VM server](https://raw.githubusercontent.com/Lince99/Systems_school/master/Notes/notes/screenshots/Screen_VM_server_config_0.png)
@@ -167,7 +173,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Continua
             - (RIMUOVERE IL CD DAL LETTORE VIRTUALE SE USATA UNA ISO)
 
-#### Configurazione OS Client [↑](#INDICE "Return to top")
+#### Configurazione OS Client [↑](#INDICE)
 
 1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
 1. Segnalazione dell'integrazione del puntatore del mouse
@@ -217,7 +223,7 @@ modified: '2019-11-21T11:21:14.074Z'
 
 
 
-## Creazione VM Server [↑](#INDICE "Return to top")
+## Creazione VM Server [↑](#INDICE)
 
 1. Server debian
     1. spegnere la macchina da amministratore
@@ -238,7 +244,7 @@ modified: '2019-11-21T11:21:14.074Z'
     1. ping 127.0.x.x
     1. shutdown -h now
 
-## Creazione VM Router [↑](#INDICE "Return to top")
+## Creazione VM Router [↑](#INDICE)
 
 1. Creare nuova macchina per monowall
     1. configurazione macchina virtuale:
@@ -280,7 +286,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
         1. Ora bisogna configurare gli host
 
-## Grafica sul Client [↑](#INDICE "Return to top")
+## Grafica sul Client [↑](#INDICE)
 
 1. Avviare il clientcognome
     1. entrare con uds
@@ -311,7 +317,7 @@ modified: '2019-11-21T11:21:14.074Z'
                 1. dhclient enp0s3
                 1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
 
-## Configurazione M0n0wall [↑](#INDICE "Return to top")
+## Configurazione M0n0wall [↑](#INDICE)
 
 1. tornare su Firefox
     1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
@@ -384,9 +390,9 @@ modified: '2019-11-21T11:21:14.074Z'
 
 
 
-## Configurare la rete [↑](#INDICE "Return to top")
+## Configurare la rete [↑](#INDICE)
 
-### Impostare l'ip del client [↑](#INDICE "Return to top")
+### Impostare l'ip del client [↑](#INDICE)
 
 1. Rilanciare il router
 1. Svegliare il client
@@ -398,7 +404,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Range: 192.168.101.100 al 192.168.101.199
         1. Save
 
-### Impostare DMZ nel router [↑](#INDICE "Return to top")
+### Impostare DMZ nel router [↑](#INDICE)
 
 1. Configurare il server
     1. Rete -> Scheda 1 -> Rete interna DMZ
@@ -439,7 +445,7 @@ modified: '2019-11-21T11:21:14.074Z'
 
 
 
-## Applicare modifiche della rete [↑](#INDICE "Return to top")
+## Applicare modifiche della rete [↑](#INDICE)
 
 1. Riavviare macchine virtuali
 1. Il client deve identificare il server sempre con lo stesso indirizzo
@@ -456,7 +462,7 @@ modified: '2019-11-21T11:21:14.074Z'
 
 
 
-## Aggiungere regole in M0n0wall [↑](#INDICE "Return to top")
+## Aggiungere regole in M0n0wall [↑](#INDICE)
 
 1. aliases:
     1. Firewall -> Rules
@@ -500,7 +506,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. LAN cambiare range in .x.100 e .x.199
         1. LAN cambiare range in .100+x.100 e .100+x.199
 
-## Migrazione IP [↑](#INDICE "Return to top")
+## Migrazione IP [↑](#INDICE)
 
 1. Nel SERVER da client in ssh
     1. ssh uds@192.168.101.250
@@ -536,7 +542,7 @@ modified: '2019-11-21T11:21:14.074Z'
     - boot da rete del lab: server fa anche da DHCP, si può osservare il server ufficiale, mandare un pacchetto UDP durante l'avvio che aggiunge le opzioni di avvio da rete del sistema operativo
     - nel caso di manutenzione di ip statici, questo stratagemma permette di ottenere sempre lo stesso indirizzo del DHCP
 
-## Restrizioni aggiuntive sul firewall del laboratorio virtuale [↑](#INDICE "Return to top")
+## Restrizioni aggiuntive sul firewall del laboratorio virtuale [↑](#INDICE)
 
 |  da/a  | LAN      |    WAN           |      DMZ   |
 |:------:|:--------:|:----------------:|:----------:|
@@ -655,9 +661,9 @@ host www.casettamia.it 8.8.8.8
 
 ---
 
-## Utility [↑](#INDICE "Return to top")
+## Utility [↑](#INDICE)
 
-### Possibili problemi [↑](#INDICE "Return to top")
+### Possibili problemi [↑](#INDICE)
 
 1. problemi di rete a casa
     1. cambiare gli IP
@@ -688,7 +694,7 @@ ifup nomeintefraccia
 ifdown nomeinterfaccia
 ```
 
-### Curiosità varie [↑](#INDICE "Return to top")
+### Curiosità varie [↑](#INDICE)
 
 1. possibilità di aumentare la banda aumentando il numero di interfacce
 
@@ -733,12 +739,11 @@ ifdown nomeinterfaccia
 1. nano .bashrc:
 ```
 case "$TERM" in
-  xterm-color|linux|...
-
+       xterm-color|linux|...
 alias shutdown=/sbin/shutdown
 ```
 
-### Funzionamento librerie [↑](#INDICE "Return to top")
+### Funzionamento librerie [↑](#INDICE)
 
 - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
 - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
@@ -753,7 +758,7 @@ Android: il Play store colleziona software adatto al sistema insieme alle loro l
 - deborphan: cerca le librerie orfane, non necessarie a nessun software
 deb auto... : rimuove le librerie inutilizzate in automatico
 
-### File utili [↑](#INDICE "Return to top")
+### File utili [↑](#INDICE)
 
 file password:
 ```
@@ -771,9 +776,9 @@ sudo nano /etc/profile
 
 ---
 
-## Esercizio Cisco [↑](#INDICE "Return to top")
+## Esercizio Cisco [↑](#INDICE)
 
-**SPERIMENTAZIONE VLAN CON ROUTER CISCO**
+#### SPERIMENTAZIONE VLAN CON ROUTER CISCO
 
 ```
 192.168.3.0/24
@@ -791,10 +796,12 @@ R3 .201                                              R3 .202
 
 ---
 
-#### TODO [↑](#INDICE "Return to top")
+## TODO [↑](#INDICE)
 
 - [x] clonare client, configurare clone e rinominarlo SERVER
 - [x] cron e anacron
 - [x] come viene gestito DHCP in LAN e come fare la DMZ
-- [x] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo. Rinumerare rete IP di tutto con una procedura gestita solamente dal client. Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
+- [x] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo.  
+ Rinumerare rete IP di tutto con una procedura gestita solamente dal client.   
+ Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
 - [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall del laboratorio virtuale**
