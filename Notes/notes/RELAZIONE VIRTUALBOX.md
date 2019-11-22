@@ -6,39 +6,63 @@ modified: '2019-11-21T11:21:14.074Z'
 
 # RELAZIONE VIRTUALBOX e M0N0WALL
 
+> Basso Nicola 5^AI  
+  aka Lince99
+
 ## INTRODUZIONE
+
+- Strumenti utilizzati
+    - Linux Mint (Laboratorio Sistemi)
+    - Kubuntu 19.04 (casa)
+    - Oracle VirtualBox versione 6.0.2
+    - Debian GNU/Linux
+    - M0n0wall
 
 - Descrizione VirtualBox
 
-![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)
+<!--![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)-->
 
 - Descrizione M0n0wall
 
-![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)
+<!--![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)-->
+
+- Obbiettivo
+
+- Informazioni aggiuntive
+
+---
 
 ## INDICE
 
 - [Configurazione client](#Configurazione-client-)
 
-## CLIENT
+---
 
-### Configurazione client [↑](#INDICE "Indice")
+## CLIENT [↑](#INDICE "Return to top")
 
-- clientcognome lasolita
-- Debian (64bit)
-- RAM 1 GB
-- HDD 4 GB (4.0 GB root, 368 MB swap)
-- NAT
+### Configurazione client [↑](#INDICE "Return to top")
+
+
+#### Informazioni generali
+    - clientcognome lasolita
+    - Debian (64bit)
+    - RAM 1 GB
+    - HDD 4 GB (4.0 GB root, 368 MB swap)
+    - NAT
+
+##### Utilità
 
 [distribuzione debian](https://www.debian.org/distrib/netinst)
 
-**Screenshot: CTRL DX + E**
+**Screenshot Virtualbox: CTRL DX + E**
 
-**Clonazione: CTRL DX + T**
+**Clonazione Virtualbox: CTRL DX + T**
+
+#### Creazione VM Client [↑](#INDICE "Return to top")
 
 1. Creazione macchina virtuale
- ![Screenshot VM server](https://raw.githubusercontent.com/Lince99/Systems_school/master/Notes/notes/screenshots/Screen_VM_server_config_0.png)
- > Creazione server
+    <!--![Screenshot VM server](https://raw.githubusercontent.com/Lince99/Systems_school/master/Notes/notes/screenshots/Screen_VM_server_config_0.png)
+    > Creazione server-->
 1. abilitare Network con NAT
 1. expert install
 1. Choose language
@@ -143,56 +167,59 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Continua
             - (RIMUOVERE IL CD DAL LETTORE VIRTUALE SE USATA UNA ISO)
 
-1. Debian GNU/Linux
-    1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
-    1. Segnalazione dell'integrazione del puntatore del mouse
-    1. clientcognome login: uds
-    1. password: lasolita
-    1. UTENTE NORMALE
-        1. pwd : print working directory
-        1. df -h : visualizza lo stato dell'hard disk
-        1. sudo : super user do often
-        1. su - : super user
-        1. password di root: lasolita
-    1. UTENTE ROOT
-        1. apt update
-        1. apt upgrade
-        1. (in caso di problemi: nano /etc/apt/sources.list)
-        ```
-        deb http://deb.debian.org/debian buster main
-        deb-src http://deb.debian.org/debian buster main
+#### Configurazione OS Client [↑](#INDICE "Return to top")
 
-        deb http://deb.debian.org/debian-security/ buster/updates main
-        deb-src http://deb.debian.org/debian-security/ buster/updates main
+1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
+1. Segnalazione dell'integrazione del puntatore del mouse
+1. clientcognome login: uds
+1. password: lasolita
+1. UTENTE NORMALE
+    1. pwd : print working directory
+    1. df -h : visualizza lo stato dell'hard disk
+    1. sudo : super user do often
+    1. su - : super user
+    1. password di root: lasolita
+1. UTENTE ROOT
+    1. apt update
+    1. apt upgrade
+    1. (in caso di problemi: nano /etc/apt/sources.list)
+    ```
+    deb http://deb.debian.org/debian buster main
+    deb-src http://deb.debian.org/debian buster main
 
-        deb http://deb.debian.org/debian buster-updates main
-        deb-src http://deb.debian.org/debian buster-updates main
-        ```
-    1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)
-        - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
-        - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
-        1. S
-        1. cowsay : non funziona perchè i giochi non esistono per root
-        1. apt install sudo
-        - SUDO permette di usufruire di azioni da amministratore da parte dell'utente normale senza sapere la password di root ma usando la propria (Wireshark richiede accesso hardware alla scheda di rete)
-        - crea gruppo sudo
-        1. id : mostra i gruppi a cui appartiene l'utente corrent
-        1. id uds : mostra i gruppi a cui appartiene all'utente
-        1. adduser uds sudo : iscrive un utente al gruppo
-        1. id uds : ricontrollo se è su sudo
-        1. exit
-        1. id
-        1. exit
-        1. relogin con uds lasolita
-        1. id : ora uds è sudo
-        1. sudo -s
-            1. password
-        1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
-        1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
+    deb http://deb.debian.org/debian-security/ buster/updates main
+    deb-src http://deb.debian.org/debian-security/ buster/updates main
 
-## SERVER
+    deb http://deb.debian.org/debian buster-updates main
+    deb-src http://deb.debian.org/debian buster-updates main
+    ```
+1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)
+    - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
+    - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
+    1. S
+    1. cowsay : non funziona perchè i giochi non esistono per root
+    1. apt install sudo
+    - SUDO permette di usufruire di azioni da amministratore da parte dell'utente normale senza sapere la password di root ma usando la propria (Wireshark richiede accesso hardware alla scheda di rete)
+    - crea gruppo sudo
+    1. id : mostra i gruppi a cui appartiene l'utente corrent
+    1. id uds : mostra i gruppi a cui appartiene all'utente
+    1. adduser uds sudo : iscrive un utente al gruppo
+    1. id uds : ricontrollo se è su sudo
+    1. exit
+    1. id
+    1. exit
+    1. relogin con uds lasolita
+    1. id : ora uds è sudo
+    1. sudo -s
+        1. password
+    1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
+    1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
 
-1. CREARE IL SERVER
+
+
+## Creazione VM Server [↑](#INDICE "Return to top")
+
+1. Server debian
     1. spegnere la macchina da amministratore
         1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
         1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
@@ -211,7 +238,7 @@ modified: '2019-11-21T11:21:14.074Z'
     1. ping 127.0.x.x
     1. shutdown -h now
 
-## ROUTER
+## Creazione VM Router [↑](#INDICE "Return to top")
 
 1. Creare nuova macchina per monowall
     1. configurazione macchina virtuale:
@@ -253,6 +280,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)
         1. Ora bisogna configurare gli host
 
+## Grafica sul Client [↑](#INDICE "Return to top")
 
 1. Avviare il clientcognome
     1. entrare con uds
@@ -282,6 +310,9 @@ modified: '2019-11-21T11:21:14.074Z'
             1. lanciare a mano la richiesta DHCP
                 1. dhclient enp0s3
                 1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)
+
+## Configurazione M0n0wall [↑](#INDICE "Return to top")
+
 1. tornare su Firefox
     1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall
         1. admin
@@ -351,6 +382,12 @@ modified: '2019-11-21T11:21:14.074Z'
             1. Download configuration
         1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
 
+
+
+## Configurare la rete [↑](#INDICE "Return to top")
+
+### Impostare l'ip del client [↑](#INDICE "Return to top")
+
 1. Rilanciare il router
 1. Svegliare il client
     1. apt install anacron (opzionale)
@@ -360,6 +397,9 @@ modified: '2019-11-21T11:21:14.074Z'
         1. Services -> DHCP Server -> DMZ -> [x] Enable
         1. Range: 192.168.101.100 al 192.168.101.199
         1. Save
+
+### Impostare DMZ nel router [↑](#INDICE "Return to top")
+
 1. Configurare il server
     1. Rete -> Scheda 1 -> Rete interna DMZ
     1. Avviare il server
@@ -396,6 +436,11 @@ modified: '2019-11-21T11:21:14.074Z'
             1. certificato SHA256: yes (usato per verificare l'autenticità del server)
         1. server
             1. ssh uds@192.168.1.100 (non deve funzionare)
+
+
+
+## Applicare modifiche della rete [↑](#INDICE "Return to top")
+
 1. Riavviare macchine virtuali
 1. Il client deve identificare il server sempre con lo stesso indirizzo
     1. ip addr sul client: 192.168.1.100 e mostra il mac
@@ -408,14 +453,19 @@ modified: '2019-11-21T11:21:14.074Z'
             1. 192.168.101.250 (fuori dal range DHCP poichè al server necessita un indirizzo ip statico anche per i successivi riavvii)
             1. Ip statico del server
             1. "Deny unknown clients" Only respond to reserved clients listed below. LASCIARE DISATTIVATA (il firewall si occupa degli indirizzi esterni, DMZ per il range di indirizzi locali, no MAC, no IP)
-  1. aliases:
-      1. Firewall -> Rules
-          1. WAN ha solo il PC fisico
-          1. Possibilità di aggiungere più regole di firewall allo stesso indirizzo IP, senza andare a modificare tutte le regole di firewall riguardanti quell'IP
-          1. Firewall -> Aliases
-              1. host-pcospitante
-              1. 172.30.4.x
-              1. Il computer da cui opero
+
+
+
+## Aggiungere regole in M0n0wall [↑](#INDICE "Return to top")
+
+1. aliases:
+    1. Firewall -> Rules
+        1. WAN ha solo il PC fisico
+        1. Possibilità di aggiungere più regole di firewall allo stesso indirizzo IP, senza andare a modificare tutte le regole di firewall riguardanti quell'IP
+        1. Firewall -> Aliases
+            1. host-pcospitante
+            1. 172.30.4.x
+            1. Il computer da cui opero
           1. tornare in Firewall -> Rules
           1. modificare la regola WAN
               1. Source
@@ -431,7 +481,7 @@ modified: '2019-11-21T11:21:14.074Z'
     1. socchiudere monowall
     1. server via ssh, quindi exit e socchiudere il server
     1. lasciare aperto solo il client
-    1. usare ssh sul client e web 
+    1. usare ssh sul client e web
     1. attenzione: timing DHCP, ordine degli eventi, documentare tutto
     1. SNAPSHOT di tutte le macchine virtuali, salvare configurazione monowall nel client e in piattaforma (Istantanea 1, descrizione: pre-antartide)
     1. 192.168.x.0/24 LAN lab virtuale (192.168.11./24)
@@ -450,7 +500,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. LAN cambiare range in .x.100 e .x.199
         1. LAN cambiare range in .100+x.100 e .100+x.199
 
-### Migrazione IP
+## Migrazione IP [↑](#INDICE "Return to top")
 
 1. Nel SERVER da client in ssh
     1. ssh uds@192.168.101.250
@@ -465,7 +515,7 @@ modified: '2019-11-21T11:21:14.074Z'
         1. IP address = 192.168.111.1/24
     1. Services -> DHCP Server -> DMZ
         1. Range 192.168.111.100 to 192.168.111.199
-        1. Reservations da 192.168.101.250 a 192.168.111.250```bash
+        1. Reservations da 192.168.101.250 a 192.168.111.250
     1. Interfaces -> LAN (NON RIAVVIARE)
         1. IP 192.168.11.1/24
     1. Services -> DHCP Server -> LAN
@@ -486,7 +536,7 @@ modified: '2019-11-21T11:21:14.074Z'
     - boot da rete del lab: server fa anche da DHCP, si può osservare il server ufficiale, mandare un pacchetto UDP durante l'avvio che aggiunge le opzioni di avvio da rete del sistema operativo
     - nel caso di manutenzione di ip statici, questo stratagemma permette di ottenere sempre lo stesso indirizzo del DHCP
 
-### Restrizioni aggiuntive sul firewall del laboratorio virtuale
+## Restrizioni aggiuntive sul firewall del laboratorio virtuale [↑](#INDICE "Return to top")
 
 |  da/a  | LAN      |    WAN           |      DMZ   |
 |:------:|:--------:|:----------------:|:----------:|
@@ -550,7 +600,7 @@ host www.casettamia.it 8.8.8.8
         - NAT IP: host-server (accetta alias, ma attenzione)
         - Description: Server in SSH
         - Auto-add a firewall rule to permit traffic through this NAT rule (crea una regola permissiva da poi adattare nel firewall, solo in fase di creazione)
-    - m0n0wall -> Firewall -> Rules 
+    - m0n0wall -> Firewall -> Rules
         - si vede l'aggiunta della regola di NAT
         - da modificare che permette di accedere al server solo dal pc ospitante (edit -> host-pcospitante)
 
@@ -558,7 +608,7 @@ host www.casettamia.it 8.8.8.8
     - options (crea più profili proxy da switchare)
         - piu
             - diretto
-            - #000
+            - #000000
             - Type: Direct (no proxy)
         - piu
             - scuola
@@ -580,7 +630,7 @@ host www.casettamia.it 8.8.8.8
 - WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
     - TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
     - TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
-- WAN to LAN: blocca 
+- WAN to LAN: blocca
 - DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
     - protocol ICMP from DMZ port any to WAN port any (Pass: DMZ to WAN - ICMP)
     - TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
@@ -595,7 +645,7 @@ host www.casettamia.it 8.8.8.8
 - TEST:
     - client:
         - ping 1.1.1.1
-
+        - TODO
 
 
 
@@ -605,7 +655,9 @@ host www.casettamia.it 8.8.8.8
 
 ---
 
-## Robe utili:
+## Utility [↑](#INDICE "Return to top")
+
+### Possibili problemi [↑](#INDICE "Return to top")
 
 1. problemi di rete a casa
     1. cambiare gli IP
@@ -621,7 +673,7 @@ host www.casettamia.it 8.8.8.8
     1. m0n0wall e client a casa non funzionano per il problema della rete
         1. CREAZIONE DELLA RETE: scegliere 192.168.x.0 x = con uno pseudorandom (188 = BC <-- oh c'mon)
         1. host www.facebook.com --> IPv6: face:b00c oh c'mooooooon
-```txt
+```
 --- (WAN) --- 1.120 (DMZ router1) --- |rete diversa| (LAN router2) .2.1
 ```
 
@@ -635,6 +687,8 @@ ifup nomeintefraccia
 ```bash
 ifdown nomeinterfaccia
 ```
+
+### Curiosità varie [↑](#INDICE "Return to top")
 
 1. possibilità di aumentare la banda aumentando il numero di interfacce
 
@@ -684,19 +738,22 @@ case "$TERM" in
 alias shutdown=/sbin/shutdown
 ```
 
-  1. LIBRERIE
-      - Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
-      - Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
-      Android: il Play store colleziona software adatto al sistema insieme alle loro liberie
-      - DEBIAN usa .deb (creato da Ian Mardock, Deb "Deborah" Ian)
-      - DPKG gestore di file
-          - vincoli di dipendenze (con limiti sulle versioni)
-      - APT
-          - utilizza dpkg
-          - retrocompatibile con i comandi dpkg
-      - deb: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
-      - deborphan: cerca le librerie orfane, non necessarie a nessun software
-      deb auto... : rimuove le librerie inutilizzate in automatico
+### Funzionamento librerie [↑](#INDICE "Return to top")
+
+- Eseguibile su winzoz: avanti forever e poi viene installato il programma con le liberie necessarie per ogni programma (Firefox e Thunderbird hanno le stesse librerie, vengono scaricate 2 volte e vengono trattate in modo differente)
+- Programma in linux: i gestori delle distribuzioni modificano le librerie per il proprio sistema con risoluzione di problemi di compatibilità, rendendole univoche nel sistema. (per Debian ci sono i tester, obbiettivo: risparmiare trasmissione dati, i pacchettatori prendevano i vari software esistenti per analizzarne le librerie richieste, senza avere il bisogno di riscaricarle anche negli aggiornamenti) (ci possono essere varie versioni nello stesso sistema)
+Android: il Play store colleziona software adatto al sistema insieme alle loro liberie
+- DEBIAN usa .deb (creato da Ian Mardock, Deb "Deborah" Ian)
+- DPKG gestore di file
+    - vincoli di dipendenze (con limiti sulle versioni)
+- APT altro gestore
+    - utilizza dpkg
+    - retrocompatibile con i comandi dpkg
+- deb: i pacchetti includono sia il programma che i file configurazione standard per l'autoconfigurazione durante l'installazione
+- deborphan: cerca le librerie orfane, non necessarie a nessun software
+deb auto... : rimuove le librerie inutilizzate in automatico
+
+### File utili [↑](#INDICE "Return to top")
 
 file password:
 ```
@@ -714,28 +771,30 @@ sudo nano /etc/profile
 
 ---
 
-SPERIMENTAZIONE VLAN CON ROUTER CISCO
+## Esercizio Cisco [↑](#INDICE "Return to top")
+
+**SPERIMENTAZIONE VLAN CON ROUTER CISCO**
 
 ```
 192.168.3.0/24
 
-R1 .101                                                   R2 .102
-        \                                           /
-    1.100 access VLAN 100    .1               .2    VLAN 100
-                          SW1 Ge1         Ge1   SW2       
-    1.200 access VLAN 200        VLAN100            VLAN 200
-                                 VLAN200                   
-        /                                           \
-R3 .201                                                   R3 .202
+R1 .101                                              R2 .102
+        \                                          /
+    1.100 access VLAN 100    .1              .2    VLAN 100
+                          SW1 Ge1        Ge1   SW2
+    1.200 access VLAN 200        VLAN100           VLAN 200
+                                 VLAN200                  
+        /                                          \
+R3 .201                                              R3 .202
 ```
 
 
 ---
 
-#### TODO:
+#### TODO [↑](#INDICE "Return to top")
 
 - [x] clonare client, configurare clone e rinominarlo SERVER
 - [x] cron e anacron
 - [x] come viene gestito DHCP in LAN e come fare la DMZ
-- [ ] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo. Rinumerare rete IP di tutto con una procedura gestita solamente dal client. Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
+- [x] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo. Rinumerare rete IP di tutto con una procedura gestita solamente dal client. Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
 - [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall del laboratorio virtuale**
