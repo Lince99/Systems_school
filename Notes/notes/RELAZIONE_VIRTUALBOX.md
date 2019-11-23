@@ -1,8 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-22T21:46:14.074Z'
-author: Basso Nicola - 5 AI
+modified: '2019-11-23T08:27:58.744Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -539,15 +538,7 @@ Clonazione Virtualbox: **R-CTRL + T**
 
 ## Restrizioni aggiuntive sul firewall [↑](#top)
 
-### Schema
-
-|  da/a      | LAN      |    WAN           |      DMZ   |
-|:----------:|:--------:|:----------------:|:----------:|
-| **LAN**    |  v       | v(dns)           |  v*2       |
-| **WAN**    |  x       | v                | v*2(dnat)  |
-| **DMZ**    |  x       | v(dns,ntp,http)  |  v         |
-
-### Condizioni [↑](#top)
+### Condizioni
 
 - Sia il client che il server devono essere protetti da virus
 (cercano di inibire chi li sconfigge, anti-antivirus)
@@ -630,33 +621,86 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
     - permette di usare un proxy per gli ip locali, mentre
     - In firefox -> Preferenze -> nessun proxy
 
+### Schema [↑](#top)
+
+|  da/a      | LAN      |    WAN           |      DMZ   |
+|:----------:|:--------:|:----------------:|:----------:|
+| **LAN**    |  v       | v(dns)           |  v*2       |
+| **WAN**    |  x       | v                | v*2(dnat)  |
+| **DMZ**    |  x       | v(dns,ntp,http)  |  v         |
+
 ### Realizzazione [↑](#top)
 
-- LAN to WAN: solo DNS in TCP/UDP
-    - TCP/UDP from LAN port NOT host-router-lan to WAN port 53 (Block: LAN to WAN - DNS)
-- LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
-    - TCP/UDP from LAN port any to DMZ port 80 (Pass: LAN to DMZ - HTTP)
-    - TCP/UDP from LAN port any to DMZ port 443 (Pass: LAN to DMZ - HTTPS)
-- WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
-    - TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
-    - TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
-- WAN to LAN: blocca
-- DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
-    - protocol ICMP from DMZ port any to WAN port any (Pass: DMZ to WAN - ICMP)
-    - TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
-    - UDP from DMZ port any to WAN port 123 (Pass: DMZ to WAN - NTP)
-    - TCP/UDP from DMZ port any to WAN port 3142 (Pass: DMZ to WAN - Updates)
-- DMZ to client LAN port 2222
-    - (in LAN) TCP from DMZ port 2222 to LAN port 22 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
-    - (in DMZ) TCP from LAN client port 22 to DMZ port 2222 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
+#### Regole di NAT
 
-- Dal server DMZ per connettersi al client usare il NAT tramite porta 2222 (scelta)
+| If | Proto | Ext. Port range | NAT IP | Int. port range | Descrizione |
+|:--:|:-----:|:---------------:|:------:|:---------------:|-------------|
+| WAN | TCP | 22 (SSH) | host-server | 22 (SSH) | Server in SSH |
 
-- TEST:
-    - client:
-        - ping 1.1.1.1
-        - TODO
+#### Alias del firewall
 
+| Nome | Indirizzo | Descrizione |
+|------|-----------|-------------|
+| host-pcospitante | 172.30.4.11 | Il computer da cui opero |
+| host-router-dmz | 192.168.111.1 | Router M0n0wall DMZ |
+| host-router-lan | 192.168.11.1 | Router M0n0wall LAN |
+| host-server | 192.168.111.250 | Server in DMZ |
+| lan-labsistemi | 172.30.4.0/24 | La rete in cui appoggia la mia WAN |
+
+#### Regole firewall LAN
+
+| Attivo | Proto | Source | Port | Destination | Port | Descr |
+|:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| X | TCP/UDP | any | any | ! host-router-lan | 53 (DNS) | Block: LAN to LAN attack - DNS |
+| V | TCP/UDP | LAN net | any | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
+| V | TCP/UDP | LAN net | any | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
+| X | TCP/UDP | LAN net | any | DMZ net | * | Block: LAN to DMZ - any |
+
+#### Regole firewall WAN
+
+| Attivo | Proto | Source | Port | Destination | Port | Descr |
+|:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| V | TCP | host-pcospitante | any | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
+| v | TCP | any | any | host-server | 22 (SSH) | NAT Server in SSH |
+
+#### Regole firewall DMZ
+
+| Attivo | Proto | Source | Port | Destination | Port | Descr |
+|:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| X    | any | DMZ net | any | LAN net | any | Block: DMZ to LAN |
+
+
+```
+LAN to WAN: solo DNS in TCP/UDP
+
+    TCP/UDP from LAN port NOT host-router-lan to WAN port 53 (Block: LAN to WAN - DNS)
+
+LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
+
+    TCP/UDP from LAN port any to DMZ port 80 (Pass: LAN to DMZ - HTTP)
+    TCP/UDP from LAN port any to DMZ port 443 (Pass: LAN to DMZ - HTTPS)
+
+WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
+
+    TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
+    TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
+
+WAN to LAN: blocca
+
+DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
+
+    protocol ICMP from DMZ port any to WAN port any (Pass: DMZ to WAN - ICMP)
+    TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
+    UDP from DMZ port any to WAN port 123 (Pass: DMZ to WAN - NTP)
+    TCP/UDP from DMZ port any to WAN port 3142 (Pass: DMZ to WAN - Updates)
+
+DMZ to client LAN port 2222
+
+    (in LAN) TCP from DMZ port 2222 to LAN port 22 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
+    (in DMZ) TCP from LAN client port 22 to DMZ port 2222 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
+
+Dal server DMZ per connettersi al client usare il NAT tramite porta 2222 (scelta)
+```
 
 ---
 
