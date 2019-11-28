@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-23T08:27:58.744Z'
+modified: '2019-11-28T11:18:14.479Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -651,17 +651,18 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
-| X | TCP/UDP | any | any | ! host-router-lan | 53 (DNS) | Block: LAN to LAN attack - DNS |
 | V | TCP/UDP | LAN net | any | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
 | V | TCP/UDP | LAN net | any | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
 | X | TCP/UDP | LAN net | any | DMZ net | * | Block: LAN to DMZ - any |
+| X | TCP/UDP | any | any | ! host-router-lan | 53 (DNS) | Block: LAN to LAN attack - DNS |
 
 #### Regole firewall WAN
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
 | V | TCP | host-pcospitante | any | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
-| v | TCP | any | any | host-server | 22 (SSH) | NAT Server in SSH |
+| V | TCP | any | any | host-server | 22 (SSH) | NAT Server in SSH |
+| V | 
 
 #### Regole firewall DMZ
 
@@ -701,6 +702,38 @@ DMZ to client LAN port 2222
 
 Dal server DMZ per connettersi al client usare il NAT tramite porta 2222 (scelta)
 ```
+
+## Servizi per il server [↑](#top)
+
+### Apache
+
+- Indiscusso re del mercato del middleware, ora sono arrivati lighthttpd, nginix
+- Servono a gestire i grandi flussi di dati e utenti con migliaia di richieste al secondo
+- I contenuti dinamici forniti da vari server, mentre le parti statiche da altri server con tecnologie diverse (grande uso di cache)
+
+#### Configurare la rete [↑](#top)
+
+Sito web consultabile dall'esterno tramite l'IP del router, ora c'è M0n0wall in porta 80 **deve rimanere tale per la LAN**.  
+Dall'esterno deve essere possibile vedere la pagina del server, senza togliere la gestione del M0n0wall dall'esterno tramite porta 8080.  
+
+
+| da/a | apache | M0n0wall |
+|:----:|:------:|:--------:|
+| LAN  |   80   |   80     |
+| WAN  | 80 restrict | 8080 restrict |
+
+#### Installazione apache [↑](#top)
+
+```bash
+sudo apt install apache2
+```
+
+Modificare la pagina index
+
+```bash
+sudo nano /var/www/html/index.html
+```
+
 
 ---
 
@@ -850,3 +883,4 @@ R3 .201                                              R3 .202
  Rinumerare rete IP di tutto con una procedura gestita solamente dal client.   
  Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
 - [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall**
+- [ ] Installare servizi nel server

@@ -7,7 +7,7 @@ Anything done at school for TPSIT and Systems and Networking
 - Notes/notes contains any kind of work, information, tips, commands and code snippets
 
 ## Notes
-Virtualbox documentation is here: https://github.com/Lince99/Systems_school/blob/master/Notes/notes/RELAZIONE%20VIRTUALBOX.md
+Virtualbox documentation is here: https://github.com/Lince99/Systems_school/blob/master/Notes/notes/RELAZIONE_VIRTUALBOX.md
 
 Use https://github.com/notable/notable or any kind of markdown editor to modify notes
 
