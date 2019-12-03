@@ -1,7 +1,7 @@
 ---
 title: WEB SERVER IN C
 created: '2019-11-20T09:51:19.284Z'
-modified: '2019-11-26T09:52:44.271Z'
+modified: '2019-12-03T10:01:35.960Z'
 ---
 
 # WEB SERVER IN C
@@ -42,11 +42,11 @@ tail -f nomefile #anche se ci sono processi che stampano
 ```
 
 Livello di debug:
-- 5 = CRITICAL
-- 4 = ERROR
-- 3 = WARNING
-- 2 = NOTICE
-- 1 = INFO
+- 5 = <span style="color:yellow; background-color: purple">**! CRITICAL !**</span>
+- 4 = <span style="color:red; background-color: black">ERROR</span>
+- 3 = <span style="color:orange; background-color: black">WARNING</span>
+- 2 = <span style="color:green; background-color: black">NOTICE</span>
+- 1 = <span style="color:white; background-color: black">INFO</span>
 
 Livello di verbosità del programma:
 1. Nothing (0)
