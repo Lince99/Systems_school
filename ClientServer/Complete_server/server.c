@@ -1,6 +1,7 @@
 /*
  * Server WEB in C
  * 
+ * strtok tokenizza la stringa della richiesta del client
  * 
  */
 
@@ -89,14 +90,6 @@ int main(int argc, char **argv) {
     listen(server_socketfd, 10);
     
     while(1) {
-		//accetta la connessione di un client
-		client_len = sizeof(client_addr);
-		client_socketfd = accept(server_socketfd, (struct sockaddr*)&client_addr, &client_len);
-		if(client_socketfd < 0) {
-			fprintf(stderr, "accept() error!\n");
-			fflush(stderr);
-			exit(EXIT_FAILURE);
-		}
 		//il figlio viene assegnato ad un nuovo processo
 		pid = fork();
 		if(pid < 0) {
@@ -106,6 +99,15 @@ int main(int argc, char **argv) {
 		}
 		//sono nel processo dedicato al client
 		if(pid == 0) {
+			//TODO test client socket on fork or not
+			//accetta la connessione di un client
+			client_len = sizeof(client_addr);
+			client_socketfd = accept(server_socketfd, (struct sockaddr*)&client_addr, &client_len);
+			if(client_socketfd < 0) {
+				fprintf(stderr, "accept() error!\n");
+				fflush(stderr);
+				exit(EXIT_FAILURE);
+			}
 			close(server_socketfd);
 			//DO THINGS
 			exit(EXIT_SUCCESS);

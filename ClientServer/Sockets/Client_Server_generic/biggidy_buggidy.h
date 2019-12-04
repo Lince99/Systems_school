@@ -1,7 +1,9 @@
 /*
  * Libreria di debug
  * 
- * 
+ * va_arg serve a gestire i parametri
+ * https://www.tutorialspoint.com/c_standard_library/c_macro_va_arg.htm
+ * https://stackoverflow.com/questions/4339412/how-to-use-va-args-inside-a-c-function-instead-of-macro
  */
 
 #ifndef BIGGIDY_BUGGIDY_H
@@ -25,6 +27,7 @@ struct err_queue {
 
 err_q* db_q_HEAD = NULL;
 err_q* db_q = NULL;
+int default_level = 4;
 
 /*
  * Nothing (0)
@@ -39,22 +42,32 @@ err_q* db_q = NULL;
  */
 void init_queue(int value) {
 	
-	db_q_HEAD = (err_q*) malloc(sizeof(err_q));
-	if(db_q_HEAD == NULL)
+	
+
+}
+
+err_q* init_node(int lvl) {
+	err_q* node = NULL;
+	
+	node = (err_q*) malloc(sizeof(err_q));
+	if(node == NULL)
 		exit(1);
-	db_q_HEAD->level = value;
-	db_q_HEAD->db_q = NULL;
- 
+	node->level = value;
+	node->db_q = NULL;
+	
+	return node;
 }
 
 void printdblevel(FILE* stream) {
 	fprintf(stream, "Current debug level: %d\n", db_q->level);
 }
 
-void printfdb()
+void printfdb(...) {
+	fprintf(stdout, "COLOR" ...);
+}
 
 void setlevel(int lvl) {
-
+	
 }
 
 void pushlevel() {

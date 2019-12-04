@@ -1,7 +1,7 @@
 ---
 title: WEB SERVER IN C
 created: '2019-11-20T09:51:19.284Z'
-modified: '2019-12-03T10:01:35.960Z'
+modified: '2019-12-04T10:39:44.230Z'
 ---
 
 # WEB SERVER IN C
@@ -29,9 +29,28 @@ grep -v
 make
 ```
 
+### Esempi reali
+
+Apache se non trova il file richiesto dal client, andrà a creare una pagina autogenerata che mostra i file nella cartella corrente.
+
+> Security by Information Hiding
+> Nascondere i file dagli attacchi 
+
+URL = parte host e struttura del file
+URI = 
+
+### Controlli
+
 Per controllare i socket attivi del server
 ```bash
 watch -c -t netstat -panetu
+#oppure
+watch "netstat -panetu | grep Nomeprogramma"
+```
+
+Per controllare i processi figli del server
+```bash
+watch -n 1 "ps -def | grep Nomeprogramma"
 ```
 
 Per inseguire la stampa usare
@@ -40,6 +59,13 @@ tail -f nomefile #anche se ci sono processi che stampano
 #usare il redirect delle stampe del server in un file di log
 ./server -p 1234 -T -v 1 > server.log
 ```
+
+Per testare come client
+```bash
+telnet 172.30.4.11 8000
+```
+
+### DEBUG
 
 Livello di debug:
 - 5 = <span style="color:yellow; background-color: purple">**! CRITICAL !**</span>
