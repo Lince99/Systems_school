@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-11-28T11:18:14.479Z'
+modified: '2019-12-05T11:11:33.297Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -651,6 +651,14 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| X | TCP/UDP | LAN net | * | ! host-router-lan | 52 (DNS) | Block: LAN to LAN attack - DNS |
+| V | TCP/UDP | LAN net | * | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
+| V | TCP/UDP | LAN net | * | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
+| V | TCP/UDP | LAN net | * | DMZ net | 22 (SSH) | Pass: LAN to DMZ - SSH |
+| W |  |  |  |  |  | ! |
+|  | R |  |  |  | ! |  |
+|  |  | O |  | G |  |  |
+|  |  |  | N |  |  |  |
 | V | TCP/UDP | LAN net | any | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
 | V | TCP/UDP | LAN net | any | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
 | X | TCP/UDP | LAN net | any | DMZ net | * | Block: LAN to DMZ - any |
@@ -660,14 +668,30 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| V | TCP | host-pcospitante | * | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
+| V | TCP | host-pcospitante | * | host-server | 22 (SSH) | NAT Server in SSH |
+| V | TCP/UDP | WAN address | * | DMZ net | 80 (HTTP) | Pass: WAN to DMZ - HTTP |
+| V | TCP/UDP | WAN address | * | DMZ net | 443 (HTTPS) | Pass: WAN to DMZ - HTTPS |
+| V | ICMP | * | * | WAN address | * | Pass: any to WAN - ICMP |  
+| W |  |  |  |  |  | ! |
+|  | R |  |  |  | ! |  |
+|  |  | O |  | G |  |  |
+|  |  |  | N |  |  |  |
 | V | TCP | host-pcospitante | any | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
 | V | TCP | any | any | host-server | 22 (SSH) | NAT Server in SSH |
-| V | 
 
 #### Regole firewall DMZ
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
+| X | * | DMZ net | * | LAN net | * | Block: DMZ to LAN any |
+| V | ICMP | DMZ net | * | * | * | Pass: DMZ to any - ICMP |
+| V | UDP | DMZ net | * | * | 53 (DNS) | Pass: DMZ to any - DNS |
+| V | TCP | DMZ net | * | * | 123 | Pass: DMZ to apt-cacher - apt updates |
+| W |  |  |  |  |  | ! |
+|  | R |  |  |  | ! |  |
+|  |  | O |  | G |  |  |
+|  |  |  | N |  |  |  |
 | X    | any | DMZ net | any | LAN net | any | Block: DMZ to LAN |
 
 
@@ -734,6 +758,11 @@ Modificare la pagina index
 sudo nano /var/www/html/index.html
 ```
 
+#### Configurazione apache con HTTPS [↑](#top)
+
+```bash
+#TODO
+```
 
 ---
 
