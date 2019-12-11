@@ -2,7 +2,7 @@
 tags: [nc, TPSIT]
 title: NETCAT
 created: '2019-10-08T10:32:06.437Z'
-modified: '2019-10-15T09:23:00.356Z'
+modified: '2019-12-11T10:44:47.240Z'
 ---
 
 # NETCAT
@@ -112,3 +112,70 @@ stdout di _date_ --> stdin di _cowsay_ --> stdout
 In netcat traditional serve -c, che va a prendere l'stdout oltre a dare l'stdin al programma.
 
 cat --> stdin --> **nc client** - - net - -> **nc server** --> stdin --> programma --> stdout --> **nc server** - - net - -> **nc client** --> stdout 
+
+---
+
+## Netcat e file PHP con CGI
+
+(Apache guide about CGI)[https://httpd.apache.org/docs/2.4/howto/cgi.html]
+
+PHP viene interpretato dal server ogni volta che vengono richiesti i file.  
+Poi genera HTML, questo viene interpretato dal client.
+
+### Problemi:
+
+- Non è efficiente (efficiente = a livello processore, come la compilazione del C o il bytecode Java eseguibile direttamente dalla JVM)
+- Apache disattiva le cgi-bin per ragioni di sicurezza (/usr/lib/cgi-bin è il posto consigliato, al massimo usare ln in una cartella personalizzata)
+
+### Soluzioni:
+
+- Collegare Netcat al server Apache
+- Compilare programmi in C da usare con Netcat
+
+### GENERAZIONE DELLE PAGINE DINAMICHE
+
+File _.cgi_ sono degli eseguibili che generano codice HTML.
+Qui si arriva fino alla metà del livello 5 (Sessione), dove Apache deciderà autonomamente quale file restituire al livello successivo.
+
+1. Creare codice in C il programma che genera intestazione e HTML con la data
+1. Compilare sul client (non installare ambienti di sviluppo nel server per motivi di sicurezza)
+1. Passare l'output compilato nel server con _scp_
+1. Abilitare CGI in Apache
+    1. in Ubuntu 
+    
+1. Testare il funzionamento
+
+#### Esercizio 1:
+
+CGI che stampa la data e ogni volta che si aggiorna la pagina si aggiorna l'ora.
+
+1. Abilitare CGI
+
+```bash
+sudo a2enmod cgi
+sudo systemctl restart apache2
+```
+
+**TODO** abilitare nelle config apache cgi
+
+1. Creare una cartella a piacere dove mettere i programmi compilati / script
+
+```bash
+mkdir /home/uds/cgi_web
+```
+
+1. Creare la pagina web che genera la pagina seguente:
+
+```html
+Content-type: text/html
+
+<html>
+    <head>
+        <title>
+        </title>
+    </head>
+    <body>
+        <h1>La data di oggi è: DATA</h1>
+    </body>
+</html>
+```
