@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-12-05T11:11:33.297Z'
+modified: '2019-12-14T08:34:53.707Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -760,9 +760,57 @@ sudo nano /var/www/html/index.html
 
 #### Configurazione apache con HTTPS [↑](#top)
 
+Creare il certificato
+
 ```bash
-#TODO
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 ```
+
+- IT
+- Italy
+- Bassano del Grappa
+- ITIS Enrico Fermi
+- 5AI
+- lab4-pc11.fermi.intra (hostname -f nel pc ospitante)
+- email
+
+Abilitare ssl su apache2
+
+```bash
+sudo cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.ba
+sudo nano /etc/apache2/sites-available/default-ssl.conf
+# modificare ServerAdmin e ServerName con l'ip del server
+# SSLCertificateFile      /etc/ssl/certs/apache-selfsigned.crt
+# SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+#
+# decommentare le ultime righe:
+#BrowserMatch "MSIE [2-6]" \
+#                               nokeepalive ssl-unclean-shutdown \
+#                               downgrade-1.0 force-response-1.0
+```
+
+Abilitare il redirect dell HTTPS
+
+```bash
+sudo nano /etc/apache2/sites-available/000-default.conf
+# <VirtualHost *:80>
+#   Redirect "/" "https://your_domain_or_IP/"
+# </VirtualHost>
+```
+
+```bash
+sudo a2enmod ssl
+sudo a2enmod headers
+sudo a2ensite default-ssl
+sudo apache2ctl configtest
+```
+
+
+##### Link utili
+
+https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-16-04
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04
 
 ---
 
