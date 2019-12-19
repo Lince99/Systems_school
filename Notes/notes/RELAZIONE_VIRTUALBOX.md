@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-12-14T08:34:53.707Z'
+modified: '2019-12-19T10:30:22.679Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -811,6 +811,73 @@ sudo apache2ctl configtest
 https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-16-04
 
 https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04
+
+---
+
+## VPN
+
+- Non installare software aggiuntivi per non farli accorgere dell'esistenza di VPN
+
+VPN su m0n0wall crea una interfaccia di rete in più.
+Obbiettivo: ping client1 verso client2
+
+https://doc.m0n0.ch/handbook/
+
+### PPTP
+
+Client deve avere il software per essere nella VPN.  
+Usato spesso negli ambienti aziendali.
+
+### IPsec
+
+Vecchio protocollo, nato prima del NAT.
+
+
+```
+C1  S1    C2  S2
+  R1        R2
+      WAN
+          Sx
+```
+
+1. C1 parla con C2
+1. C1 deve andare a Sx
+1. Il router parla in chiaro con Sx
+1. Il router R1 conosce la rete R2
+1. Il router sostituisce il livello 3 con IPsec
+1. IPsec porta il resto del traffico ai livelli superiori ma cripta tutto dal livello 4 in su.
+1. R2 riceve il pacchetto IPsec, e si conoscono entrambi i router
+1. R2 decripta il pacchetto IPsec, non facendo accorgere ai client connessi della VPN
+
+Da IPsec tradizionale a IPsec di tipo tunnel:
+Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più: 
+
+- 1
+- 2
+- 3
+    - 3 IPsec IP dei router
+    - 3 livello IP criptato con IP privati di C1 e C2
+- 4 pacchetto criptato
+- ...
+
+#### Configurazione VPN in monowall
+
+1. VPN->IPsec->+
+    1. DPD Interval = 60 seconds
+    1. Local subnet = LAN subnet
+    1. Remote subnet = 192.168.12.1 (lan remota)
+    1. Remote gateway = 172.30.4.95
+    1. Description = Connessione VPN lab4-pc12 (NomeStudente)
+    1. My identifier = My IP Address = 172.30.4.104
+    1. Lifetime = 28800 seconds (standard CISCO)
+    1. Pre-Shared Key = password scelta
+    1. Lifetime = 28800 seconds
+1. Enable IPsec
+
+### Client e server
+
+C1 può pingare S1?  
+S1 può pingare S2?  
 
 ---
 
