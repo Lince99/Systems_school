@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2019-12-19T10:30:22.679Z'
+modified: '2020-01-09T09:53:17.530Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -693,39 +693,6 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 |  |  | O |  | G |  |  |
 |  |  |  | N |  |  |  |
 | X    | any | DMZ net | any | LAN net | any | Block: DMZ to LAN |
-
-
-```
-LAN to WAN: solo DNS in TCP/UDP
-
-    TCP/UDP from LAN port NOT host-router-lan to WAN port 53 (Block: LAN to WAN - DNS)
-
-LAN to DMZ: ammetti traffico HTTP e HTTPS solamente
-
-    TCP/UDP from LAN port any to DMZ port 80 (Pass: LAN to DMZ - HTTP)
-    TCP/UDP from LAN port any to DMZ port 443 (Pass: LAN to DMZ - HTTPS)
-
-WAN to DMZ: ammetti traffico HTTP e HTTPS solamente
-
-    TCP/UDP from WAN port any to DMZ port 80 (Pass: WAN to DMZ - HTTP)
-    TCP/UDP from WAN port any to DMZ port 443 (Pass: WAN to DMZ - HTTPS)
-
-WAN to LAN: blocca
-
-DMZ to WAN: ammetti traffico ICMP, DNS, NTP (UDP 123), aggiornamenti (3142)
-
-    protocol ICMP from DMZ port any to WAN port any (Pass: DMZ to WAN - ICMP)
-    TCP/UDP from DMZ port any to WAN port 53 (Pass: DMZ to WAN - DNS)
-    UDP from DMZ port any to WAN port 123 (Pass: DMZ to WAN - NTP)
-    TCP/UDP from DMZ port any to WAN port 3142 (Pass: DMZ to WAN - Updates)
-
-DMZ to client LAN port 2222
-
-    (in LAN) TCP from DMZ port 2222 to LAN port 22 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
-    (in DMZ) TCP from LAN client port 22 to DMZ port 2222 (Pass: DMZ to LAN client - SSH port 2222 (normally disabled) )
-
-Dal server DMZ per connettersi al client usare il NAT tramite porta 2222 (scelta)
-```
 
 ## Servizi per il server [↑](#top)
 
