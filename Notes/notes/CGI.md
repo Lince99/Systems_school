@@ -1,7 +1,8 @@
 ---
+deleted: true
 title: CGI
 created: '2019-12-17T08:45:45.685Z'
-modified: '2020-01-07T10:13:05.808Z'
+modified: '2020-01-14T09:29:42.894Z'
 ---
 
 # CGI

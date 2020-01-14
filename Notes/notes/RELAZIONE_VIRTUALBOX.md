@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-09T09:53:17.530Z'
+modified: '2020-01-14T09:36:17.448Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -772,6 +772,12 @@ sudo a2ensite default-ssl
 sudo apache2ctl configtest
 ```
 
+### Sostituzione FoxyProxy con SmartProxy
+
+- Estensione da installare: https://addons.mozilla.org/it/firefox/addon/smartproxy/?src=search
+- Abilitare uso estensione 
+- Analizzatore DOM Inspector che fornisce contenuti di una pagina tramite vari proxy
+- _ssh -D_ Dynamic application-level port forwarding per simulare delle connessioni da remoto
 
 ##### Link utili
 
