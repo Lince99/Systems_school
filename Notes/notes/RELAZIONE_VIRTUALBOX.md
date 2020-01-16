@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-14T09:36:17.448Z'
+modified: '2020-01-16T11:13:17.787Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -851,6 +851,131 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 
 C1 può pingare S1?  
 S1 può pingare S2?  
+
+
+## Sostituire IPsec con OpenVPN
+
+- IPsec lavora a livello di kernel (non sicuro)
+- OpenVPN funziona in Userspace, e il kernel permette a questo programma di gestire la rete
+- IPsec ha la modalità diretta e tunnelling con NAT (duplica il livello 3 IPsec e IP privati, router ofusca da livello IP in su, aggiunge livello IPsec e l'altro router lo estrae e ritorna in locale)
+- OpenVPN lavora nei livelli 5, 6, 7.
+- **Il traffico OpenVPN lavora in UDP porta 1194**
+
+### Software OpenVPN
+
+- Riesce a portare pacchetti IP completi da 1 a 5 e in più poi da 3 a 7
+- Ha varie funzionalità:
+    - portare pacchetti IP
+    - simulare trame Ethernet
+- Kernel mette a disposizione delle interfacce **tun** e **tap**, dove il traffico passa per entrare nella rete locale.
+    - tun: trame punto punto, traffico fuori standard attuale
+    - tap: trame ethernet, traffico classico
+    - 1 interfaccia fisica _eth0_
+    - 1 interfaccia virtuale _tun0_
+
+#### Configurazione router
+
+- il router riceve traffico in porta 1194 UDP
+- usare DNAT (port forwarding, virtual server)
+- manda pacchetto a host con OpenVPN installato
+
+## OpenVPN e la cifratura
+
+- Metodo semplice (fare questa)
+    - connessioni di 2 host
+    - usa una chiave simmetrica (da scambiare con qualche trikky)
+    - https://www.openvpn.net
+    - usr/share/doc/openvpn
+- Quello non semplice
+    - connessioni multipunto (VPN di raccolta)
+        - servizi aziendali locali usufruibili dall'esterno
+    - uso di certificati
+    https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-18-04
+
+### Connessione punto punto
+
+- comunicazione server <-> server
+- l'interfaccia deve avere un suo indirizzo IP
+- > 192.168.200+x.1
+- usare DNAT
+- dentro il file di config mettere l'opzione log.append nomefile (direttiva nel file di configurazione di openVPN)
+```bash
+tail -f nomelog
+```
+
+#### Creazione VPN con OpenVPN
+
+- **SERVER: 192.168.112.250**
+- **CLIENT: 192.168.111.250**
+
+https://wiki.debian.org/OpenVPN  
+https://www.cyberciti.biz/faq/install-configure-openvpn-server-on-debian-9-linux/
+https://openvpn.net/community-resources/static-key-mini-howto/
+
+1. scaricare openvpn
+```bash
+sudo apt update && sudo apt upgrade
+sudo apt install openvpn
+```
+
+1. generare una chiave condivisa nel server
+```bash
+#si trova in /etc/openvpn
+openvpn --genkey --secret static.key
+```
+
+1. configurare tun0 nel server
+
+```bash
+nano -T 4 /etc/openvpn/tun0.conf
+#dev tun0
+#ifconfig 192.68.111.250 192.168.112.250
+#secret /etc/openvpn/static.key
+```
+
+1. copiare la chiave nel client con sftp
+```bash
+sftp uds@TODO
+#copiarla in /etc/openvpn sul client
+```
+
+1. configurare tun0 nel client
+
+```bash
+nano -T 4 /etc/openvpn/tun0.conf
+#remote 192.168.112.250
+#dev tun0
+#ifconfig 192.168.112.250 192.168.111.250
+#secret /etc/openvpn/static.key
+```
+
+1. aprire le porte nel router
+TODO
+
+1. avviare openvpn da entrambe le parti con
+```bash
+openvpn --config /etc/openvpn/tun0.conf --verb 6  // verbose output
+```
+
+1. testare la VPN
+
+    1. sul server
+```bash
+ping 192.168.111.250
+```
+    1. sul client
+```bash
+ping 192.168.112.250
+```
+
+    1. sul client
+```bash
+sudo openvpn --remote 192.168.111.250 --dev tun1 --ifconfig 192.168.112.1 192.168.111.1
+```
+
+
+
+
 
 ---
 
