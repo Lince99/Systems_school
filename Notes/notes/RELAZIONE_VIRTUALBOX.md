@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-16T11:13:17.787Z'
+modified: '2020-01-18T08:31:36.880Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -918,22 +918,31 @@ sudo apt update && sudo apt upgrade
 sudo apt install openvpn
 ```
 
-1. generare una chiave condivisa nel server
+1. generare una chiave condivisa simmetrica nel server
 ```bash
 #si trova in /etc/openvpn
-openvpn --genkey --secret static.key
+openvpn --genkey --secret tun_lab.key
 ```
 
 1. configurare tun0 nel server
 
 ```bash
-nano -T 4 /etc/openvpn/tun0.conf
-#dev tun0
-#ifconfig 192.68.111.250 192.168.112.250
-#secret /etc/openvpn/static.key
+nano -T 4 /etc/openvpn/tun_lab.conf
+#dev tun ;livello applicativo
+#port 1194
+#proto udp #livello 4
+#ifconfig 192.68.211.1 192.168.212.1 ;proprio - esterno ;livello 3
+#remote 172.30.4.104
+#secret /etc/openvpn/tun_lab.key
+#log-append /var/log/openvpn-tun_lab.log
+#comp-lzo ;comprime il traffico per ottimizzare il flusso dati
+#cipher ;di default usa Blowfish, non affidabile
+#keepalive 10 120 ;effettua un ping ogni 10 secondi
 ```
 
-1. copiare la chiave nel client con sftp
+> Si può mettere in ascolto il server su una precisa interfaccia con #listen IP1
+
+1. copiare la chiave nel client con sftp tramite IPsec
 ```bash
 sftp uds@TODO
 #copiarla in /etc/openvpn sul client
@@ -942,15 +951,37 @@ sftp uds@TODO
 1. configurare tun0 nel client
 
 ```bash
-nano -T 4 /etc/openvpn/tun0.conf
+nano -T 4 /etc/openvpn/tun_lab.conf
 #remote 192.168.112.250
-#dev tun0
-#ifconfig 192.168.112.250 192.168.111.250
-#secret /etc/openvpn/static.key
+#dev tun
+#port 1194
+#proto udp
+#ifconfig 192.168.212.1 192.168.211.1 ;esterno - proprio
+#remote 172.30.4.95 ;IPWAN del server livello 3
+#secret /etc/openvpn/tun_lab.key
+#log-append /var/log/openvpn-tun_lab.log
+#comp-lzo ;comprime il traffico per ottimizzare il flusso dati
+#cipher ;di default usa Blowfish, non affidabile
+#keepalive 10 120 ;effettua un ping ogni 10 secondi
 ```
 
+1. meccanismo di rotazione dei log
+    1. informa il processo con kill -segnale di comunicazione che il file è occupato e deve usarne un altro
+    1. comprime il file e lo chiama .1
+    1. crea un nuovo file
+    1. giorno successivo muove log compresso .1 in .2
+    1. a tot giorni 
+
+
 1. aprire le porte nel router
-TODO
+    1. DNAT
+    1. può funzionare anche senza regole di NAT, dove il traffico
+    1. Firewall->WAN
+        1. TCP/UDP
+        1. from: any :1194
+        1. to: 192.168.211.1/24 :1194
+        1. Allow: WAN to OpenVPN
+    1. TODO https://hardforum.com/threads/m0n0wall-port-forwarding-nat-help.793033/
 
 1. avviare openvpn da entrambe le parti con
 ```bash
@@ -962,17 +993,14 @@ openvpn --config /etc/openvpn/tun0.conf --verb 6  // verbose output
     1. sul server
 ```bash
 ping 192.168.111.250
+ping 192.168.211.250
 ```
     1. sul client
 ```bash
 ping 192.168.112.250
+ping 192.168.212.250
 ```
-
-    1. sul client
-```bash
-sudo openvpn --remote 192.168.111.250 --dev tun1 --ifconfig 192.168.112.1 192.168.111.1
-```
-
+    1. il router fa un timeout per le connessioni VPN dalla parte del server che risponde al client tramite il NAT
 
 
 
