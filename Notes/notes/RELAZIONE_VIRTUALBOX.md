@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-18T08:31:36.880Z'
+modified: '2020-01-23T11:37:16.247Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -652,47 +652,21 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
 | X | TCP/UDP | LAN net | * | ! host-router-lan | 52 (DNS) | Block: LAN to LAN attack - DNS |
-| V | TCP/UDP | LAN net | * | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
-| V | TCP/UDP | LAN net | * | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
-| V | TCP/UDP | LAN net | * | DMZ net | 22 (SSH) | Pass: LAN to DMZ - SSH |
-| W |  |  |  |  |  | ! |
-|  | R |  |  |  | ! |  |
-|  |  | O |  | G |  |  |
-|  |  |  | N |  |  |  |
-| V | TCP/UDP | LAN net | any | DMZ net | 80 (HTTP) | Pass: LAN to DMZ - HTTP |
-| V | TCP/UDP | LAN net | any | DMZ net | 443 (HTTPS) | Pass: LAN to DMZ - HTTPS |
-| X | TCP/UDP | LAN net | any | DMZ net | * | Block: LAN to DMZ - any |
-| X | TCP/UDP | any | any | ! host-router-lan | 53 (DNS) | Block: LAN to LAN attack - DNS |
+
 
 #### Regole firewall WAN
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
 | V | TCP | host-pcospitante | * | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
-| V | TCP | host-pcospitante | * | host-server | 22 (SSH) | NAT Server in SSH |
-| V | TCP/UDP | WAN address | * | DMZ net | 80 (HTTP) | Pass: WAN to DMZ - HTTP |
-| V | TCP/UDP | WAN address | * | DMZ net | 443 (HTTPS) | Pass: WAN to DMZ - HTTPS |
-| V | ICMP | * | * | WAN address | * | Pass: any to WAN - ICMP |  
-| W |  |  |  |  |  | ! |
-|  | R |  |  |  | ! |  |
-|  |  | O |  | G |  |  |
-|  |  |  | N |  |  |  |
-| V | TCP | host-pcospitante | any | WAN address | 80 (HTTP) | Allow: accesso web al m0n0wall dal PC ospitante |
-| V | TCP | any | any | host-server | 22 (SSH) | NAT Server in SSH |
+
 
 #### Regole firewall DMZ
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
 | X | * | DMZ net | * | LAN net | * | Block: DMZ to LAN any |
-| V | ICMP | DMZ net | * | * | * | Pass: DMZ to any - ICMP |
-| V | UDP | DMZ net | * | * | 53 (DNS) | Pass: DMZ to any - DNS |
-| V | TCP | DMZ net | * | * | 123 | Pass: DMZ to apt-cacher - apt updates |
-| W |  |  |  |  |  | ! |
-|  | R |  |  |  | ! |  |
-|  |  | O |  | G |  |  |
-|  |  |  | N |  |  |  |
-| X    | any | DMZ net | any | LAN net | any | Block: DMZ to LAN |
+
 
 ## Servizi per il server [↑](#top)
 
@@ -833,7 +807,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 - 4 pacchetto criptato
 - ...
 
-#### Configurazione VPN in monowall
+#### Configurazione VPN in monowall [↑](#top)
 
 1. VPN->IPsec->+
     1. DPD Interval = 60 seconds
@@ -849,9 +823,8 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 
 ### Client e server
 
-C1 può pingare S1?  
-S1 può pingare S2?  
-
+- C1 può pingare S1?  
+- S1 può pingare S2?  
 
 ## Sostituire IPsec con OpenVPN
 
@@ -879,7 +852,7 @@ S1 può pingare S2?
 - usare DNAT (port forwarding, virtual server)
 - manda pacchetto a host con OpenVPN installato
 
-## OpenVPN e la cifratura
+## OpenVPN e la cifratura [↑](#top)
 
 - Metodo semplice (fare questa)
     - connessioni di 2 host
@@ -928,7 +901,7 @@ openvpn --genkey --secret tun_lab.key
 
 ```bash
 nano -T 4 /etc/openvpn/tun_lab.conf
-#dev tun ;livello applicativo
+#dev tun10 ;livello applicativo
 #port 1194
 #proto udp #livello 4
 #ifconfig 192.68.211.1 192.168.212.1 ;proprio - esterno ;livello 3
@@ -953,7 +926,7 @@ sftp uds@TODO
 ```bash
 nano -T 4 /etc/openvpn/tun_lab.conf
 #remote 192.168.112.250
-#dev tun
+#dev tun10
 #port 1194
 #proto udp
 #ifconfig 192.168.212.1 192.168.211.1 ;esterno - proprio
@@ -972,10 +945,10 @@ nano -T 4 /etc/openvpn/tun_lab.conf
     1. giorno successivo muove log compresso .1 in .2
     1. a tot giorni 
 
-
 1. aprire le porte nel router
-    1. DNAT
-    1. può funzionare anche senza regole di NAT, dove il traffico
+    1. DNAT (Outbound NAT)
+    1. può funzionare anche senza regole di NAT, dove il traffico esce
+        1. 
     1. Firewall->WAN
         1. TCP/UDP
         1. from: any :1194
@@ -1002,8 +975,89 @@ ping 192.168.212.250
 ```
     1. il router fa un timeout per le connessioni VPN dalla parte del server che risponde al client tramite il NAT
 
+1. Avviare openvpn
+```bash
+/etc/init.d/openvpn start
+sysctl enable openvpn openvpn@serverconfig #crea un symlink
+ip addr
+```
+1. Test dell'interfaccia
+```bash
+sudo apt install mtr
+mtr -t
+ip route #mostra che 200+x è raggiungibile da 200+y
+ip addr
+#ip route add 192.68.100+x.0/24 via 192.168.200+x.1 #test
+#aggiunge/modifica nella tabella di routing locale ogni volta che la vpn viene attivata
+```
+
+1. Aggiungere le seguenti direttive al config di openVPN:
+    - route 100+x.0/24
+    - route x.0/24
+
+    per permettere di fare:
+    1. ping .100+y.250
+    1. verso .100+x.250
+    1. risponde a .200+y.1
+
+1. Aggiungere rotte statiche a monowall per permettere alla LAN di raggiungere l'altra LAN
+    1. raggiungere C2 da S1 aggiungere .206.1 e usa .105.250
+    1. raggiungere C2 da C1 da .106.0 verso S1 .105.250
+    1. aggiungere le rotte configurate nella VPN
+
+1. Nei computer con Linux non fanno da router, per abilitarlo:
+
+```bash
+cd /proc/sys/net/ipv4
+cat ip_forward
+echo 1 > ip_forward
+```
+
+Oppure _a mano ogni volta_:
+```bash
+cat /etc/sysctl.conf
+#decommentare la riga net.ipv4.ip_forward = 1
+```
+
+Oppure usare systemctl:
+```bash
+sudo nano sysctl.d/forwarding.conf
+#Nome, abilito il forwarding (data)
+net.ipv4.ip_forward = 1
+```
+
+```bash
+sysctl --system
+cat /proc/sys/net/ipv4/ip_forward
+mtr 192.168.1.z
+mtr 192.168.x.z
+```
 
 
+
+#### Schema:
+
+```
+C1 .x.100
+S1 .100+x.250
+   .200+x.1
+
+R1 .x.1
+   .100+x.1
+   172.30.4.x
+
+
+LAN LAB ...
+
+
+R2 .y.1
+   .100+y.1
+   172.30.4.y
+
+C2 .y.100
+S2 .100+y.250
+   .200+y.1
+```
 
 ---
 
@@ -1140,6 +1194,23 @@ R1 .101                                              R2 .102
                                  VLAN200                  
         /                                          \
 R3 .201                                              R3 .202
+```
+
+## Avvio di OS linux e init.d
+
+SystemV con vari run level 
+- run levle 0: spegnimento
+- run level 1: sistema avvio in manutenzione utente singole
+- run level 3: uso comune in CLI
+- run level 5: uso comune con GUI
+- run level 6: riavvio in corso
+
+Script che gestiscono i vari processi del PC:
+**/etc/init.d/**
+
+Con SystemD ha un unico eseguibile che però è retrocompatibile:
+```bash
+service apache2 status
 ```
 
 ---
