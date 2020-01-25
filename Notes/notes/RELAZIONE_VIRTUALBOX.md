@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-23T11:37:16.247Z'
+modified: '2020-01-25T08:06:41.312Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1010,7 +1010,7 @@ ip addr
 ```bash
 cd /proc/sys/net/ipv4
 cat ip_forward
-echo 1 > ip_forward
+sudo echo 1 > ip_forward
 ```
 
 Oppure _a mano ogni volta_:
@@ -1021,9 +1021,9 @@ cat /etc/sysctl.conf
 
 Oppure usare systemctl:
 ```bash
-sudo nano sysctl.d/forwarding.conf
+sudo nano /etc/sysctl.d/forwarding.conf
 #Nome, abilito il forwarding (data)
-net.ipv4.ip_forward = 1
+net.ipv4.ip_forward=1
 ```
 
 ```bash
@@ -1058,6 +1058,14 @@ C2 .y.100
 S2 .100+y.250
    .200+y.1
 ```
+
+### Rete VPN tra LAN
+
+1. OpenVPN attiva Server1 <--> Server2
+1. Direttive route in OpenVPN (altre reti locali)
+1. Abilitare routing del server (sysctl)
+1. Rotte statiche nei m0n0wall
+1. Verifica della VPN
 
 ---
 
