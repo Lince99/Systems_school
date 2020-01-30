@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-25T08:06:41.312Z'
+modified: '2020-01-30T11:15:13.801Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -911,6 +911,8 @@ nano -T 4 /etc/openvpn/tun_lab.conf
 #comp-lzo ;comprime il traffico per ottimizzare il flusso dati
 #cipher ;di default usa Blowfish, non affidabile
 #keepalive 10 120 ;effettua un ping ogni 10 secondi
+#route 192.168.11.0 255.255.255.0
+#route 192.168.111.0 255.255.255.0
 ```
 
 > Si può mettere in ascolto il server su una precisa interfaccia con #listen IP1
@@ -936,6 +938,8 @@ nano -T 4 /etc/openvpn/tun_lab.conf
 #comp-lzo ;comprime il traffico per ottimizzare il flusso dati
 #cipher ;di default usa Blowfish, non affidabile
 #keepalive 10 120 ;effettua un ping ogni 10 secondi
+#route 192.168.12.0 255.255.255.0
+#route 192.168.112.0 255.255.255.0
 ```
 
 1. meccanismo di rotazione dei log
@@ -1032,7 +1036,6 @@ cat /proc/sys/net/ipv4/ip_forward
 mtr 192.168.1.z
 mtr 192.168.x.z
 ```
-
 
 
 #### Schema:
@@ -1219,6 +1222,20 @@ Script che gestiscono i vari processi del PC:
 Con SystemD ha un unico eseguibile che però è retrocompatibile:
 ```bash
 service apache2 status
+```
+
+- Avvia più demoni contemporaneamente
+- Gestisce i file di configurazione
+- Ha degli ordini di priorità
+- Usa linguaggi compilati, quindi aggiornare i processi all'avvio è diventato dispendioso ma hanno messo a disposizione il comando **systemctl**
+```bash
+systemctl enable openvpn@nomeconfig.service #crea symlink al successo
+systemctl start openvpn@nomeconfig.service
+```
+
+Oppure si usa _la vecchia maniera_ dopo aver usato systemctl
+```bash
+./etc/init.d/openvpn status
 ```
 
 ---
