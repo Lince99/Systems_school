@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-01-30T11:15:13.801Z'
+modified: '2020-02-01T08:33:55.823Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1072,7 +1072,41 @@ S2 .100+y.250
 
 ---
 
+## SNMP
+
+Fornisce e ottiene informazioni dai dispositivi di rete
+
+Nella scuola è presente il software Cacti nel server _sguattero_, che mostra dei grafici e statistiche di utilizzo della macchina.  
+Avere delle statistiche serve ai tecnici per rilevare delle anomalie, ma anche ai clienti una parvenza di controllo (anche reale se possibile).
+
+Se viene installato in un server, si può centralizzare l'intero controllo dello stato della rete
+
+Installare sul server MRTG:
+- MRTG è stato inventato da Tobi e si chiama Multi Router Traffic Grapher
+- sudo apt install mrtg
+    - vengono installati altri pacchetti accessori che contengono configurazioni aggiuntive
+    - gira ogni 5 minuti e aggiorna i file database con i grafici
+    - la pagina riassuntiva /var/www/html/mrtg
+    - /usr/share/mrtg contiene info sulle configurazioni
+    - Rendere /etc/mrtg.cfg sotto root?
+        Sì
+
+Abilitare SNMP in M0n0wall
+1. Services -> SNMP
+    1. System location: itis_lab_fermi
+    1. System contact: informazioni del cliente o dell'assistenza, basta che sia coerente in tutti i dispositivi
+
+Configurare MRTG
+
+https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/
+
+---
+
 ## Utilità [↑](#top)
+
+### Community
+
+
 
 ### Possibili problemi
 
