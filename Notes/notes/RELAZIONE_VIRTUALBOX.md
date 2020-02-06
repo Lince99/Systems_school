@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-01T08:33:55.823Z'
+modified: '2020-02-06T11:38:09.373Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1081,7 +1081,8 @@ Avere delle statistiche serve ai tecnici per rilevare delle anomalie, ma anche a
 
 Se viene installato in un server, si può centralizzare l'intero controllo dello stato della rete
 
-Installare sul server MRTG:
+### Installare sul server MRTG
+
 - MRTG è stato inventato da Tobi e si chiama Multi Router Traffic Grapher
 - sudo apt install mrtg
     - vengono installati altri pacchetti accessori che contengono configurazioni aggiuntive
@@ -1089,24 +1090,92 @@ Installare sul server MRTG:
     - la pagina riassuntiva /var/www/html/mrtg
     - /usr/share/mrtg contiene info sulle configurazioni
     - Rendere /etc/mrtg.cfg sotto root?
-        Sì
+        Si
+- /etc/cron.d/mrtg è un cron che aggiorna i grafici
 
-Abilitare SNMP in M0n0wall
+
+#### Abilitare SNMP in M0n0wall
+
 1. Services -> SNMP
     1. System location: itis_lab_fermi
     1. System contact: informazioni del cliente o dell'assistenza, basta che sia coerente in tutti i dispositivi
+1. Aggiungere regola nel firewall per l'interrogazione del servizio SNMP (statistiche in UDP porta 161)
+    1. UDP | DMZ net | * | host-router-dmz | 161 | Allow: DMZ to router - SNMP
 
-Configurare MRTG
+#### Configurare MRTG
+
+1. sudo apt-get install mrtg -y
+1. sudo mkdir /var/www/mrtg
+1. sudo chown -R www-data:www-data /var/www/mrtg
+1. sudo cfgmaker public@192.168.111.1 > /etc/mrtg.cfg
+    1. potrebbe dare problemi se il firewall è malconfigurato
+1. sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html
+1. sudo nano /etc/apache2/sites-available/mrtg.conf
+    1. 
+  ```xml
+  <VirtualHost *:80>
+  ServerAdmin admin@yourdomain.com
+  DocumentRoot "/var/www/mrtg"
+  ServerName yourdomain.com
+  <Directory "/var/www/mrtg/">
+  Options None
+  AllowOverride None
+  Order allow,deny
+  Allow from all
+  Require all granted
+  </Directory>
+  TransferLog /var/log/apache2/mrtg_access.log
+  ErrorLog /var/log/apache2/mrtg_error.log
+  </VirtualHost>
+  ```
+1. sudo a2ensite mrtg
+1. sudo systemctl restart apache2
+1. cd /var/www/html
+    1. ls -s ../mrtg
+
+Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
+
+#### Configurare SNMPD nel server
+
+1. Creare un altro file con cfgmaker e aggiungere nel file di monowall tutto quello che è stato generato a riguardo del server
+    1. installare snmpd
+    ```bash
+    sudo apt install snmpd
+    ```
+    1. configurare snmpd
+    ```bash
+    snmpconf
+    ```
+        1. Enter
+        1. 1
+        1. 1
+    1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
+
+1. cfgstoragemaker sul server che mostra informazioni sul file system
+    1. scaricare l'ultimo pacchetto da snapshot debian al link http://snapshot.debian.org/archive/debian-archive/20090802T004153Z/debian/pool/main/c/cfgstoragemaker/cfgstoragemaker_1.1-3_all.deb
+    1. trasferire da client a server con sftp
+    1. nel server installarlo con:
+    ```bash
+    sudo dpkg -i cfgstoragemaker_1.1-3_all.deb
+    ```
+    1. sudo cfgstoragemaker public@localhost > /etc/mrtg_storage.cfg
+1. rifare indexmaker
 
 https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/
+
+http://snapshot.debian.org/package/cfgstoragemaker/1.1-3/#cfgstoragemaker_1.1-3
+
+TODO: configurare anche monitor delle risorse del server
+
+REMOVE THIS: Si farà cacti
+
+---
+
+---
 
 ---
 
 ## Utilità [↑](#top)
-
-### Community
-
-
 
 ### Possibili problemi
 
