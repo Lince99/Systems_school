@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-06T11:38:09.373Z'
+modified: '2020-02-08T08:34:35.561Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1093,6 +1093,10 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
         Si
 - /etc/cron.d/mrtg è un cron che aggiorna i grafici
 
+- snmp esplora un albero delle interfacce con un sottoalbero per ogni interfaccia con ogni dato inviato/spedito
+    - Usa gli OID con degli standard rispettatto da tutte le apparecchiature che supportano l'SNMP
+    - configurando il server snmpd fornisce solo alcuni sottoalberi
+    - In caso di dati non standard si usano OID non ufficiali oppure richiedendo alla IANA per lo standard
 
 #### Abilitare SNMP in M0n0wall
 
@@ -1158,6 +1162,8 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
     ```bash
     sudo dpkg -i cfgstoragemaker_1.1-3_all.deb
     ```
+    1. copiare il contenuto dal seguente link all'interno del file /usr/share/snmp/mibs/HOST-RESOURCES-MIB.txt
+        https://github.com/haad/net-snmp/blob/master/mibs/HOST-RESOURCES-MIB.txt
     1. sudo cfgstoragemaker public@localhost > /etc/mrtg_storage.cfg
 1. rifare indexmaker
 
@@ -1165,15 +1171,19 @@ https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-
 
 http://snapshot.debian.org/package/cfgstoragemaker/1.1-3/#cfgstoragemaker_1.1-3
 
-TODO: configurare anche monitor delle risorse del server
+
 
 REMOVE THIS: Si farà cacti
 
----
 
 ---
 
+
 ---
+
+
+---
+
 
 ## Utilità [↑](#top)
 
@@ -1351,5 +1361,6 @@ Oppure si usa _la vecchia maniera_ dopo aver usato systemctl
 - [x] fare i sistemisti in Antartide nel mese invernale, il client è al caldo, il server e monowall sono nel container al freddo.  
  Rinumerare rete IP di tutto con una procedura gestita solamente dal client.   
  Scaletta delle cose da fare, ssh al server, web al monowall e testare la rete.
-- [ ] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall**
-- [ ] Installare servizi nel server
+- [x] Fare regole firewall come indicato in **Restrizioni aggiuntive sul firewall**
+- [x] Installare servizi nel server
+- [ ] configurare monitor delle risorse del server con mrtg
