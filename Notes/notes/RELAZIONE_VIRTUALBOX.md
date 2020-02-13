@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-08T08:34:35.561Z'
+modified: '2020-02-13T11:38:20.938Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1115,7 +1115,6 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
     1. potrebbe dare problemi se il firewall è malconfigurato
 1. sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html
 1. sudo nano /etc/apache2/sites-available/mrtg.conf
-    1. 
   ```xml
   <VirtualHost *:80>
   ServerAdmin admin@yourdomain.com
@@ -1135,7 +1134,7 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
 1. sudo a2ensite mrtg
 1. sudo systemctl restart apache2
 1. cd /var/www/html
-    1. ls -s ../mrtg
+    1. ln -s ../mrtg .
 
 Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
 
@@ -1155,22 +1154,30 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
         1. 1
     1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
 
+1. usare cfgmaker
+
 1. cfgstoragemaker sul server che mostra informazioni sul file system
     1. scaricare l'ultimo pacchetto da snapshot debian al link http://snapshot.debian.org/archive/debian-archive/20090802T004153Z/debian/pool/main/c/cfgstoragemaker/cfgstoragemaker_1.1-3_all.deb
     1. trasferire da client a server con sftp
-    1. nel server installarlo con:
-    ```bash
-    sudo dpkg -i cfgstoragemaker_1.1-3_all.deb
-    ```
-    1. copiare il contenuto dal seguente link all'interno del file /usr/share/snmp/mibs/HOST-RESOURCES-MIB.txt
-        https://github.com/haad/net-snmp/blob/master/mibs/HOST-RESOURCES-MIB.txt
-    1. sudo cfgstoragemaker public@localhost > /etc/mrtg_storage.cfg
+        1. ssh uds@172.30.4.97
+        1. nel server installarlo con:
+        ```bash
+        sudo dpkg -i cfgstoragemaker_1.1-3_all.deb
+        ```
+    1. sudo nano /etc/snmp/snmpd.conf
+        1. commentare la parte -V systemonly
+    1. copiare il contenuto dal seguente link all'interno del file ```nano /usr/share/snmp/mibs/HOST-RESOURCES-MIB.txt```
+    https://github.com/haad/net-snmp/blob/master/mibs/HOST-RESOURCES-MIB.txt
+    1. cfgstoragemaker public@localhost > /etc/mrtg_storage.cfg
 1. rifare indexmaker
+
+
 
 https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/
 
 http://snapshot.debian.org/package/cfgstoragemaker/1.1-3/#cfgstoragemaker_1.1-3
 
+https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html
 
 
 REMOVE THIS: Si farà cacti
