@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-13T11:38:20.938Z'
+modified: '2020-02-15T08:30:43.426Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1146,15 +1146,34 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
     sudo apt install snmpd
     ```
     1. configurare snmpd
-    ```bash
-    snmpconf
-    ```
-        1. Enter
-        1. 1
-        1. 1
+        1. ```bash
+           snmpconf
+           ```
+        1. all (snmp e snmpd)
+        1. 2 (snmpd.conf)
+        1. 1 (various)
+        1. 2 (disk usage)
+        1. / (mount point)
+        1. 100000 (minimum amount)
+        1. finished
+        1. finished
+        1. quit
+    1. sudo nano /etc/snmp/snmpd.conf
+        1. rimuovere/commentare in una nuova riga: **-V systemonly** dalla riga _rocommunity public default_
+    1. sudo systemctl restart snmpd
     1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
+    1. copiare il contenuto del file mrt_server.cfg dentro mrtg.cfg
+    1. sudo indexmaker /etc/mrtg.cfg
 
-1. usare cfgmaker
+    
+
+
+
+
+
+#### BROKEN
+
+##### REMOVE THIS: Si farà cacti
 
 1. cfgstoragemaker sul server che mostra informazioni sul file system
     1. scaricare l'ultimo pacchetto da snapshot debian al link http://snapshot.debian.org/archive/debian-archive/20090802T004153Z/debian/pool/main/c/cfgstoragemaker/cfgstoragemaker_1.1-3_all.deb
@@ -1171,16 +1190,11 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
     1. cfgstoragemaker public@localhost > /etc/mrtg_storage.cfg
 1. rifare indexmaker
 
-
-
 https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/
 
 http://snapshot.debian.org/package/cfgstoragemaker/1.1-3/#cfgstoragemaker_1.1-3
 
 https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html
-
-
-REMOVE THIS: Si farà cacti
 
 
 ---
