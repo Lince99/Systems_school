@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-15T08:30:43.426Z'
+modified: '2020-02-15T08:35:36.967Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1163,7 +1163,7 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
     1. sudo systemctl restart snmpd
     1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
     1. copiare il contenuto del file mrt_server.cfg dentro mrtg.cfg
-    1. sudo indexmaker /etc/mrtg.cfg
+    1. sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html
 
     
 
