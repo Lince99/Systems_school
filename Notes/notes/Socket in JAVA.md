@@ -1,7 +1,7 @@
 ---
 title: Socket in JAVA
 created: '2020-01-14T09:37:59.601Z'
-modified: '2020-02-11T08:34:15.046Z'
+modified: '2020-02-19T09:54:46.904Z'
 ---
 
 # Socket in JAVA
@@ -94,7 +94,8 @@ Non usare indirizzo IP ma usare nome host
 - lista di utenti correnti connessi
     - ttl all'interno del tag id
     ```xml
-    <id timeout="30" value="1234"></id>
-    <msg>contenuto</msg>
+    <msg id="nome" timeout="60">
+        Hello World!
+    </msg>
 
     ```
