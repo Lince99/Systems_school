@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-15T08:35:36.967Z'
+modified: '2020-02-20T11:36:08.277Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -477,7 +477,7 @@ Clonazione Virtualbox: **R-CTRL + T**
           1. Network
               1. 172.30.4.0/24 (a casa 192.168.1.1/24)
           1. La rete in cui appoggia la mia WAN
-1. Studiare la migrazione degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
+1. Studiare la migrazione stagionale degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
     1. socchiudere monowall
     1. server via ssh, quindi exit e socchiudere il server
     1. lasciare aperto solo il client
@@ -854,7 +854,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 
 ## OpenVPN e la cifratura [↑](#top)
 
-- Metodo semplice (fare questa)
+- Metodo semplice e coccoloso(fare questa)
     - connessioni di 2 host
     - usa una chiave simmetrica (da scambiare con qualche trikky)
     - https://www.openvpn.net
@@ -949,7 +949,7 @@ nano -T 4 /etc/openvpn/tun_lab.conf
     1. giorno successivo muove log compresso .1 in .2
     1. a tot giorni 
 
-1. aprire le porte nel router
+1. aprire le porte nel router *che così passa aria*
     1. DNAT (Outbound NAT)
     1. può funzionare anche senza regole di NAT, dove il traffico esce
         1. 
@@ -1074,7 +1074,7 @@ S2 .100+y.250
 
 ## SNMP
 
-Fornisce e ottiene informazioni dai dispositivi di rete
+Fornisce e ottiene informazioni dai dispositivi di rete che altrimenti no
 
 Nella scuola è presente il software Cacti nel server _sguattero_, che mostra dei grafici e statistiche di utilizzo della macchina.  
 Avere delle statistiche serve ai tecnici per rilevare delle anomalie, ma anche ai clienti una parvenza di controllo (anche reale se possibile).
@@ -1136,7 +1136,9 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
 1. cd /var/www/html
     1. ln -s ../mrtg .
 
-Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
+Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
+
+
 
 #### Configurare SNMPD nel server
 
@@ -1160,6 +1162,7 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
         1. quit
     1. sudo nano /etc/snmp/snmpd.conf
         1. rimuovere/commentare in una nuova riga: **-V systemonly** dalla riga _rocommunity public default_
+        1. decommentare rocommunity local
     1. sudo systemctl restart snmpd
     1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
     1. copiare il contenuto del file mrt_server.cfg dentro mrtg.cfg
@@ -1167,13 +1170,91 @@ Pagina visitabile all'indirizzo https://172.30.4.97/mrtg
 
     
 
+## Cacti
 
+### Installare le dipendenze di cacti
 
+1. installare il server
+    1. 
+    ```bash
+    su -
+    apt update && sudo apt upgrade
+    apt install -y apache2 mariadb-server mariadb-client php-mysql libapache2-mod-php
+    apt install -y php-xml php-ldap php-mbstring php-gd php-gmp
+    apt install -y snmp php-snmp rrdtool librrds-perl
+    ```
 
+    https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-cacti-on-ubuntu-18-04-lts-bionic-beaver.html
+1. configurare mysql
+    1. 
+    ```bash
+    sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+    ```
+    Inserire il seguente contenuto dopo [mysqld]
+    ```
+    max_heap_table_size = 128M
+    tmp_table_size = 64M
+    join_buffer_size = 64M
+    innodb_file_format = Barracuda
+    innodb_large_prefix = 1
+    innodb_buffer_pool_size = 512M
+    innodb_flush_log_at_timeout = 3
+    innodb_read_io_threads = 32
+    innodb_write_io_threads = 16
+    innodb_io_capacity = 5000
+    innodb_io_capacity_max = 10000
+    ```
+1. configurare php
+    ```bash
+    sudo nano /etc/php/7.3/apache2/php.ini
+    sudo nano /etc/php/7.3/cli/php.ini
+    ```
+    ```
+    date.timezone = EU/Rome
+    memory_limit = 512M
+    max_execution_time = 60
+    ```
+1. riavvia il server sql
+    ```bash
+    sudo systemctl restart mariadb
+    ```
+1. configurare il database
+    ```bash
+    sudo mysql -u root -p
+    ```
+    ```sql
+    create database cacti;
+    GRANT ALL ON cacti.* TO cactiuser@localhost IDENTIFIED BY 'cactipassword';
+    flush privileges;
+    exit
+    ```
+    ```bash
+    sudo mysql -u root -p mysql < /usr/share/mysql/mysql_test_data_timezone.sql
+    sudo mysql -u root -p
+    ```
+    ```bash
+    GRANT SELECT ON mysql.time_zone_name TO cactiuser@localhost;
+    flush privileges;
+    exit
+    ```
+1. scaricare cacti
+    ```bash
+    wget https://www.cacti.net/downloads/cacti-latest.tar.gz
+    tar -zxvf cacti-latest.tar.gz
+    sudo mv cacti-1* /opt/cacti
+    ```
+
+### Aggiungere un altro apparecchio nella rete
+
+Switch: `172.30.1.100 - .125`
+- 117 lab sistemi
+
+Server:
+- .230 sguattero
+- .199
+- .229
 
 #### BROKEN
-
-##### REMOVE THIS: Si farà cacti
 
 1. cfgstoragemaker sul server che mostra informazioni sul file system
     1. scaricare l'ultimo pacchetto da snapshot debian al link http://snapshot.debian.org/archive/debian-archive/20090802T004153Z/debian/pool/main/c/cfgstoragemaker/cfgstoragemaker_1.1-3_all.deb
