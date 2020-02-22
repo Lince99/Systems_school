@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-20T11:36:08.277Z'
+modified: '2020-02-22T08:26:51.907Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -746,7 +746,7 @@ sudo a2ensite default-ssl
 sudo apache2ctl configtest
 ```
 
-### Sostituzione FoxyProxy con SmartProxy
+### Sostituzione FoxyProxy con SmartProxy [↑](#top)
 
 - Estensione da installare: https://addons.mozilla.org/it/firefox/addon/smartproxy/?src=search
 - Abilitare uso estensione 
@@ -761,7 +761,7 @@ https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl
 
 ---
 
-## VPN
+## VPN [↑](#top)
 
 - Non installare software aggiuntivi per non farli accorgere dell'esistenza di VPN
 
@@ -770,12 +770,12 @@ Obbiettivo: ping client1 verso client2
 
 https://doc.m0n0.ch/handbook/
 
-### PPTP
+### PPTP [↑](#top)
 
 Client deve avere il software per essere nella VPN.  
 Usato spesso negli ambienti aziendali.
 
-### IPsec
+### IPsec [↑](#top)
 
 Vecchio protocollo, nato prima del NAT.
 
@@ -821,12 +821,12 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
     1. Lifetime = 28800 seconds
 1. Enable IPsec
 
-### Client e server
+### Client e server [↑](#top)
 
 - C1 può pingare S1?  
 - S1 può pingare S2?  
 
-## Sostituire IPsec con OpenVPN
+## Sostituire IPsec con OpenVPN [↑](#top)
 
 - IPsec lavora a livello di kernel (non sicuro)
 - OpenVPN funziona in Userspace, e il kernel permette a questo programma di gestire la rete
@@ -834,7 +834,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 - OpenVPN lavora nei livelli 5, 6, 7.
 - **Il traffico OpenVPN lavora in UDP porta 1194**
 
-### Software OpenVPN
+### Software OpenVPN [↑](#top)
 
 - Riesce a portare pacchetti IP completi da 1 a 5 e in più poi da 3 a 7
 - Ha varie funzionalità:
@@ -846,7 +846,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
     - 1 interfaccia fisica _eth0_
     - 1 interfaccia virtuale _tun0_
 
-#### Configurazione router
+#### Configurazione router [↑](#top)
 
 - il router riceve traffico in porta 1194 UDP
 - usare DNAT (port forwarding, virtual server)
@@ -876,7 +876,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 tail -f nomelog
 ```
 
-#### Creazione VPN con OpenVPN
+#### Creazione VPN con OpenVPN [↑](#top)
 
 - **SERVER: 192.168.112.250**
 - **CLIENT: 192.168.111.250**
@@ -1038,7 +1038,7 @@ mtr 192.168.x.z
 ```
 
 
-#### Schema:
+#### Schema della VPN [↑](#top)
 
 ```
 C1 .x.100
@@ -1072,7 +1072,7 @@ S2 .100+y.250
 
 ---
 
-## SNMP
+## SNMP [↑](#top)
 
 Fornisce e ottiene informazioni dai dispositivi di rete che altrimenti no
 
@@ -1081,7 +1081,7 @@ Avere delle statistiche serve ai tecnici per rilevare delle anomalie, ma anche a
 
 Se viene installato in un server, si può centralizzare l'intero controllo dello stato della rete
 
-### Installare sul server MRTG
+### Installare sul server MRTG [↑](#top)
 
 - MRTG è stato inventato da Tobi e si chiama Multi Router Traffic Grapher
 - sudo apt install mrtg
@@ -1106,7 +1106,7 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
 1. Aggiungere regola nel firewall per l'interrogazione del servizio SNMP (statistiche in UDP porta 161)
     1. UDP | DMZ net | * | host-router-dmz | 161 | Allow: DMZ to router - SNMP
 
-#### Configurare MRTG
+#### Configurare MRTG [↑](#top)
 
 1. sudo apt-get install mrtg -y
 1. sudo mkdir /var/www/mrtg
@@ -1140,7 +1140,7 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
 
 
 
-#### Configurare SNMPD nel server
+#### Configurare SNMPD nel server [↑](#top)
 
 1. Creare un altro file con cfgmaker e aggiungere nel file di monowall tutto quello che è stato generato a riguardo del server
     1. installare snmpd
@@ -1170,7 +1170,7 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
 
     
 
-## Cacti
+## Cacti [↑](#top)
 
 ### Installare le dipendenze di cacti
 
@@ -1244,7 +1244,7 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
     sudo mv cacti-1* /opt/cacti
     ```
 
-### Aggiungere un altro apparecchio nella rete
+### Aggiungere un altro apparecchio nella rete [↑](#top)
 
 Switch: `172.30.1.100 - .125`
 - 117 lab sistemi
@@ -1254,7 +1254,7 @@ Server:
 - .199
 - .229
 
-#### BROKEN
+#### BROKEN [↑](#top)
 
 1. cfgstoragemaker sul server che mostra informazioni sul file system
     1. scaricare l'ultimo pacchetto da snapshot debian al link http://snapshot.debian.org/archive/debian-archive/20090802T004153Z/debian/pool/main/c/cfgstoragemaker/cfgstoragemaker_1.1-3_all.deb
@@ -1422,7 +1422,7 @@ R1 .101                                              R2 .102
 R3 .201                                              R3 .202
 ```
 
-## Avvio di OS linux e init.d
+## Avvio di OS linux e init.d [↑](#top)
 
 SystemV con vari run level 
 - run levle 0: spegnimento
@@ -1452,6 +1452,14 @@ Oppure si usa _la vecchia maniera_ dopo aver usato systemctl
 ```bash
 ./etc/init.d/openvpn status
 ```
+
+### Storia di CentOS [↑](#top)
+
+- RedHat era inizialmente gratuito
+- Prima viene fatta Mandrake, poi Mandriva
+- Un gruppo decideva di comprare ogni versione per poi rimuovere quelle parti con licenza proprietaria
+    - One cent operative system
+    - Cent OS
 
 ---
 
