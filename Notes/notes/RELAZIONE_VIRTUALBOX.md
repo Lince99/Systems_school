@@ -1,4 +1,5 @@
 ---
+author: Basso Nicola
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
 modified: '2020-02-22T08:26:51.907Z'
@@ -10,21 +11,21 @@ modified: '2020-02-22T08:26:51.907Z'
 
 ## INTRODUZIONE [↑](#top)
 
-#### Descrizione VirtualBox
+### Descrizione VirtualBox
 
-![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png)
+![Virtualbox logo](https://www.virtualbox.org/graphics/vbox_logo2_gradient.png){#id .class width=180px height=140px}
 
 Virtualbox è un software che ci permette di emulare il funzionamento di altri sistemi operativi
 al di sopra di un altro che sarà il nostro "pc ospite".
 
-#### Descrizione M0n0wall
+### Descrizione M0n0wall
 
-![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif)
+![M0n0wall logo](https://m0n0.ch/images/m0n0wall.gif){#id .class width=300px height=84px}
 
 M0n0wall è un sistema operativo open source ora abbandonato che ci permette di gestire
 tutti gli aspetti avanzati di un router.
 
-#### Obbiettivo
+### Obbiettivo
 
 Riuscire a creare un laboratorio virtuale completo:
 
@@ -41,20 +42,20 @@ Software utilizzati per questa relazione:
 - pandoc (comando per generare pdf da markdown)
 
     ```bash
-    pandoc --pdf-engine=xelatex \
-    --highlight-style breezedark \
-    -V colorlinks -V urlcolor=NavyBlue -V toccolor=Red \
-    -V geometry:"margin=10mm" -V geometry:"top=2cm, bottom=1.5cm, left=2cm, right=2cm" \
-    -V margin-left=1cm -V margin-right=1cm -V margin-top=1cm -V margin-bottom=0.5cm \
-    -s --listings --toc \
-    --default-image-extension=.png \
-    -V papersize=a4 \
+    pandoc --pdf-engine=xelatex -f markdown-raw_tex \
+    --highlight-style breezedark -V colorlinks -V toccolor=Red \
+    -s --toc --listings \
+    -V geometry:"top=2cm, bottom=1.5cm, left=2cm, right=2cm" \
+    --default-image-extension=.png -V papersize=a4 -V mainfont='DejaVu Sans' -V fontsize=12pt \
+    -H lists.tex -H head.tex \
     -f markdown RELAZIONE_VIRTUALBOX.md -o RELAZIONE_VIRTUALBOX.pdf
     ```
 
+    Guida pandoc: [markdown2pdf_pandoc](https://jdhao.github.io/2019/05/30/markdown2pdf_pandoc/)
+
 ---
 
-## Utilità [↑](#top)
+## Utilità varie[↑](#top)
 
 ### Download links
 
@@ -69,7 +70,7 @@ Clonazione Virtualbox: **R-CTRL + T**
 
 ## Creazione VM Client [↑](#top)
 
-#### Informazioni generali
+### Informazioni generali
 
 - nome VM = clientcognome
 - password per tutto = lasolita
@@ -85,7 +86,7 @@ Clonazione Virtualbox: **R-CTRL + T**
 1. expert install
 1. Choose language
     1. Italiano  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_39_09.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_39_09.png){ width=80% margin=48px}
     1. Italia - it_IT.UTF-8
     1. it_IT e it_IT@euro
     1. UTF8
@@ -93,38 +94,38 @@ Clonazione Virtualbox: **R-CTRL + T**
     1. Italiana
 1. Caricare i componenti del programma
     1. nessun software  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_42_01.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_42_01.png){ width=80% margin=48px}
 1. Rilevare l'hardware di rete
 1. Configurare la rete
     1. DHCP
-        1. Si
-        1. 3
+        1. dare "Si"
+        1. opzione 3
         1. hostname = cognome.intra  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_50_31.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_50_31.png){ width=80% margin=48px}
 1. Scelta distribuzione
     1. http
     1. Italy
     1. ftp.it.debian.org  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_22_06_21.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_22_06_21.png){ width=80% margin=48px}
     1. Archivio Debian: buster - stable (testing, unstable, experimental sono le rolling release)  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_10_53_41.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_10_53_41.png){ width=80% margin=48px}
 1. Scaricare componenti del programma installazione
     1. Modalità esperta permette di installare i programmi dall'immagine ISO
 1. Password e utenti  
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_10_59_48.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_10_59_48.png){ width=80% margin=48px}
     1. nomi e password erano nello stesso file, ora sono separati
     1. "shadow passowrd" abilitato (Sì)  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_53_13.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_53_13.png){ width=80% margin=48px}
     1. accesso a root abilitato (Sì)
     utente root deve essere in possesso di una sola persona (GDPR)
     1. password: lasolita
-    1. Creazione utente normale:
+    1. Creazione utente normale
         1. Utente Di Servizio  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_59_46.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_20_59_46.png){ width=80% margin=48px}
         1. uds
         1. lasolita
     1. Configurare orologio (RTC = real time clock a batteria, GPS via satellite manda l'ora e localizzazione, Orologio telecontrollato di Francoforte)  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_06_41.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_06_41.png){ width=80% margin=48px}
     1. NTP = Si
         1. Consigliato (italiano)
         1. Europe/Rome (UTC Greenwich +1 inverno, +2 estate, CEST (central europe standard time))
@@ -132,10 +133,9 @@ Clonazione Virtualbox: **R-CTRL + T**
     1. Partizionamento dei dischi
       - permette di usare il terminale grazie al multiplexing - 6 terminali + altre grafiche (CTRL+ALT+F1 F2 F3... F9(su pc lab))
       - ALT+F1 su VM  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_12_49.png)
+      ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_12_49.png){ width=80% margin=48px}
     1. Manuale
-        1. HDD nuovo da partizionare
-          - gpt e mbr
+        1. HDD nuovo da partizionare (opzioni disponibili: gpt e mbr)
         1. Partizioni primarie
             1. esteso
             1. partizioni logiche
@@ -144,35 +144,31 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. SCSI (0,0,0) (sda) - 10,7 GB
             1. msdos
         1. SPAZIO LIBERO  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_19_07.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_19_07.png){ width=80% margin=48px}
             1. Creare nuova paritzione
             1. 4.0 GB
             1. Primaria (mbr)
-            1. Inizio
-              - btrfs per i dischi flash per sistemi ibridi, FAT va a leggere i dati nella prima parte chiavetta usurandola
+            1. Inizio (btrfs per i dischi flash per sistemi ibridi, FAT va a leggere i dati nella prima parte chiavetta usurandola)
             1. Usare come ext4 (estesa con journaling)
-            1. Punti di mount: / (cartella di root)
-              - mount: attacca il disco nel tree delle directory
-              - root, home, swap
+            1. Punti di mount: / (cartella di root) (mount: attacca il disco nel tree delle directory. Opzioni disponibili: root, home, swap)
             1. attivare nelle opzioni di mount:
-            1. discard: rimuovere un file: dereferenziazione per poi essere sovrascritto da altri file, informa il disco della cancellazione, durante i periodi di inattività cancella i settori marchiati "discard"
-              - dispositivi flash: scrivere e riscrivere: cancellazione costa risorse su zone già scritte
+            1. discard: rimuovere un file: dereferenziazione per poi essere sovrascritto da altri file, informa il disco della cancellazione, durante i periodi di inattività cancella i settori marchiati "discard" (dispositivi flash: scrivere e riscrivere: cancellazione costa risorse su zone già scritte)
             1. noatime: lettura dei file: scrive le date (accesso, creazione, modifica, ...) sul file letto, quindi scrive e rallenta = alcuni servizi necessitano la gestione di atime (orario di accesso).
             1. etichetta: linuxroot
             1. Flag avviabile: utilizzato da DOS
             1. Impostazione della partizione completata  
-            ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_30_31.png)
+            ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_30_31.png){ width=80% margin=48px}
         1. SPAZIO LIBERO
             1. Primaria
             1. Fine
             1. Area di swap: (memoria virtuale in winzoz), se la RAM è occupata va ad utilizzare il disco nella partizione dedicata
         1. Terminare le modifiche
-            1. Yep  
-            ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_33_44.png)
+            1. Si  
+            ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_33_44.png){ width=80% margin=48px}
     1. Sistema di base
         1. scelta del kernel:1. Creazione macchina virtuale linux-image-amd64 (ultimo kernel stabile)
         1. generico (mappatura del disco all'avvio, driver autoconfigurati)  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_37_15.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_37_15.png){ width=80% margin=48px}
     1. Gestore dei pacchetti
         1. No (solo software libero)
         1. Si Software contrib (software libero con parti non libere) (installazione di Adobe Flash Player (libreria), (Font proprietari Microsoft
@@ -181,8 +177,8 @@ Clonazione Virtualbox: **R-CTRL + T**
     1. Selezione installazione software:
         1. Deselezionare tutto
         1. Abilitare pacchetti VirtualBox
-        1. Nessun auto update
-         ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_22_11_07.png)
+        1. Nessun auto update  
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_09_2019_22_11_07.png)
         1. No partecipare alle statistiche
         1. Deseleziona tutto
     1. Installare Boot loader GRUB (GRUB è un OS per avviare gli altri OS)
@@ -190,7 +186,7 @@ Clonazione Virtualbox: **R-CTRL + T**
           - BIOS legacy: letto primo settore del disco e viene mandato in esecuzione
           - BIOS EFI: legge il disco per trovare partizioni EFI, carica un file EFI in memoria
         1. Si  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_46_27.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_46_27.png){ width=80% margin=48px}
         1. /dev/sda
         1. Forzare l'installazione di GRUB su dispositivo rimovibile EFI? No
           - EFI: partizionamento da 100 MB nella prima parte del disco formattato in gpt
@@ -203,23 +199,23 @@ Clonazione Virtualbox: **R-CTRL + T**
 
 ### Configurazione OS Client [↑](#top)
 
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_57_04.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_11_57_04.png){ width=80% margin=48px}
 
 1. TAB COMPLETITION: doppio tab per completare le parole sul terminale
 1. Segnalazione dell'integrazione del puntatore del mouse
 1. clientcognome login: uds
 1. password: lasolita
 1. UTENTE NORMALE
-    1. pwd : print working directory
-    1. df -h : visualizza lo stato dell'hard disk
-    1. sudo : super user do often
-    1. su - : super user
-    1. password di root: lasolita
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_12_18_05.png)
+    1. `pwd` : print working directory
+    1. `df -h` : visualizza lo stato dell'hard disk
+    1. `sudo` : super user do often
+    1. `su -` : super user
+    1. password di root: lasolita  
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_26_09_2019_12_18_05.png){ width=80% margin=48px}
 1. UTENTE ROOT
-    1. apt update
-    1. apt upgrade
-    1. (in caso di problemi: nano /etc/apt/sources.list)
+    1. `apt update`
+    1. `apt upgrade`
+    1. (in caso di problemi: `nano /etc/apt/sources.list`)
 
     ```bash
     deb http://deb.debian.org/debian buster main
@@ -233,35 +229,35 @@ Clonazione Virtualbox: **R-CTRL + T**
     ```
 
 1. apt install less joe tcpdump mtr-tiny cowsay (opzionali: bash-completion, dnsutils, netcat)  
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_02_10_2019_11_07_13.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_02_10_2019_11_07_13.png){ width=80% margin=48px}
     - pacchetti aggiuntivi: librerie mancanti per i programmi selezionati --> DIPENDENZE INCLUSIVE
     - contesa dei software: propone la scelta, configurandone la scelta scartata --> DIPENDENZE ESCLUSIVE
     1. S
-    1. cowsay : non funziona perchè i giochi non esistono per root
-    1. apt install sudo
+    1. `cowsay` : non funziona perchè i giochi non esistono per root
+    1. `apt install sudo`
     - SUDO permette di usufruire di azioni da amministratore da parte dell'utente normale senza sapere la password di root ma usando la propria (Wireshark richiede accesso hardware alla scheda di rete)
     - crea gruppo sudo
-    1. id : mostra i gruppi a cui appartiene l'utente corrent
-    1. id uds : mostra i gruppi a cui appartiene all'utente
-    1. adduser uds sudo : iscrive un utente al gruppo
-    1. id uds : ricontrollo se è su sudo
-    1. exit
-    1. id
-    1. exit
+    1. `id` : mostra i gruppi a cui appartiene l'utente corrent
+    1. `id uds` : mostra i gruppi a cui appartiene all'utente
+    1. `adduser uds sudo` : iscrive un utente al gruppo
+    1. `id uds` : ricontrollo se è su sudo
+    1. `exit`
+    1. `id`
+    1. `exit`
     1. relogin con uds lasolita
-    1. id : ora uds è sudo
-    1. sudo -s
+    1. `id` : ora uds è sudo
+    1. `sudo -s`
         1. password
-    1. apt clean : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
-    1. apt purge nomeprogramma : rimuove programma, config di sistema MA non configurazione utente
+    1. `apt clean` : configurazione di sistema non viene rimossa, nel caso di una reinstallazione la configurazione rimuove i file superflui
+    1. `apt purge nomeprogramma` : rimuove programma, config di sistema MA non configurazione utente
 
 ## Creazione VM Server [↑](#top)
 
 1. Server debian come il client  
-![Screenshot](screenshots/VM_setup/Screen_VM_server_config_0.png)
+![Screenshot](screenshots/VM_setup/Screen_VM_server_config_0.png){ width=80% margin=48px}
     1. spegnere la macchina da amministratore
         1. la GUI da la possibilità di spegnere la macchina da sudo, mentre da CLI serve per forza sudo
-        1. shutdown -h now (oppure sudo shutdown -h now da utente uds)
+        1. `shutdown -h now` (oppure sudo shutdown -h now da utente uds)
     1. clonare la macchina virtuale *clientcognome*
         1. CTRL + O o Pecora Dolly nel menu a tendina
         1. servercognome
@@ -269,20 +265,20 @@ Clonazione Virtualbox: **R-CTRL + T**
         1. Scegliere "Clone completo", copia tutti i file come disco separato.
     1. nome sbagliato: modificare /etc/hostname: (i processi prendono l'hostname all'avvio, quindi lo mantengono durante l'esecuzione anche se nel durante viene modificato)
     1. login uds
-    1. joe /etc/hostname  
-    ![Screenshot](screenshots/Server/VirtualBox_serverbasso_02_10_2019_11_23_12.png)
+    1. `joe /etc/hostname`  
+    ![Screenshot](screenshots/Server/VirtualBox_serverbasso_02_10_2019_11_23_12.png){ width=80% margin=48px}
     1. mettere servercognome invece di clientcognome  
-    ![Screenshot](screenshots/Server/VirtualBox_serverbasso_02_10_2019_11_26_00.png)
+    ![Screenshot](screenshots/Server/VirtualBox_serverbasso_02_10_2019_11_26_00.png){ width=80% margin=48px}
         1. CTRL+K e poi X
     1. modificare file /etc/hosts
         1. 127.0.0.1 = localhost (127.0.1.1 = sempre indirizzi di loopback (max 16 milioni))
     1. ping 127.0.x.x
-    1. shutdown -h now
+    1. `shutdown -h now`
 
 ## Creazione VM Router [↑](#top)
 
 1. Creare nuova macchina per monowall  
-![Screenshot](screenshots/VM_setup/Screen_VM_router_config_0.png)
+![Screenshot](screenshots/VM_setup/Screen_VM_router_config_0.png){ width=80% margin=48px}
     1. configurazione macchina virtuale:
         1. routercognome
         1. BSD
@@ -293,33 +289,33 @@ Clonazione Virtualbox: **R-CTRL + T**
         1. /home/itis/InternetFiles/m0n0wall-generic-pc-1.8.1.iso
     1. avvia e poi subito F12
     1. Menu di monowall (può funzionare solo con floppy (config ) e CD (OS))  
-    ![Screenshot](screenshots/Router/VirtualBox_routerbasso_02_10_2019_11_40_03.png)
+    ![Screenshot](screenshots/Router/VirtualBox_routerbasso_02_10_2019_11_40_03.png){ width=80% margin=48px}
         1. 7 - Install on HDD
         1. ad0
         1. y  
-        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_02_10_2019_11_41_26.png)
+        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_02_10_2019_11_41_26.png){ width=80% margin=48px}
         1. al riavvio spegnere subito  
-        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_06_12.png)
+        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_06_12.png){ width=80% margin=48px}
     1. togliere CD da virtualbox
         1. Archiviazione
             1. CD: rimuovi disco dal lettore  
-            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-02_11-42-56.png)
+            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-02_11-42-56.png){ width=80% margin=48px}
     1. Scheda di rete 1
         1. Scheda con Bridge
             1. br0 (a scuola)  
-            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-03-05.png)
+            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-03-05.png){ width=80% margin=48px}
     1. Scheda di rete 2
         1. Rete interna
             1. LAN  
-            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-04-35.png)
+            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-04-35.png){ width=80% margin=48px}
     1. Scheda di rete 3
         1. Rete interna
             1. DMZ  
-            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-04-46.png)
+            ![Screenshot](screenshots/VM_setup/Istantanea_2019-10-03_11-04-46.png){ width=80% margin=48px}
     1. riconosce che esiste un HDD non visualizzando la voce 7 dal menu
     1. Non sono etichettate le porte LAN, WAN e DMZ
         1. 1 (Interfaces: assign network ports) (ci devono essere 3 interfacce: em0 em1 em2)  
-        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_09_15.png)
+        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_09_15.png){ width=80% margin=48px}
         1. osservare i MAC address nelle impostazioni di rete di VirtualBox se sono in ordine come su monowall
         1. richiesta di abilitare VLAN? n (è possibile avere monowall con 1 sola interfaccia e con VLAN attive per avere più reti)
         1. LAN interface: em1
@@ -327,9 +323,9 @@ Clonazione Virtualbox: **R-CTRL + T**
         1. opzionali: em2
         1. ENTER
         1. confermare? y (punto delicato: a casa usa DHCP, in laboratorio viene aggiunto un server DHCP in più, creando caos nello stesso dominio di broadcast. Però due server DHCP possono distribuire una porzione di indirizzi)  
-        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_14_55.png)
+        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_14_55.png){ width=80% margin=48px}
         1. ENTER (per dare un'indirizzo IP alla WAN, monowall ha inviato una richiesta DHCP nella rete presente)  
-        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_18_36.png)
+        ![Screenshot](screenshots/Router/VirtualBox_routerbasso_03_10_2019_11_18_36.png){ width=80% margin=48px}
         1. Ora bisogna configurare gli host
 
 ---
@@ -338,44 +334,44 @@ Clonazione Virtualbox: **R-CTRL + T**
 
 1. Avviare il clientcognome
     1. entrare con uds
-    1. sudo bash
+    1. `sudo bash`
     1. serve gestore login grafico o desktop manager (mdm = mint desktop manager, lightdm = light desktop manager, kdm = kde desktop manager, nodm = avvia in automatico la sessione)
     1. serve un desktop enviro1. Creazione macchina virtualement (mate, lxqt, kde)
     1. serve il browser (firefox-esr è il nome del pacchetto creato per un litigio tra Mozilla e Debian per il logo (panda rosso))
-        1. apt install lightdm mate firefox-esr  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_27_00.png)
+        1. `apt install lightdm mate firefox-esr`  
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_27_00.png){ width=80% margin=48px}
         1. S
-        1. apt install firefox-esr-l10n-it (lingua italiana)  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_35_05.png)
+        1. `apt install firefox-esr-l10n-it` (lingua italiana)  
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_35_05.png){ width=80% margin=48px}
     1. ora i pacchetti non servono più
-        1. apt clean
+        1. `apt clean`
     1. Linux quando parte c'è il kernel che passa il comando ad un gestore di sistema (init) che lancia una serie di script, ora esiste systemd, basato su un eseguibile parallelo
     1. E' possibile manovrare i singoli servizi da amministratori con:
         1. in /etc/init.d/... ci sono vari file eseguibili con configuratori (console-setup) e anche processi grafici
         1. /etc/init.d/lightdm status (gestito da systemd)
     1. /etc/init.d/lightdm restart (avvia l'interfaccia grafica)  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_40_40.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_40_40.png){ width=80% margin=48px}
         1. accedere come uds
         1. avviare firefox  
-        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_45_09.png)
+        ![Screenshot](screenshots/Client/VirtualBox_clientbasso_03_10_2019_11_45_09.png){ width=80% margin=48px}
         1. andare sulle impostazioni di rete del client di Virtualbox
             1. Collegare Rete interna e mettere LAN
         1. aprire terminale MATE
-            1. ip addr
-            1. sudo bash
-            1. /etc/init.d/networking stop  
-            ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-49-41.png)
+            1. `ip addr`
+            1. `sudo bash`
+            1. `/etc/init.d/networking stop`  
+            ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-49-41.png){ width=80% margin=48px}
             1. (PLEASE WAIT UNTIL OUR PROF RESOLVE THE PROBLEM...)
             1. lanciare a mano la richiesta DHCP
-                1. dhclient enp0s3
+                1. `dhclient enp0s3`
                 1. viene assegnato 192.168.1.100 (ciascuno è dentro la propria rete LAN distaccata da quella del laboratorio)  
-                ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-50-29.png)
+                ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-50-29.png){ width=80% margin=48px}
 
 ### Configurazione M0n0wall [↑](#top)
 
 1. tornare su Firefox
     1. 192.168.1.1 sulla barra di ricerca per accedere alla pagina di gestione del router m0n0wall  
-    ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-52-50.png)
+    ![Screenshot](screenshots/Client/Istantanea_2019-10-03_11-52-50.png){ width=80% margin=48px}
         1. admin
     1. mono
     1. possibilità di configurazione del router via web attraverso il client o i computer presenti in LAN
@@ -418,13 +414,13 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. DMZ (è possibile mettere in bridge monowall, ma DMZ deve essere indipendente dalla LAN)
             1. IP address: 192.168.101.1 / 24
             1. Save  
-            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-19-58.png)
+            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-19-58.png){ width=80% margin=48px}
             1. "Note: be sure to add firewall rules to permit traffic through the interface." (da configurare il firewall)
         1. Firewall -> Rules -> LAN
             1. (valido solo per BSD e non per iptables) Le regole sono valutate in ordine discendente (da sopra a sotto)
             1. Default: permette tutto
         1. Firewall -> Rules -> DMZ -> +  
-            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-23-48.png)
+            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-23-48.png){ width=80% margin=48px}
             1. Action: block
             1. protocol: any
             1. Source: DMZ subnet
@@ -435,15 +431,15 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. Pass
             1. Destination: any
             1. Description: Allow: DMZ to any  
-            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-25-41.png)
+            ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-25-41.png){ width=80% margin=48px}
         1. Apply changes
             - I computer DMZ possono andare su tutta internet? NO: se il DMZ viene "conquistato" bisogna bloccare le connessioni con un firewall che non cercano direttamente un proxy specificato o un DNS personale.
         1. Status -> traffic graph  
-        ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-28-59.png)
+        ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-28-59.png){ width=80% margin=48px}
         1. Diagnostics -> Logs
         1. Diagnostics -> DHCP leases ()
         1. Diagnostics -> ARP table (MAC registrati)  
-        ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-31-07.png)
+        ![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-31-07.png){ width=80% margin=48px}
         1. Diagnostics -> Backup/Restore (XML)
             1. Download configuration
         1. Diagnostics -> Factory Defaults (pulisce l'intera configurazione)
@@ -456,14 +452,14 @@ Clonazione Virtualbox: **R-CTRL + T**
 
 1. Rilanciare il router
 1. Svegliare il client
-    1. apt install anacron (opzionale)
+    1. `apt install anacron` (opzionale)
     1. dal browser
         1. 192.168.1.1
         1. admin lasolita
         1. Services -> DHCP Server -> DMZ -> [x] Enable
         1. Range: 192.168.101.100 al 192.168.101.199
         1. Save  
-        ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-00-52.png)
+        ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-00-52.png){ width=80% margin=48px}
 
 ### Impostare DMZ nel router [↑](#top)
 
@@ -471,7 +467,7 @@ Clonazione Virtualbox: **R-CTRL + T**
     1. Rete -> Scheda 1 -> Rete interna DMZ
     1. Avviare il server
         1. uds lasolita
-        1. testare la rete con ping 1.1.1.1
+        1. testare la rete con `ping 1.1.1.1`
         1. FASE DI COLLAUDO:
             1. CONTROLLARE STACK ISO/OSI DAL LIVELLO 0
                 1. scheda di rete fisica
@@ -483,13 +479,13 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. essendoci delle regole di firewall bisogna collaudarlo (ordine delle righe sbagliate, DMZ, regole di blocco)
             1. sul router Diagnostics -> DHCP leases
             1. sul client pingare il server
-                1. ping 192.168.101.100
+                1. `ping 192.168.101.100`
             1. testare se server pinga il client
-                1. ping 192.168.1.100
+                1. `ping 192.168.1.100`
             1. test dei nomi di dominio nel client ([x] riuscita)
-                1. ping www.e-fermi.it
+                1. `ping www.e-fermi.it`
             1. test dei nomi di dominio nel server
-                1. ping www.e-fermi.it
+                1. `ping www.e-fermi.it`
         1. **/etc/resolv.conf**
             1. file ad attuazione immediata, serve per i programmi per trovare il DNS
             1. modifica manuale, ma il DHCP va a riscrivere tutto il file (usare solo in caso di disattivazione di DHCP)
@@ -499,17 +495,17 @@ Clonazione Virtualbox: **R-CTRL + T**
         1. sudo apt install ssh (metapacchetto, crea solo dipendenze come openssh client e server e altro)(dropbear alternativa ad ssh)
     1. verificare la possibilità di fare ssh da client a server e l'impossibilità di fare ssh dal server al client
         1. client
-            1. ssh uds@192.168.101.100
+            1. `ssh uds@192.168.101.100`
             1. certificato SHA256: yes (usato per verificare l'autenticità del server)
         1. server
-            1. ssh uds@192.168.1.100 (non deve funzionare)
+            1. `ssh uds@192.168.1.100` (non deve funzionare)
 
 ### Applicare modifiche della rete [↑](#top)
 
 1. Riavviare macchine virtuali
 1. Il client deve identificare il server sempre con lo stesso indirizzo
-    1. ip addr sul client: 192.168.1.100 e mostra il mac
-    1. ip addr sul server: 192.168.101.100 e mostra il mac
+    1. `ip addr` sul client: 192.168.1.100 e mostra il mac
+    1. `ip addr` sul server: 192.168.101.100 e mostra il mac
     1. sulla configurazione del router:
         1. Diagnostics -> ARP table
         1. Services -> DHCP Server -> DMZ -> Reservations
@@ -531,7 +527,7 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. host-pcospitante
             1. 172.30.4.x
             1. Il computer da cui opero  
-            ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-10-51.png)
+            ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-10-51.png){ width=80% margin=48px}
         1. tornare in Firewall -> Rules
         1. modificare la regola WAN
             1. Source
@@ -543,7 +539,7 @@ Clonazione Virtualbox: **R-CTRL + T**
             1. Network
                 1. 172.30.4.0/24 (a casa 192.168.1.1/24)
             1. La rete in cui appoggia la mia WAN  
-            ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-16-22.png)
+            ![Screenshot](screenshots/Router/Istantanea_2019-10-12_09-16-22.png){ width=80% margin=48px}
 1. Studiare la migrazione stagionale degli indirizzi completa del laboratorio senza console server e router, temporizzare i riavvii con cambi di opzioni di monowall, client avrà indirizzo corretto al rinnovo richiesta DHCP
     1. socchiudere monowall
     1. server via ssh, quindi exit e socchiudere il server
@@ -555,11 +551,11 @@ Clonazione Virtualbox: **R-CTRL + T**
     1. 192.168.100+x.0/24 DMZ lab virtuale (192.168.111.0/24)
 
 1. Impostare IP statico:
-    1. nano /etc/network/interfaces
+    1. `nano /etc/network/interfaces`
     1. dhcp to static
     1. address 192.168.x.2/24
     1. gateway 192.168.x.1  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_31_10_2019_10_59_49.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_31_10_2019_10_59_49.png){ width=80% margin=48px}
 1. Pure nel server, ma con 192.168.100+x.2/24 e gateway .1
 1. In monowall
     1. Interfaces
@@ -571,9 +567,9 @@ Clonazione Virtualbox: **R-CTRL + T**
 ## Migrazione IP [↑](#top)
 
 1. Nel SERVER da client in ssh
-    1. ssh uds@192.168.101.250
-    1. su -
-    1. nano /etc/network/interfaces
+    1. `ssh uds@192.168.101.250`
+    1. `su -`
+    1. `nano /etc/network/interfaces`
         1. ... inet static
         1. address 192.168.100+x.250/24
            gateway 192.168.100+x.1
@@ -591,14 +587,14 @@ Clonazione Virtualbox: **R-CTRL + T**
         1. Range 192.168.11.100 to 192.168.11.199
     1. Reboot system
 1. Nel client
-    1. ifup enp0s3
+    1. `ifup enp0s3`
     1. testare il server
-        1. ping 192.168.111.250
+        1. `ping 192.168.111.250`
     1. testare la rete
-        1. ping 1.1.1.1
+        1. `ping 1.1.1.1`
     1. dal server pingare l'esterno
-        1. ssh uds@192.168.111.250
-        1. ping 1.1.1.1
+        1. `ssh uds@192.168.111.250`
+        1. `ping 1.1.1.1`
 
 - DHCP è debole:
   - boot da rete del lab: server fa anche da DHCP, si può osservare il server ufficiale, mandare un pacchetto UDP durante l'avvio che aggiunge le opzioni di avvio da rete del sistema operativo
@@ -619,12 +615,12 @@ anche nel caso uno dei due o entrambi siano stati attaccati e vogliono diffonder
   - Un client riceve il DNS dal router tramite la richiesta DHCP (dns livello applicazione, dhcp livello IP)
   - Client scrive il server DNS nel file /etc/resolve.conf, file continuamente riscritto dal router  
     Nel client cat /etc/resolv.conf  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_07_11_2019_11_13_35.png)
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_07_11_2019_11_13_35.png){ width=80% margin=48px}
   - LAN deve permettere al servizio DNS di andare solo nel M0n0wall lato LAN, le altre richieste TCP/UDP per il DNS da tagliare
 - Creare alias per host-server, host-router-lan, host-router-dmz  
-    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-17-05.png)  
-    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-17-54.png)  
-    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-18-21.png)  
+    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-17-05.png){ width=80% margin=48px}  
+    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-17-54.png){ width=80% margin=48px}  
+    ![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-18-21.png){ width=80% margin=48px}  
 - LAN e WAN verso DMZ
   - DMZ esce solo con la porta 80 (ora solo porta 22 per SSH)
   - LAN può essere infettata
@@ -678,24 +674,22 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 - Installare il plugin Foxyproxy Standard sia nel pc ospitante che nel client
   - options (crea più profili proxy da switchare)  
-    ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-09-52.png)
-        - piu'
-          - diretto
-          - #000000
-          - Type: Direct (no proxy)
-        - piu'  
-        ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-11-23.png)
-          - scuola
-          - #66cc66
-          - 172.30.1.199
-          - 3128
-    - diretto -> patterns
-      - se l'ip ha una forma usa un certo proxy, altrimenti usa l'altro
-      - New White
-        - Pattern: 192.168.*
+    ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-09-52.png){ width=80% margin=48px}
+    - diretto
+    - #000000
+    - Type: Direct (no proxy)  
+    ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-11-23.png){ width=80% margin=48px}
+    - scuola
+    - #66cc66
+    - 172.30.1.199
+    - 3128
+  - diretto -> patterns
+    - se l'ip ha una forma usa un certo proxy, altrimenti usa l'altro
+    - New White
+      - Pattern: 192.168.*
     - permette di usare un proxy per gli ip locali, mentre
     - In firefox -> Preferenze -> nessun proxy  
-    ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-20-16.png)
+    ![Screenshot](screenshots/Client/Istantanea_2019-11-09_09-20-16.png){ width=80% margin=48px}
 
 ### Schema [↑](#top)
 
@@ -709,7 +703,7 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 #### Regole di NAT
 
-![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-54-45.png)
+![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-54-45.png){ width=80% margin=48px}
 
 | If | Proto | Ext. Port range | NAT IP | Int. port range | Descrizione |
 |:--:|:-----:|:---------------:|:------:|:---------------:|-------------|
@@ -717,7 +711,7 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 #### Alias del firewall
 
-![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-18-30.png)
+![Screenshot](screenshots/Router/Istantanea_2019-11-07_11-18-30.png){ width=80% margin=48px}
 
 | Nome | Indirizzo | Descrizione |
 |------|-----------|-------------|
@@ -735,7 +729,7 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 
 #### Regole firewall WAN
 
-![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-05-52.png)
+![Screenshot](screenshots/Router/Istantanea_2019-10-03_12-05-52.png){ width=80% margin=48px}
 
 | Attivo | Proto | Source | Port | Destination | Port | Descr |
 |:------:|:-----:|:------:|:----:|:-----------:|:----:|-------|
@@ -760,7 +754,7 @@ si può redirezionare con DNAT e rispondere con il server DNS ufficiale.
 Sito web consultabile dall'esterno tramite l'IP del router, ora c'è M0n0wall in porta 80 **deve rimanere tale per la LAN**.  
 Dall'esterno deve essere possibile vedere la pagina del server, senza togliere la gestione del M0n0wall dall'esterno tramite porta 8080.  
 
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_01_2020_11_35_51.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_30_01_2020_11_35_51.png){ width=80% margin=48px}
 
 | da/a | apache | M0n0wall |
 |:----:|:------:|:--------:|
@@ -787,13 +781,13 @@ Creare il certificato
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 ```
 
-- IT
-- Italy
-- Bassano del Grappa
-- ITIS Enrico Fermi
-- 5AI
-- lab4-pc11.fermi.intra (hostname -f nel pc ospitante)
-- email
+- IT  
+- Italy  
+- Bassano del Grappa  
+- ITIS Enrico Fermi  
+- 5AI  
+- lab4-pc11.fermi.intra (`hostname -f` nel pc ospitante)  
+- email  
 
 Abilitare ssl su apache2
 
@@ -833,11 +827,11 @@ sudo apache2ctl configtest
 - Analizzatore DOM Inspector che fornisce contenuti di una pagina tramite vari proxy
 - _ssh -D_ Dynamic application-level port forwarding per simulare delle connessioni da remoto
 
-##### Link utili
+#### Link utili
 
-https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-16-04
+[how-to-install-the-apache-web-server-on-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-16-04)
 
-https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04
+[how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-16-04)
 
 ---
 
@@ -855,7 +849,7 @@ Obbiettivo: ping client1 verso client2
 Client deve avere il software per essere nella VPN.  
 Usato spesso negli ambienti aziendali.
 
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_00_40.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_00_40.png){ width=80% margin=48px}
 
 ### IPsec [↑](#top)
 
@@ -890,7 +884,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 
 #### Configurazione VPN in monowall [↑](#top)
 
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_09_58.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_09_58.png){ width=80% margin=48px}
 
 1. VPN->IPsec->+
     1. DPD Interval = 60 seconds
@@ -904,7 +898,7 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
     1. Lifetime = 28800 seconds
 1. Enable IPsec
 
-![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_31_29.png)
+![Screenshot](screenshots/Client/VirtualBox_clientbasso_19_12_2019_11_31_29.png){ width=80% margin=48px}
 
 ### Client e server [↑](#top)
 
@@ -942,13 +936,13 @@ Il pacchetto che nasce da C2 e arriva a C1, crea un livello 3 ISO/OSI in più:
 - Metodo semplice e coccoloso(fare questa)
   - connessioni di 2 host
   - usa una chiave simmetrica (da scambiare con qualche trikky)
-  - https://www.openvpn.net
+  - [www.openvpn.net](https://www.openvpn.net)
   - usr/share/doc/openvpn
 - Quello non semplice
   - connessioni multipunto (VPN di raccolta)
     - servizi aziendali locali usufruibili dall'esterno
   - uso di certificati
-    https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-18-04
+    [how-to-set-up-an-openvpn-server-on-ubuntu-18-04](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-18-04)
 
 ### Connessione punto punto
 
@@ -967,11 +961,11 @@ tail -f nomelog
 - **SERVER: 192.168.112.250**
 - **CLIENT: 192.168.111.250**
 
-https://wiki.debian.org/OpenVPN
+[OpenVPN](https://wiki.debian.org/OpenVPN)
 
-https://www.cyberciti.biz/faq/install-configure-openvpn-server-on-debian-9-linux/
+[install-configure-openvpn-server-on-debian-9-linux](https://www.cyberciti.biz/faq/install-configure-openvpn-server-on-debian-9-linux/)
 
-https://openvpn.net/community-resources/static-key-mini-howto/
+[openvpn.net/community-resources/static-key-mini-howto](https://openvpn.net/community-resources/static-key-mini-howto/)
 
 1. scaricare openvpn
 
@@ -989,7 +983,7 @@ openvpn --genkey --secret tun_lab.key
 
 1. configurare tun0 nel server
 
-![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_00_12.png)
+![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_00_12.png){ width=80% margin=48px}
 
 ```bash
 nano -T 4 /etc/openvpn/tun_lab.conf
@@ -1051,7 +1045,7 @@ nano -T 4 /etc/openvpn/tun_lab.conf
         1. from: any :1194
         1. to: 192.168.211.1/24 :1194
         1. Allow: WAN to OpenVPN
-    1. altra guida: https://hardforum.com/threads/m0n0wall-port-forwarding-nat-help.793033/
+    1. altra guida: [m0n0wall-port-forwarding-nat-help](https://hardforum.com/threads/m0n0wall-port-forwarding-nat-help.793033/)
 
 1. avviare openvpn da entrambe le parti con
 
@@ -1099,7 +1093,7 @@ openvpn --config /etc/openvpn/tun0.conf --verb 6  // verbose output
     - route 100+x.0/24
     - route x.0/24
 
-    per permettere di fare:
+1. per permettere di fare:
     1. ping .100+y.250
     1. verso .100+x.250
     1. risponde a .200+y.1
@@ -1111,7 +1105,7 @@ openvpn --config /etc/openvpn/tun0.conf --verb 6  // verbose output
 
 1. Nei computer con Linux non fanno da router, per abilitarlo:
 
-![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_02_50.png)
+![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_02_50.png){ width=80% margin=48px}
 
 ```bash
 cd /proc/sys/net/ipv4
@@ -1127,7 +1121,7 @@ cat /etc/sysctl.conf
 ```
 
 Oppure usare systemctl:  
-![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_04_28.png)
+![Screenshot](screenshots/Server/VirtualBox_serverbasso_25_01_2020_09_04_28.png){ width=80% margin=48px}
 
 ```bash
 sudo nano /etc/sysctl.d/forwarding.conf
@@ -1212,15 +1206,15 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
 
 #### Configurare MRTG [↑](#top)
 
-1. sudo apt-get install mrtg -y
-1. sudo mkdir /var/www/mrtg
-1. sudo chown -R www-data:www-data /var/www/mrtg  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_01_02_2020_09_33_03.png)
-1. sudo cfgmaker public@192.168.111.1 > /etc/mrtg.cfg
+1. `sudo apt-get install mrtg -y`
+1. `sudo mkdir /var/www/mrtg`
+1. `sudo chown -R www-data:www-data /var/www/mrtg`  
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_01_02_2020_09_33_03.png){ width=80% margin=48px}
+1. `sudo cfgmaker public@192.168.111.1 > /etc/mrtg.cfg`
     1. potrebbe dare problemi se il firewall è malconfigurato  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_01_02_2020_09_33_29.png)
-1. sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html
-1. sudo nano /etc/apache2/sites-available/mrtg.conf
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_01_02_2020_09_33_29.png){ width=80% margin=48px}
+1. `sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html`
+1. `sudo nano /etc/apache2/sites-available/mrtg.conf`
 
     ```xml
     <VirtualHost *:80>
@@ -1239,12 +1233,12 @@ Se viene installato in un server, si può centralizzare l'intero controllo dello
     </VirtualHost>
     ```
 
-1. sudo a2ensite mrtg
-1. sudo systemctl restart apache2
-1. cd /var/www/html
-    1. ln -s ../mrtg .
+1. `sudo a2ensite mrtg`
+1. `sudo systemctl restart apache2`
+1. `cd /var/www/html`
+    1. `ln -s ../mrtg .`
 
-Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
+Pagina visitabile assiduamente all'indirizzo [172.30.4.97/mrtg](https://172.30.4.97/mrtg)
 
 #### Configurare SNMPD nel server [↑](#top)
 
@@ -1256,13 +1250,8 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
         ```
 
     1. configurare snmpd  
-    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_06_02_2020_11_59_13.png)
-        1. usare snpconf
-
-            ```bash
-            snmpconf
-            ```
-
+    ![Screenshot](screenshots/Client/VirtualBox_clientbasso_06_02_2020_11_59_13.png){ width=80% margin=48px}
+        1. usare `snpconf`
         1. all (snmp e snmpd)
         1. 2 (snmpd.conf)
         1. 1 (various)
@@ -1272,13 +1261,13 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
         1. finished
         1. finished
         1. quit
-    1. sudo nano /etc/snmp/snmpd.conf
+    1. `sudo nano /etc/snmp/snmpd.conf`
         1. rimuovere/commentare in una nuova riga: **-V systemonly** dalla riga _rocommunity public default_
         1. decommentare rocommunity local
-    1. sudo systemctl restart snmpd
-    1. sudo cfgmaker public@localhost > /etc/mrtg_server.cfg
+    1. `sudo systemctl restart snmpd`
+    1. `sudo cfgmaker public@localhost > /etc/mrtg_server.cfg`
     1. copiare il contenuto del file mrt_server.cfg dentro mrtg.cfg
-    1. sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html
+    1. `sudo indexmaker /etc/mrtg.cfg > /var/www/mrtg/index.html`
 
 ## Cacti [↑](#top)
 
@@ -1295,7 +1284,7 @@ Pagina visitabile assiduamente all'indirizzo https://172.30.4.97/mrtg
     apt install -y snmp php-snmp rrdtool librrds-perl
     ```
 
-    https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-cacti-on-ubuntu-18-04-lts-bionic-beaver.html
+    [how-to-install-cacti-on-ubuntu-18-04-lts-bionic-beaver](https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-cacti-on-ubuntu-18-04-lts-bionic-beaver.html)  
 1. configurare mysql
     1.configurare il database
 
@@ -1382,11 +1371,9 @@ Server:
 - .199
 - .229
 
-https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/
+[how-to-install-and-configure-mrtg-on-ubuntu-18.04](https://www.howtoforge.com/tutorial/how-to-install-and-configure-mrtg-on-ubuntu-1804/)
 
-http://snapshot.debian.org/package/cfgstoragemaker/1.1-3/#cfgstoragemaker_1.1-3
-
-https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html
+[linux-snmp-oids-for-cpumemory-and-disk-statistics](https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html)
 
 ---
 
@@ -1394,7 +1381,7 @@ https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.ht
 
 ---
 
-## Utilità [↑](#top)
+## Utilità e curiosità [↑](#top)
 
 ### Possibili problemi
 
@@ -1520,7 +1507,7 @@ sudo nano /etc/profile
 
 ## Esercizio Cisco [↑](#top)
 
-#### SPERIMENTAZIONE VLAN CON ROUTER CISCO
+### SPERIMENTAZIONE VLAN CON ROUTER CISCO
 
 ```txt
 192.168.3.0/24
