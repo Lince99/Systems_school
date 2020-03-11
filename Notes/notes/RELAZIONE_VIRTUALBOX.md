@@ -1568,6 +1568,14 @@ Oppure si usa _la vecchia maniera_ dopo aver usato systemctl
   - One cent operative system
   - Cent OS
 
+### Reverse proxy [↑](#top)
+
+Se si vuole un file da un server, questo puo' redirezionare ad un altro server la richiesta.
+
+- Chiamata dall'esterno di un file non presente nel server fisico
+- **ProxtPreserveHost On** nel file di configurazione di apache
+- Il server la rigira verso dei server remoti (server di bilanciamento)
+
 ---
 
 ## TODO [↑](#top)

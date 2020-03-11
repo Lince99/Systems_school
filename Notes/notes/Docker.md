@@ -133,3 +133,20 @@ docker remove debian:v1
 ## Risorse utili
 
 https://github.com/DockStation/dockstation
+
+## Esempio
+
+```bash
+sudo apt install docker.io
+docker pull debian:latest
+docker run -it --name debian debian:latest
+apt update
+apt install nano apache2 net-tools
+nano /var/www/html/index.html
+exit
+docker commit debian debian:apache_ready
+docker images
+docker run -it debian:apache_ready
+docker pull httpd
+docker start httpd
+```
