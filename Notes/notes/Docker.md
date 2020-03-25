@@ -126,7 +126,14 @@ Terminazione del docker
 ```bash
 docker container ls --all
 #eliminare le modifiche fatte
-docker remove debian:v1
+docker rm debian:v1
+```
+
+### Eliminazione
+
+```bash
+docker system prune
+docker system prune -a #anche le immagini
 ```
 
 
@@ -149,4 +156,47 @@ docker images
 docker run -it debian:apache_ready
 docker pull httpd
 docker start httpd
+```
+
+### Tomcat e apache in docker
+
+```bash
+docker pull debian:latest
+docker run -it --name webserver_apache debian
+```
+
+All'interno del docker:
+
+```bash
+apt update
+apt install net-tools nano apache2 php -y
+exit
+```
+
+Si salvano i cambiamenti in una nuova immagine per fare un nuovo container
+
+```bash
+docker ps -a
+docker container ls --all
+docker commit webserver_apache webserver:apache_ready
+docker images
+```
+
+Installazione di tomcat
+
+```bash
+docker run -it --name apache_tomcat webserver:apache_ready
+apt install tomcat9 default-jdk ant git -y
+apt install tomcat9-examples tomcat9-admin tomcat9-docs -y
+exit
+docker commit apache_tomcat webserver:apache_tomcat
+```
+
+Esecuzione del server tomcat in una porta personalizzata
+
+https://hub.docker.com/_/tomcat/
+
+```bash
+# docker stop test_tomcat #in caso di problemi
+docker run -it --rm --name test_tomcat -p 8888:8080 webserver:apache_tomcat #todo test better
 ```
