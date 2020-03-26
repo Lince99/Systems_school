@@ -1,10 +1,7 @@
----
-title: RAID
----
-
 # RAID
 
 Raid non e' backup, sono due aspetti differenti:
+
 - Backup: mantenere i dati, pc spento e dati ci sono
 - Raid: continuita' di servizio, serve a mantenere il servizio attivo insieme da altre funzioni
 
@@ -115,7 +112,7 @@ Rende pero' difficile il recupero dei dati nel caso la scheda si rompa.
 L'OS vede all'inizio tutti i dischi come dischi normali, poi li vede come RAID.
 Conviene il RAID software in base alle situazioni, poiche' richiede computazione alla macchina ospitante.
 
-## TODO
+## TODO creare RAID 1
 
 - Creare pc virtuale con 2 dischi in raid 1
 - disco da 4 GB
@@ -135,3 +132,62 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
 - Cercare il Controllo RAID
     - /proc/mdstat
 - Settimana prossima disconnessione disco in live per tenere il sistema in live
+
+
+### Istruzioni creazione Raid 1 in Virtualbox
+
+1. Creare nuova macchina virtuale
+    1. debian_raid
+    1. RAM: 2048 MB
+    1. HDD: 4 GB
+    1. Impostazioni della macchina
+        1. System
+            1. Aggiungere un processore in piu
+        1. Storage
+            1. Inserire la iso nel lettore dischi del controller IDE
+            1. Controller SATA
+                1. Incrementare Port Count a 4
+                1. Aggiungere un altro disco debian_raid2 da 4 GB
+        1. Network
+            1. Cambiare in Bridged Adapter
+
+1. Inserire la iso di debian 10 e avviare la macchina virtuale
+1. Install (no GUI)
+    1. Lingua: italiano
+    1. Nome host: propriocognomeraid (bassoraid)
+    1. Nome del dominio: lasciarlo vuoto
+    1. Password di root: lasolita
+    1. Nome completo utente: Utente di Servizio
+    1. Username: uds
+    1. Password: lasolita
+    1. Partizionamento Manuale
+        1. Per ogni disco SCSIx
+            1. partizione primaria
+                1. 4.0 GB
+                1. volume fisico per il RAID
+            1. partizione logica
+                1. 292.6 MB
+                1. swap
+         1. Configurare il RAID software
+            1. Configurare un device multidisk (MD)
+            1. RAID 1
+            1. 2 dischi attivi
+            1. 0 device "spare"
+            1. Terminare
+         1. Selezionare la partizione appena creata via raid software
+            1. Usare come: File system ext4 con journaling
+            1. Punto di mount: /
+      1. Selezionare mirror italiano
+          1. ftp.it.debian.org
+      1. Lasciare i pacchetti di default (non aggiungere GUI o altri servizi)
+      1. Installare GRUB: si
+          1. Installarlo nel primo disco
+1. Entrare come uds
+    1. `su -`
+    1. `apt update && apt install sudo nano elinks -y`
+    1. Installare grub anche sull'altro disco (con `grub-install /dev/sdb` non va)
+       (probabile risoluzione: https://askubuntu.com/questions/43036/how-do-i-install-grub-on-a-raid-system-installation#57010 )
+         
+#### Disconnessione di un disco in live
+
+1. TODO
