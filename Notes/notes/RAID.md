@@ -1,3 +1,9 @@
+---
+title: RAID
+created: '2020-03-12T09:29:18.898Z'
+modified: '2020-03-26T09:31:02.793Z'
+---
+
 # RAID
 
 Raid non e' backup, sono due aspetti differenti:
@@ -167,16 +173,24 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
                 1. volume fisico per il RAID
             1. partizione logica
                 1. 292.6 MB
-                1. swap
-         1. Configurare il RAID software
+                1. volume fisico per il RAID
+        1. Configurare il RAID software per il root
             1. Configurare un device multidisk (MD)
             1. RAID 1
             1. 2 dischi attivi
             1. 0 device "spare"
             1. Terminare
-         1. Selezionare la partizione appena creata via raid software
+        1. Configurare il RAID software per lo swap
+            1. Configurare un device multidisk (MD)
+            1. RAID 1
+            1. 2 dischi attivi
+            1. 0 device "spare"
+            1. Terminare
+        1. Selezionare la partizione 1 creata via raid software
             1. Usare come: File system ext4 con journaling
             1. Punto di mount: /
+        1. Selezionare la partizione 2 per la swap
+            1. Usare come: swap
       1. Selezionare mirror italiano
           1. ftp.it.debian.org
       1. Lasciare i pacchetti di default (non aggiungere GUI o altri servizi)
@@ -185,9 +199,97 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
 1. Entrare come uds
     1. `su -`
     1. `apt update && apt install sudo nano elinks -y`
-    1. Installare grub anche sull'altro disco (con `grub-install /dev/sdb` non va)
-       (probabile risoluzione: https://askubuntu.com/questions/43036/how-do-i-install-grub-on-a-raid-system-installation#57010 )
-         
+    1. Installare grub anche sull'altro disco `grub-install /dev/sda && grub-install /dev/sdb`
+1. Questo sistema va ancora in modalita' legacy, mentre ora si usa la modalita' UEFI 
+1. Tipologie di superblocchi:
+    1. Inizio
+    1. Fine: permette l'utilizzo di avvio da BIOS UEFI
+        1. UEFI non prevede mbr o altro codice, ma una partizione da 100 MB etichettata da gpt che contiene degli eseguibili come un normale file system, e da qui viene caricato il giusto loader (grub o windows boot loader), avendo 2 dishi servono 2 partizioni UEFI in parallelo
+        1. Serve partizione fat per il raid
+    1. Quando il kernel vede partizioni di tipo RAID va a leggere all'inizio del disco o alla fine, se non trova nulla allora sono partizioni generiche
+
+
 #### Disconnessione di un disco in live
 
-1. TODO
+##### Informazioni varie sui dischi
+
+Mostra tutte le partizioni presenti
+
+```bash
+cat /proc/partitions
+```
+
+Se si possiede nagios nel server RAID
+
+```bash
+/usr/lib/nagios/plugins/check_raid
+```
+
+Mostra le informazioni e lo stato del disco
+
+```bash
+cciss_vol_status -V /dev/sda
+```
+
+
+Nel caso di raid software il seguente comando mostra le informazioni
+
+```bash
+cat /proc/mdstat
+```
+
+SE NON VENGONO FUORI DATI:
+
+```bash
+mount
+```
+
+Dove si vede /dev/sda1, se ha la radice ( / ) allora non e' stata configurato il RAID
+
+```bash
+cfdisk /dev/sda
+cfdisk /dev/sdb
+```
+
+##### MDADM e VBoxManage
+
+Virtualbox possiede il comando `VBoxManage`:
+- Permette di gestire le macchine virtuali da riga di comando
+- `VBoxManage --help`
+- l'opzione `modifyvm` permette di aggiungere dischi a caldo
+- `storageattach` permette di staccare i dischi
+
+Per simulare una rottura del primo disco:
+1. Servono delle operazioni all'interno della VM come `dmesg`
+1. Con `cat /proc/mdstat` devono venire fuori delle UUU_UUUUUU
+1. In live riattaccare il disco e vedere i log
+1. Il Raid software
+1. `mdadm -Q /dev/md0` mostra lo stato di un raid
+1. `mdadm -E /dev/sda | less` mostra le informazioni del disco
+    1. Guardando l'Array UUID di varie partizioni si possono notare se fanno parte dello stesso raid
+1. Il raid hardware i controlli di sincronizzazione sono automatici, mentre il raid software richiede dei comandi di sincronizzazione
+
+> Obbiettivo cercare di riallineare le partizioni staccando prima il primo disco e poi il secondo con il primo attaccato.
+
+###### VBoxManage per staccare un disco
+
+https://www.virtualbox.org/manual/ch08.html ( Voce _8.17. VBoxManage storageattach_ )
+
+1. Si ottengono le informazioni della macchina virtuale
+
+```bash
+VBoxManage showvminfo
+```
+
+1. La macchina deve essere in esecuzione e si esegue il seguente comando da root:
+
+```bash
+su -
+dmesg -wH
+```
+
+1. E si stacca il primo hard disk
+
+```bash
+vboxmanage storageattach [vm-name] --storagectl SATA --port 1 --medium none
+```
