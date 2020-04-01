@@ -1,8 +1,7 @@
 ---
-author: Basso Nicola 5AI
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-02-22T08:26:51.907Z'
+modified: '2020-04-01T09:43:02.064Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1378,6 +1377,91 @@ Server:
 
 [linux-snmp-oids-for-cpumemory-and-disk-statistics](https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html)
 
+### TOMCAT
+
+#### Installazione
+
+[Guida installazione tomcat7 in debian](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-apache-tomcat-on-a-debian-server)
+
+[Guida installazione tomcat9](https://www.thegeekstuff.com/2017/06/install-tomcat-linux/)
+
+[Guida ufficiale tomcat](https://tomcat.apache.org/tomcat-9.0-doc/setup.html)
+
+1. Installare apache tomcat versione 9 (Testing su docker per mera curiosita')
+    ```bash
+    sudo apt update && sudo apt upgrade -y
+    sudo apt install tomcat9 default-jdk ant git wget bash-completion sudo gcc make
+    sudo apt install tomcat9-admin tomcat9-examples tomcat9-docs
+    useradd -m tomcat
+    passwd tomcat #lasolita
+    sudo adduser tomcat sudo
+    su - tomcat
+    wget -c https://apache.panu.it/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33.tar.gz
+    tar xvfz apache-tomcat-9.0.33.tar.gz
+    mv apache-tomcat-9.0.33.tar.gz apache-tomcat-9
+    #Inserire la seguente riga nel .bash_profile / .bashrc:
+    export CATALINA_HOME=/home/tomcat/apache-tomcat-9
+    $(dirname $(dirname $(readlink -f $(which javac))))
+    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    cd $CATALINA_HOME/bin
+    tar xvfz commons-daemon-native.tar.gz
+    cd commons-daemon-1.2.2-native-src/unix
+    ./configure
+    make
+    cp jsvc ../..
+    cd ../..
+    $CATALINA_HOME/bin/catalina.sh start
+    #per fermarlo:
+    $CATALINA_HOME/bin/catalina.sh stop 
+    $CATALINA_HOME/bin/shutdown.sh
+    cd $CATALINA_HOME/logs
+    less catalina.out
+    ```
+
+    Comando per il docker:
+    ```bash
+    sudo docker run -dt --name tomcat_server -u 0 -p 9080:80 -p 9022:22 -p 9808:8080 webserver:apache_tomcat /bin/sh -c "/home/tomcat/apache-tomcat-9/bin/catalina.sh start && tail -f /dev/null"
+    ```
+    Per entrare nella bash del docker
+    ```bash
+    sudo docker exec -it tomcat_server /bin/bash
+    ```
+
+1. Modificare gli utenti di tomcat (con installazione da apt)
+
+    ```bash
+    sudo nano /etc/tomcat9/tomcat-users.xml
+    ```
+
+    1. Aggiungere il seguente utente:
+
+    ```xml
+    <tomcat-users>
+        <role rolename="tomcat">
+        <user username="admin" password="password" roles="manager-gui,admin-gui,tomcat"/>
+    </tomcat-users>
+    ```
+
+1. Visitare la pagina SERVER_IP:8080, SERVER_IP:8080/docs, SERVER_IP:8080/examples,  SERVER_IP:8080/manager/html, SERVER_IP:8080/host-manager/html
+
+1. Rifare un esempio su tomcat
+    1. Andare nella pagina /examples/servlets
+    1. Per fare in modo che Hello World si colleghi al link
+    1. dentro /usr/share/local/examples ci sono gli esempi
+    1. in `/var/lin/tomcat9/webapps/ROOT` c'e' il file index.html
+        1. in `META-INF` e' presente un file xml per fare file html statici
+    1. Ogni singola applicazione bisogna dichiararli su file xml
+    1. I CONTENUTI STATICI SONO SALVATI IN DIRECTORY DIVERSE RISPETTO ALLE SERVLET
+
+##### Servlet
+
+1. docs
+    1. First web application docs/appdev/index.html
+        1. docs/appdev/deployments.html
+        1. Il codice e le applicazioni vanno in un altra cartella
+        1. `dpkg -L tomcat9-examples | less` mostra le informazioni del pacchetto
+  
+
 ---
 
 ---
@@ -1590,3 +1674,4 @@ Se si vuole un file da un server, questo puo' redirezionare ad un altro server l
 - [x] Installare servizi nel server
 - [x] configurare monitor delle risorse del server con mrtg
 - [ ] Configurare cacti sul server
+- [ ] Creare dei servlet di esempio in tomcat9
