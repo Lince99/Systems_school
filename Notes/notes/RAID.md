@@ -1,7 +1,7 @@
 ---
 title: RAID
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-04-03T07:52:02.319Z'
+modified: '2020-04-03T08:54:39.276Z'
 ---
 
 # RAID
@@ -271,7 +271,7 @@ Per simulare una rottura del primo disco:
 
 > Obbiettivo cercare di riallineare le partizioni staccando prima il primo disco e poi il secondo con il primo attaccato.
 
-###### VBoxManage per staccare un disco
+##### VBoxManage per staccare un disco
 
 https://www.virtualbox.org/manual/ch08.html ( Voce _8.17. VBoxManage storageattach_ )  
 https://nakkaya.com/2012/08/30/create-manage-virtualBox-vms-from-the-command-line/
@@ -300,3 +300,73 @@ dmesg -wH
     1. Deve venire fuori il seguente messaggio in dmesg:
     
     > md/raid1:md0: Operation continuing on 1 devices
+
+### Trasformare un RAID 1 in un RAID 5
+
+- Con due dischi da 1 TB in RAID1 ho solo il 50% della resa.
+- Se ho bisogno di altro spazio e' possibile portarli a 2 TB aggiungendo un altro disco, portando al 66% di resa.
+
+#### Scalabilita' del RAID con Linux
+
+- Con Linux e' possibile tenere il server attivo senza interrompere il servizio
+- Durante l'estensione dell'array, i dischi devono riorganizzarsi e genera una lentezza, quindi questa tipologia di lavoro va fatto in periodi di scarico del server
+
+```
+ext4 on block device
+swap on block device
+
+            root_partition  swap
+                 |           |
+/dev/sd_1        |           |
+/dev/sd_2   partizione1   part2   partizione1   part2
+                  |        |            |        |
+/dev/sda         DISCO_FISICO          DISCO_FISICO
+/dev/sdb  
+```
+
+Nel RAID1 con 2 dischi:
+```
+            root_partition  swap
+                 |           |
+           RAID_device1   RAID_device2
+                 |\          |\__________________
+                 | |         |                   |
+                 | \------------------\          | 
+/dev/sd_1        |           |        |          |
+/dev/sd_2   partizione1   part2   partizione1   part2
+                  |        |            |        |
+/dev/sda         DISCO_FISICO          DISCO_FISICO
+/dev/sdb  
+```
+
+- Nella fase di sincronizzazione del terzo disco il RAID non sara' ne 1 ne 5, pur mantenendo la dimensione del RAID1
+    - Nel superblocco avra' una sua struttura speciale
+    - Il RAID1 puo' essere visto come RAID5 con solo 2 dischi anche se non puo' funzionare
+    - La root partition sta comunque usando meta' partizione, quindi bisogna informare la partizione che puo' essere estesa (raddoppiandola)
+    - Una volta si usava l'xfs: file system della silicon graphics permetteva la deframmentazione, il journaling, e anche l'incremento della dimensione della partizione in linea
+    - Anche la swap deve essere raddoppiata
+- Da riga di comando il terzo disco deve essere allacciato alla macchina e con dmesg il disco deve essere riconosciuto
+    - Deve essere subito partizionato
+    - `sfdisk -d /dev/sda` esegue il dump dalla tabella di partizioni
+    - Con sfdisk posso copaire la tabella di partizioni da un disco all'altro
+    - `sfdisk -d /dev/sda | sfdisk /dev/sdc`
+
+## TODO migrare da RAID 1 a RAID 5
+
+- La macchina deve rimanere funzionante
+- Eseguire prima:
+
+    ```bash
+    #mostra i raid
+    cat /proc/mdstat
+    #mostra lo spazio disponibile
+    df -h
+    #mostra la swap
+    free
+    ```
+- Eseguire durante la migrazione:
+
+    ```bash
+    su -
+    dmesg -wH
+    ```
