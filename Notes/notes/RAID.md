@@ -1,7 +1,7 @@
 ---
 title: RAID
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-03-26T09:31:02.793Z'
+modified: '2020-04-03T07:52:02.319Z'
 ---
 
 # RAID
@@ -273,12 +273,13 @@ Per simulare una rottura del primo disco:
 
 ###### VBoxManage per staccare un disco
 
-https://www.virtualbox.org/manual/ch08.html ( Voce _8.17. VBoxManage storageattach_ )
+https://www.virtualbox.org/manual/ch08.html ( Voce _8.17. VBoxManage storageattach_ )  
+https://nakkaya.com/2012/08/30/create-manage-virtualBox-vms-from-the-command-line/
 
 1. Si ottengono le informazioni della macchina virtuale
 
 ```bash
-VBoxManage showvminfo
+VBoxManage showvminfo debian_raid
 ```
 
 1. La macchina deve essere in esecuzione e si esegue il seguente comando da root:
@@ -289,7 +290,13 @@ dmesg -wH
 ```
 
 1. E si stacca il primo hard disk
+    1. Su virtualbox i dischi devono avere l'opzione **Hot-pluggable** attivata
 
-```bash
-vboxmanage storageattach [vm-name] --storagectl SATA --port 1 --medium none
-```
+    1. Comando da eseguire nella macchina ospitante:
+    ```bash
+    VBoxManage storageattach "debian_raid" --storagectl "SATA" --port 1 --medium none
+    ```
+
+    1. Deve venire fuori il seguente messaggio in dmesg:
+    
+    > md/raid1:md0: Operation continuing on 1 devices
