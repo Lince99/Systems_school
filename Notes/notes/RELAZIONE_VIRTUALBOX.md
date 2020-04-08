@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-04-08T08:48:23.430Z'
+modified: '2020-04-08T09:44:58.484Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1388,6 +1388,7 @@ Server:
 [Guida ufficiale tomcat](https://tomcat.apache.org/tomcat-9.0-doc/setup.html)
 
 1. Installare apache tomcat versione 9 (Testing su docker per mera curiosita')
+
     ```bash
     sudo apt update && sudo apt upgrade -y
     sudo apt install tomcat9 default-jdk ant git wget bash-completion sudo gcc make
@@ -1402,6 +1403,7 @@ Server:
     #sudo ./usr/share/tomcat9/bin/shutdown.sh per fermarlo
     sudo mv /usr/share/tomcat9/etc /usr/share/tomcat9/conf #senno' catalina.sh non lo trova
     ```
+
     ```bash
     #se tomcat9 da apt non va allora si scarica la versione tar.gz
     wget -c https://apache.panu.it/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33.tar.gz
@@ -1426,16 +1428,21 @@ Server:
     less catalina.out
     ```
 
-    Comando per il docker:
+    Comando per il docker
+
     ```bash
     sudo docker run -dt --name tomcat_server -u 0 -p 9080:80 -p 9808:8080 webserver:apache_tomcat /bin/sh -c "./usr/share/tomcat9/bin/catalina.sh start && service ssh start && tail -f /dev/null"
     ```
+
     Per entrare nella bash del docker
+
     ```bash
     sudo docker exec -it tomcat_server /bin/bash
     #sudo -s #da tomcat a root
     ```
-    Oppure entrare tramite ssh:
+
+    Oppure entrare tramite ssh
+
     ```bash
     ssh tomcat@172.17.0.x
     ```
@@ -1478,8 +1485,39 @@ Server:
         1. docs/appdev/deployments.html
         1. Il codice e le applicazioni vanno in un altra cartella
         1. `dpkg -L tomcat9-examples | less` mostra le informazioni del pacchetto
-1. TODO
+1. Deployment
 
+    ```bash
+    sudo cp /usr/share/java/tomcat9-servlet-api-9.0.16.jar /var/lib/tomcat9/lib/
+    mkdir /var/lib/tomcat9/webapps/TestApp
+    cd /var/lib/tomcat9/webapps/TestApp
+    mkdir images src WEB-INF
+    cd src
+    nano TestApp.java #inserire esempio della servlet
+    #import java.servlet.*;
+    #import java.servlet.http.*;
+    #import java.io.*;
+    #...
+    cd WEB-INF
+    mkdir classes #conterra' i file .class
+    nano web.xml
+    ```
+
+    ```xml
+    <web-app>
+      <servlet>
+        <servlet-name>TestApp</servlet-name>
+        <servlet-class>TestApp</servlet-class>
+      </servlet>
+      <servlet-mapping>
+        <servlet-name>TestApp</servlet-name>
+        <url-pattern>/Test</url-pattern>
+      </servlet-mapping>
+    </webapp>
+    ```
+
+    1. Non serve riavviare il server per effettuare le modifiche
+1. Visitare la pagina http://IP_SERVER:8080/TestApp/Test
 
 ---
 
