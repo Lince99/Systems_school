@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-04-01T09:43:02.064Z'
+modified: '2020-04-08T08:48:23.430Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1377,9 +1377,9 @@ Server:
 
 [linux-snmp-oids-for-cpumemory-and-disk-statistics](https://www.debianadmin.com/linux-snmp-oids-for-cpumemory-and-disk-statistics.html)
 
-### TOMCAT
+### TOMCAT [↑](#top)
 
-#### Installazione
+#### Installazione [↑](#top)
 
 [Guida installazione tomcat7 in debian](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-apache-tomcat-on-a-debian-server)
 
@@ -1395,7 +1395,15 @@ Server:
     useradd -m tomcat
     passwd tomcat #lasolita
     sudo adduser tomcat sudo
+    chsh -s /bin/bash tomcat #fornisce la bash interattiva all'utente
     su - tomcat
+    export CATALINA_HOME=/usr/share/tomcat9
+    sudo ./usr/share/tomcat9/bin/startup.sh
+    #sudo ./usr/share/tomcat9/bin/shutdown.sh per fermarlo
+    sudo mv /usr/share/tomcat9/etc /usr/share/tomcat9/conf #senno' catalina.sh non lo trova
+    ```
+    ```bash
+    #se tomcat9 da apt non va allora si scarica la versione tar.gz
     wget -c https://apache.panu.it/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33.tar.gz
     tar xvfz apache-tomcat-9.0.33.tar.gz
     mv apache-tomcat-9.0.33.tar.gz apache-tomcat-9
@@ -1420,12 +1428,19 @@ Server:
 
     Comando per il docker:
     ```bash
-    sudo docker run -dt --name tomcat_server -u 0 -p 9080:80 -p 9022:22 -p 9808:8080 webserver:apache_tomcat /bin/sh -c "/home/tomcat/apache-tomcat-9/bin/catalina.sh start && tail -f /dev/null"
+    sudo docker run -dt --name tomcat_server -u 0 -p 9080:80 -p 9808:8080 webserver:apache_tomcat /bin/sh -c "./usr/share/tomcat9/bin/catalina.sh start && service ssh start && tail -f /dev/null"
     ```
     Per entrare nella bash del docker
     ```bash
     sudo docker exec -it tomcat_server /bin/bash
+    #sudo -s #da tomcat a root
     ```
+    Oppure entrare tramite ssh:
+    ```bash
+    ssh tomcat@172.17.0.x
+    ```
+
+    Problema riscontrato su docker: [Tab completion not working bash](https://askubuntu.com/questions/325807/arrow-keys-home-end-tab-complete-keys-not-working-in-shell)
 
 1. Modificare gli utenti di tomcat (con installazione da apt)
 
@@ -1437,8 +1452,11 @@ Server:
 
     ```xml
     <tomcat-users>
-        <role rolename="tomcat">
-        <user username="admin" password="password" roles="manager-gui,admin-gui,tomcat"/>
+        <role rolename="manager-gui"/>
+        <role rolename="manager-script"/>
+        <role rolename="manager-jmx"/>
+        <role rolename="manager-status"/>
+        <user username="tomcat" password="s3cret" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
     </tomcat-users>
     ```
 
@@ -1453,14 +1471,15 @@ Server:
     1. Ogni singola applicazione bisogna dichiararli su file xml
     1. I CONTENUTI STATICI SONO SALVATI IN DIRECTORY DIVERSE RISPETTO ALLE SERVLET
 
-##### Servlet
+##### Servlet [↑](#top)
 
 1. docs
     1. First web application docs/appdev/index.html
         1. docs/appdev/deployments.html
         1. Il codice e le applicazioni vanno in un altra cartella
         1. `dpkg -L tomcat9-examples | less` mostra le informazioni del pacchetto
-  
+1. TODO
+
 
 ---
 
