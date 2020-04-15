@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-04-08T09:44:58.484Z'
+modified: '2020-04-15T09:40:28.197Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1480,6 +1480,8 @@ Server:
 
 ##### Servlet [↑](#top)
 
+https://www.tutorialspoint.com/servlets/servlets-first-example.htm
+
 1. docs
     1. First web application docs/appdev/index.html
         1. docs/appdev/deployments.html
@@ -1518,6 +1520,14 @@ Server:
 
     1. Non serve riavviare il server per effettuare le modifiche
 1. Visitare la pagina http://IP_SERVER:8080/TestApp/Test
+
+###### Esercizio
+
+- Servlet se interrogata dal browser normalmente propone una pagina con form con:
+    - data e ora inizio/fine proposte tramite generazione predefinita dalla servlet
+    - descrizione appuntamento
+    - dopo 1 ora per la fine
+- alla conferma del form la stessa dovra' restituire un file xml pronto per essere digerito dall'applicazione calendario di propria preferenza
 
 ---
 
@@ -1731,4 +1741,4 @@ Se si vuole un file da un server, questo puo' redirezionare ad un altro server l
 - [x] Installare servizi nel server
 - [x] configurare monitor delle risorse del server con mrtg
 - [ ] Configurare cacti sul server
-- [ ] Creare dei servlet di esempio in tomcat9
+- [x] Creare dei servlet di esempio in tomcat9
