@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-04-15T09:40:28.197Z'
+modified: '2020-04-15T09:55:43.049Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1403,6 +1403,8 @@ Server:
     #sudo ./usr/share/tomcat9/bin/shutdown.sh per fermarlo
     sudo mv /usr/share/tomcat9/etc /usr/share/tomcat9/conf #senno' catalina.sh non lo trova
     ```
+
+    Se non va la prima versione usare questa:
 
     ```bash
     #se tomcat9 da apt non va allora si scarica la versione tar.gz

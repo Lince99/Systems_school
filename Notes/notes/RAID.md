@@ -1,7 +1,7 @@
 ---
 title: RAID
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-04-03T08:54:39.276Z'
+modified: '2020-04-17T09:03:17.959Z'
 ---
 
 # RAID
@@ -200,6 +200,7 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
     1. `su -`
     1. `apt update && apt install sudo nano elinks -y`
     1. Installare grub anche sull'altro disco `grub-install /dev/sda && grub-install /dev/sdb`
+    1. Portare grub su tutti i dischi e per vedere se tutti ce l'hanno `upgrade-from-grub-legacy`
 1. Questo sistema va ancora in modalita' legacy, mentre ora si usa la modalita' UEFI 
 1. Tipologie di superblocchi:
     1. Inizio
@@ -351,7 +352,10 @@ Nel RAID1 con 2 dischi:
     - Con sfdisk posso copaire la tabella di partizioni da un disco all'altro
     - `sfdisk -d /dev/sda | sfdisk /dev/sdc`
 
-## TODO migrare da RAID 1 a RAID 5
+## Migrazione da RAID 1 a RAID 5
+
+https://wiki.archlinux.org/index.php/Convert_a_single_drive_system_to_RAID  
+https://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a-new-machine#32721
 
 - La macchina deve rimanere funzionante
 - Eseguire prima:
@@ -369,4 +373,65 @@ Nel RAID1 con 2 dischi:
     ```bash
     su -
     dmesg -wH
+    ```
+
+1. Aggiungere un altro disco su VirtualBox
+    1. 
+1. Andare nella macchina virtuale sempre accesa durante questi passaggi
+
+    ```bash
+    su -
+    sfdisk -d /dev/sda #dump della tabella delle partizioni
+    sfdisk -d /dev/sda | sfdisk /dev/sdb #copia la tabella delle partizioni
+    ```
+
+    1. Installare grub
+
+    ```bash
+    upgrade-from-grub-legacy
+    cfdisk /dev/sdc #rendere il disco bootabile in caso di problemi
+    ```
+
+
+1. Assegnare il raid anche al nuovo disco
+
+    ```bash
+    mdadm /dev/md1 --add /dev/sdc1
+    mdadm /dev/md2 --add /dev/sdc2
+    ```
+
+1. Passare da RAID 1 a RAID 5
+
+    ```bash
+    mdadm /dev/md2 --grow --raid-devices=3 --level=5
+    cat /proc/partitions
+    df
+    ```
+
+1. Ora bisogna ridimensionare la partizione di root
+
+    ```bash
+    resize2fs /dev/md1
+    #prende la dimensione attuale del file system e la dimensione reale del dispositivo a blocchi
+    df #root passa dal ~37% al ~19% di disco usato
+    ```
+
+1. Rimuovere la partizione di swap se non utilizzata
+
+    ```bash
+    cat /etc/fstab #copiare l'UUID
+    swapoff -a #disattiva tutte le memorie di scambio mappate nell'fstab
+    ```
+
+    1. Riabilitare la swap ricreandola
+
+        ```bash
+        mkswap -U UUIDCOPIATODAPRIMA /dev/md2
+        swapon -a
+        ```
+      
+1. Controllare se e' tutto apposto
+
+    ```bash
+    ls -l /dev/disk/by-uuid/ #mostra tutti gli identificativi delle partizioni
     ```
