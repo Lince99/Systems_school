@@ -1,11 +1,10 @@
 ---
-title: RAID
-author: Basso Nicola 5^AI
-created: '2020-04-24T09:04:24.015Z'
-modified: '2020-04-24T09:05:01.495Z'
+title: RAID and LVM
+created: '2020-03-12T09:29:18.898Z'
+modified: '2020-04-24T09:07:28.725Z'
 ---
 
-# RAID
+# RAID and LVM
 
 Raid non e' backup, sono due aspetti differenti:
 
@@ -153,8 +152,8 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
         1. Storage
             1. Inserire la iso nel lettore dischi del controller IDE
             1. Controller SATA
-                1. Incrementare Port Count a 4
-                1. Aggiungere un altro disco debian_raid2 da 4 GB
+            1. Incrementare Port Count a 4
+            1. Aggiungere un altro disco debian_raid2 da 4 GB
         1. Network
             1. Cambiare in Bridged Adapter
 
@@ -170,11 +169,11 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
     1. Partizionamento Manuale
         1. Per ogni disco SCSIx
             1. partizione primaria
-                1. 4.0 GB
-                1. volume fisico per il RAID
+            1. 4.0 GB
+            1. volume fisico per il RAID
             1. partizione logica
-                1. 292.6 MB
-                1. volume fisico per il RAID
+            1. 292.6 MB
+            1. volume fisico per il RAID
         1. Configurare il RAID software per il root
             1. Configurare un device multidisk (MD)
             1. RAID 1
@@ -437,3 +436,111 @@ https://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a
     ```bash
     ls -l /dev/disk/by-uuid/ #mostra tutti gli identificativi delle partizioni
     ```
+
+---
+---
+---
+
+## Dimensione e astrazione dei dischi (Logical Volume Management)
+
+> Carpa giapponese: questo pesce adatta le sue caratteristiche in base all'ambiente in cui si trova, se sa di essere in un ambiente ridotto limita la dimensione del proprio corpo. Se l'ambiente si espande anche il pesce cresce fino ad un limite
+
+### Creare una macchina virtuale da espandere
+
+In base alle esigenze faccio crescere la dimensione della macchina virtuale.
+
+#### Obbiettivo
+
+Normalmente la partizione di root ext4 era in sda1 e la swap nella sda2.
+
+
+#### Macchina virtuale debian
+
+- 1 GB
+- Disco da 3 GB (apposta)
+- Scheda di rete con bridge
+- Installazione esperta
+    - Selezione lingua
+    - Rete automatica
+    - nomehost: pescerosso
+    - distro stable
+    - componenti aggiuntivi
+        - network-console (per installazione via ssh)
+    - proseguire l'installazione in remoto
+        - ssh installer@nomemacchina
+    - Impostazione utenti e password
+        - lasolita
+        - Utente di Servizio
+        - uds
+        - lasolita
+    - Orologio settato su Europa
+    - Partizionamento del disco
+        - partizione unica
+        - Volume fisico per LVM (Logical Volume Management)
+        - Configurare l'LVM
+            - Mostra dettagli di configurazione
+            - Creare gruppi di volumi
+                - alleszusamme (VG o Volume Group usa solo sda1)
+                - Creare volume logico
+                - Nome: linuxroot
+                - Dimensione: 2200MB
+                - Creare volume logico
+                - Nome: swap
+                - Dimensione: 512MB
+                - Creare volume logico
+                - linuxhome
+                - Dimensione: 500MB
+                - Mostra dettagli di configurazione
+                - lvmroot
+                - lvmhome
+                - swap
+          - Con il sistema LVM linux gestisce le partizioni non direttamente collegate al disco fisico, permettendo ridimensionamenti conmm piu' liberta'
+
+##### Comandi per vedere lo stato dell'LVM
+
+```bash
+mount
+cd /dev/mapper
+ls
+df
+free
+cat /proc/swaps
+```
+
+Al posto di avere /dev/sda1/root si ha /dev/mapper/alleszusamme-linuxroot e GRUB non ha problemi a riconoscere l'LVM se mbr, in caso di EFI serve la partizione dedicata richiesta da sistemi U/EFI
+
+#### Aggiunta di un altro disco sdb1 (LVM)
+
+Il Volume Group deve espandersi prendendo anche il secondo disco fisico, ampliando di molto la home(LV) e la swap(LV)
+
+Dimensione obbiettivo:
+- linuxroot: 2.2GB
+- swap: 1GB
+- home: 3GB
+- spazio libero rimanente serve in caso di necessita' future
+
+E' possibile di ignorare dischi, aumentare il numero di dischi
+
+Configurare uds e sudo
+
+```bash
+su -
+apt install sudo joe
+ip addr
+adduser uds sudo
+```
+
+Mostrare le informazioni delle partizioni e dell'LVM
+
+```bash
+ssh uds@clientX
+sudo -s
+lvdisplay #mostra tutti i volumi logici
+vgdisplay # mostra i volume group
+```
+
+Per ridimensionare le partizioni:
+
+```bash
+resize2fs --help
+```
