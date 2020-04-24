@@ -1,7 +1,7 @@
 ---
 title: RAID
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-04-17T09:03:17.959Z'
+modified: '2020-04-24T06:55:47.898Z'
 ---
 
 # RAID
@@ -118,7 +118,7 @@ Rende pero' difficile il recupero dei dati nel caso la scheda si rompa.
 L'OS vede all'inizio tutti i dischi come dischi normali, poi li vede come RAID.
 Conviene il RAID software in base alle situazioni, poiche' richiede computazione alla macchina ospitante.
 
-## TODO creare RAID 1
+## Passaggi per creare un RAID 1
 
 - Creare pc virtuale con 2 dischi in raid 1
 - disco da 4 GB
@@ -376,7 +376,8 @@ https://serverfault.com/questions/32709/how-do-i-move-a-linux-software-raid-to-a
     ```
 
 1. Aggiungere un altro disco su VirtualBox
-    1. 
+    1. disco da 4GB
+    1. hot-pluggable
 1. Andare nella macchina virtuale sempre accesa durante questi passaggi
 
     ```bash
