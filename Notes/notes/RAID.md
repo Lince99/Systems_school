@@ -1,8 +1,7 @@
 ---
 title: RAID
-author: Basso Nicola 5^AI
 created: '2020-04-24T09:04:24.015Z'
-modified: '2020-04-24T09:05:01.495Z'
+modified: '2020-04-26T13:38:34.170Z'
 ---
 
 # RAID
@@ -153,8 +152,8 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
         1. Storage
             1. Inserire la iso nel lettore dischi del controller IDE
             1. Controller SATA
-                1. Incrementare Port Count a 4
-                1. Aggiungere un altro disco debian_raid2 da 4 GB
+            1. Incrementare Port Count a 4
+            1. Aggiungere un altro disco debian_raid2 da 4 GB
         1. Network
             1. Cambiare in Bridged Adapter
 
@@ -170,11 +169,11 @@ Conviene il RAID software in base alle situazioni, poiche' richiede computazione
     1. Partizionamento Manuale
         1. Per ogni disco SCSIx
             1. partizione primaria
-                1. 4.0 GB
-                1. volume fisico per il RAID
+            1. 4.0 GB
+            1. volume fisico per il RAID
             1. partizione logica
-                1. 292.6 MB
-                1. volume fisico per il RAID
+            1. 292.6 MB
+            1. volume fisico per il RAID
         1. Configurare il RAID software per il root
             1. Configurare un device multidisk (MD)
             1. RAID 1
