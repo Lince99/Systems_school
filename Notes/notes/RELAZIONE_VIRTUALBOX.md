@@ -1,7 +1,7 @@
 ---
 title: RELAZIONE_VIRTUALBOX
 created: '2019-09-26T08:50:05.352Z'
-modified: '2020-04-15T09:55:43.049Z'
+modified: '2020-05-06T09:33:55.118Z'
 ---
 
 # Virtualbox, M0n0wall e l'architettura client-server {#top}
@@ -1530,6 +1530,27 @@ https://www.tutorialspoint.com/servlets/servlets-first-example.htm
     - descrizione appuntamento
     - dopo 1 ora per la fine
 - alla conferma del form la stessa dovra' restituire un file xml pronto per essere digerito dall'applicazione calendario di propria preferenza
+
+#### JSP
+
+> JSP = Java Server Page
+
+- Usare le servlet di Tomcat con i file .jsp.
+
+```jsp
+<html>
+  <body>
+    <% //codice Java %>
+  </body>
+</html>
+```
+
+- Il php e' direttamente interpretato, mentre Java e' metainterpretato, ma non e' possibile interpretare il linguaggio java.
+    - Tomcat compila la prima richiesta creando una servlet salvata in memoria, per poi interpretare l'html nelle successive richieste
+
+##### Gestione degli errori con JSP
+
+- In caso di errori di compilazione si potra' gestire solo nella prima richiesta e Tomcat restituira' una serie di errori 500 con l'errore di compilazione riscontrato.
 
 ---
 

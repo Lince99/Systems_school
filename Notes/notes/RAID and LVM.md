@@ -1,7 +1,7 @@
 ---
 title: RAID and LVM
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-04-24T09:07:28.725Z'
+modified: '2020-04-29T09:01:23.940Z'
 ---
 
 # RAID and LVM
@@ -480,21 +480,21 @@ Normalmente la partizione di root ext4 era in sda1 e la swap nella sda2.
         - Configurare l'LVM
             - Mostra dettagli di configurazione
             - Creare gruppi di volumi
-                - alleszusamme (VG o Volume Group usa solo sda1)
-                - Creare volume logico
-                - Nome: linuxroot
-                - Dimensione: 2200MB
-                - Creare volume logico
-                - Nome: swap
-                - Dimensione: 512MB
-                - Creare volume logico
-                - linuxhome
-                - Dimensione: 500MB
-                - Mostra dettagli di configurazione
-                - lvmroot
-                - lvmhome
-                - swap
-          - Con il sistema LVM linux gestisce le partizioni non direttamente collegate al disco fisico, permettendo ridimensionamenti conmm piu' liberta'
+            - alleszusamme (VG o Volume Group usa solo sda1)
+            - Creare volume logico
+            - Nome: linuxroot
+            - Dimensione: 2200MB
+            - Creare volume logico
+            - Nome: swap
+            - Dimensione: 512MB
+            - Creare volume logico
+            - linuxhome
+            - Dimensione: 500MB
+            - Mostra dettagli di configurazione
+            - lvmroot
+            - lvmhome
+            - swap
+        - Con il sistema LVM linux gestisce le partizioni non direttamente collegate al disco fisico, permettendo ridimensionamenti conmm piu' liberta'
 
 ##### Comandi per vedere lo stato dell'LVM
 
@@ -544,3 +544,5 @@ Per ridimensionare le partizioni:
 ```bash
 resize2fs --help
 ```
+
+###
