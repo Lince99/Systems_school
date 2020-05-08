@@ -1,7 +1,7 @@
 ---
 title: RAID and LVM
 created: '2020-03-12T09:29:18.898Z'
-modified: '2020-04-29T09:01:23.940Z'
+modified: '2020-05-08T08:58:08.280Z'
 ---
 
 # RAID and LVM
@@ -457,7 +457,7 @@ Normalmente la partizione di root ext4 era in sda1 e la swap nella sda2.
 #### Macchina virtuale debian
 
 - 1 GB
-- Disco da 3 GB (apposta)
+- Disco da 3 GB (apposta) (con 4 porte per aggiunte di altri dischi)
 - Scheda di rete con bridge
 - Installazione esperta
     - Selezione lingua
@@ -545,4 +545,95 @@ Per ridimensionare le partizioni:
 resize2fs --help
 ```
 
-###
+##### Impostare Virtualbox per aggiungere il disco
+
+- Aggiungere un nuovo disco
+    - PesceRossoB
+    - 4 GB
+- Avviare la macchina
+- login
+- controllare le partizioni
+
+```bash
+cat /proc/partitions
+cd /dev/disk/by-uuid
+ls -la
+cd /dev/disk/by-label #etichette della lvm a livello di partizione
+ls -la
+```
+
+> UUID e' un dato virtuale che esiste solo in una partizione formattata da un filesystem.
+
+```bash
+cd /dev/disk/by-id
+ls -la
+```
+
+> ID e' a livello fisico e identifica le partizioni ma soprattutto il disk manager, marca e modello dei dischi.
+
+Livelli:
+
+1. Dispositivi a blocchi identificati con sda, sdb, ... (ID della partizione inserito nel disco durante la creazione)
+1. Volume Group
+1. Logical Volume mappati dal VG con dm-0, dm-1, ...
+1. linuxhome, linuxroot, swap
+1. formattazione delle partizioni (UUID e Label come lvmroot, lvmhome, ...)
+
+##### Aggiunta del disco per LVM
+
+Partizioni linux:
+- 82 linux swap
+- 85 ext
+- fd Linux raid autodetect
+- 8e Linux LVM
+
+1. formattare il disco
+
+```bash
+sudo -s
+wipefs /dev/sdb #attenzione! elimina i dati della partizione 
+cfdisk /dev/sdb
+```
+
+1. partizione mbr
+1. Type
+    1. 8e
+
+1. controllare che sia tutto apposto
+
+```bash
+cat /proc/partitions
+vgdisplay #mostra VG UUID
+dpkg -l lvm*
+dpkg -L lvm2 | less #file che compongono il pacchetto: pv (physical volume), vg (virtual group), lv (logical volume),
+```
+
+1. Inizializzare il disco fisico
+
+```bash
+pvcreate /dev/sdb1
+pvdisplay #manca il collegamento del disco al VG
+vgextend VGNAME /dev/sdb1
+pvdisplay #pra mache sdb1 fa parte del VG
+vgsize #ora e' la somma della dimensione dei due dischi, manca il resize della LV
+man lvresize 
+man lvextend #quello che server
+df #home da redimensionare
+lvexend --size 3G alleszusamme/linuxhome #LV ridimensionato, ora manca la formattazione
+lvdisplay
+df -h #lvmhome in ext4 e' ancora come prima
+resize2fs /dev/alleszusamme/linuxhome
+df -h #linuxhome ridimensionata
+vgdisplay #mostrano solo 5.5GB allocati, quindi bisogna ampliare anche linuxroot
+lvextend --size 3G alleszusamme/linuxroot
+df #quantita' di dati usati differenta 
+resize2fs /dev/alleszusamme/linuxroot
+vgdisplay #lo spazio rimanente serve per partizioni future
+sync
+```
+
+Anche con LVM e' possibile gestire il RAID 1 software
+
+#### Con LVM aggiungere terzo disco che sostituisce il secondo rotto
+
+TODO
